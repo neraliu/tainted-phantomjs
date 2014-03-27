@@ -1,0 +1,33 @@
+<html>
+<head>
+    <script type="text/javascript" src="xml2json.js"></script>
+</head>
+<body>
+<h1>Check issues html</h1>
+<script type="text/javascript">
+    var X2JS = new X2JS();
+
+    X2JS.escapeMode(true);
+	
+	xmlDocStr = X2JS.json2xml_str(
+        {
+            MyRoot : {
+                MyEscapeXmlChild : "<success> & \" ' / </success>",
+                MyEscapeXmlChild2 : {
+                	_attr : "success",
+                	__text : "<success> & \" ' / </success>"
+                },
+                MyEscapeXmlChildNonString : false
+            }
+        }
+    );
+	
+	alert(xmlDocStr);
+
+    jsonObj = X2JS.xml_str2json( xmlDocStr );
+    alert(jsonObj.MyRoot.MyEscapeXmlChild);
+    alert(jsonObj.MyRoot.MyEscapeXmlChild2);
+    alert(jsonObj.MyRoot.MyEscapeXmlChildNonString);
+    	
+</script>
+</body>

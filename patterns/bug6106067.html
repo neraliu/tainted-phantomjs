@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Yahoo! Messenger Conversation History</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<link rel="stylesheet" type="text/css" href="http://mail.yimg.com/pd/ssav/1.1.6/htdocs/styles/combo.css">
+<script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js" charset="utf-8"></script>
+</head>
+<body><div id="header">
+	<div id="filter"><span>View All</span>
+		<ul>
+			<li id="et0">View All</li>
+			<li id="et1">Instant Messages</li>
+			<li id="et2">SMS Messages</li>
+			<li id="et3">Conference Messages</li>
+			<li id="et4">All Calls</li>
+			<li id="et5">Video Calls</li>
+			<li id="et6">Voice Calls</li>
+			<li id="et7">Phone Calls</li>
+		</ul>
+	</div>
+	<div id="searchbox">
+		<b id="cf"></b>
+		<b id="kf"></b>
+		<i id="marker"></i>
+		<input maxlength="50" id="search" class="hint" value="Search">
+		<div id="hints" style="display:none">
+			<a class="on" rel="kf">Search keyword: <span id="k"></span></a>
+			<a rel="cf" id="hcf">Search contact: <span id="c"></span></a>
+		</div>
+	</div>
+</div>
+<div id="loading"><img alt="" src="http://mail.yimg.com/ok/u/assets/img/spinner-32x32-anim.gif"> Loading ...</div>
+<div id="content">
+	<div id="sidebar">
+		<div id="rclist"></div>
+		<div id="sclist"></div>
+	</div>
+	<div id="welcome"><table><tr><td><div id="logo"></div>Click on a contact to view your conversation history</td></tr></table></div>
+	<div id="snippets" style="display:none">
+		<div id="searchcount"></div>
+		<div id="snippetsview"></div>
+	</div>
+	<div id="stream" style="display:none">
+		<div id="profile"></div>
+		<div id="streamview">
+			<div id="loadmore" class="loading">
+				<span id="more">Show more messages ...</span>
+				<span id="nomore">No more messages</span>
+				<span id="moreLoading"></span>
+				<span id="nomsg">No more messages of this type are available</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="footer">
+	<div class="setup" title="Messenger now delivers voicemail to an email address of your choice. Before we can enable this service, please tell us where you want your voicemail delivered.">Set Up Voicemail</div>
+	<div>Voicemail currently being delivered to:</div>
+	<div class="btn" id="vmdest"><div class="hint">Choose the email address that you would like voice messages sent to<b class="arrow notch"></b><b class="arrow"></b></div><span>...</span><ul id="vmdestlist"><li>
+		<a target='_blank' href="https://edit.yahoo.com/commchannel/manage?.done=http%3A%2F%2Fvoice.yahoo.com%2F&.intl=us&.lang=en-US">Add new email address</a>
+		<a id="reqVerify" style="display:none" href="https://edit.yahoo.com/v/send?.done=http%3A%2F%2Fvoice.yahoo.com%2F&.intl=us&.lang=en-US&.em="></a>
+	</li></ul></div>
+	<div class="btn" id="vmlang"><span>...</span><div class="hint"><b class="arrow notch"></b><b class="arrow"></b>Choose your PC to PC voicemail greeting language</div><ul id="vmlanglist"></ul></div>
+</div>
+<div id="mask" style="display:none">
+	<div id="cover"></div>
+	<div class="dlg" id="error_dlg">
+		<h2>Error</h2>
+		<div class="content">
+			<div class='message'>Failed to process your request, please try again later.</div>
+			<div id='errorCode'>Error Code:<span id='code'></span></div>
+			<div class="btns">
+				<a class='btn default' rel='ok'>OK</a>
+			</div>
+		</div>
+	</div>
+	<div class='dlg' id='delete_dlg'>
+		<h2>Delete Conversations</h2>
+		<div class='content'>
+			<div id='show_msg' class='mid'>
+				<div class='message' id='mid'>This conversation will be permanently deleted. Are you sure you want to continue?</div>
+				<div class='message' id='email'>All conversations between you and {email} will be permanently deleted. Are you sure you want to continue?</div>
+				<div class='message' id='progress'><img alt="" src="http://mail.yimg.com/ok/u/assets/img/spinner-32x32-anim.gif">Deleting conversations ...</div>
+			</div>
+			<div class='btns'>
+				<a id="btn_cancel" class='btn' rel='cancel'>Cancel</a>
+				<a id="btn_delete" class='btn default' rel='delete'>Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+<iframe style="height:0;position:absolute;top:-999px" id="hiddenFrameForPrinting"></iframe>
+
+<script type="text/javascript">
+wssid="F9gfyKjjkaN";
+ssaAppId="YahooMsgrSSAViewer";
+primary_yid="neraliu";
+display_yid="neraliu";
+aliases=["neraliu"];
+cascadeURL="/ws/mail/v2.0/jsonrpc?appid=YahooMsgrSSAViewer&wssid=F9gfyKjjkaN";
+SV2URL="/mailsearch/v2/search?appid=YahooMsgrSSAViewer&wssid=F9gfyKjjkaN&";
+</script>
+<script type="text/javascript" src="http://mail.yimg.com/pd/ssav/1.1.6/htdocs/combo.js" charset="utf-8"></script>
+<script type="text/javascript">
+var basePath="http://mail.yimg.com/pd/ssav/1.1.6/htdocs/",rootPath="mail:pd/ssav/1.1.6/htdocs/build/",comboBase="http://mail.yimg.com/zz/combo?",
+yui=YUI({
+	timeout:9000,lang:"en-US",groups:{
+		ssav: {
+			combine:true,
+			base:basePath+rootPath,
+			root:rootPath,
+			comboBase:comboBase,
+			modules:{
+				"lang/ssavconfig_us": {
+					path:"ssavconfig/lang/ssavconfig_us.js",
+					requires:['intl']
+				},
+				ssavcr:{
+					lang:["en-US","en-GB","de-DE","es-AR","es-ES","es-MX","es-US","fr-CA","fr-FR","id-ID","it-IT","ko-KR","pt-BR","ro-RO","th-TH","vi-VN","zh-Hans-CN","zh-Hant-HK","zh-Hant-TW"],
+					requires:['intl','lang/ssavconfig_us']
+				}
+			}
+		}
+	}
+}).use('streamview','contacts','searchview','searchbar','sidebar','strformat','dialogs','footer','viewerhost','ssavcr',function(Y){
+	Y.on("domready",function(){
+		Y.fire("listRecent");
+		Y.later(2000,Y,function(){Y.fire("vmsetup","us","en-US","","JdlbCEfuNyQ")});
+		Y.one("body").on("contextmenu",function(e){if(document.selection.type=='None'){e.halt();return false;}});
+	});
+});
+</script>
+</body></html><!-- webapp101.ap1.msg.sg3.yahoo.com compressed/chunked Fri Feb 22 08:38:19 UTC 2013 -->

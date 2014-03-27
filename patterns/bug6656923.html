@@ -1,0 +1,11 @@
+<script src="../js/jquery-1.9.1.min.js"></script>
+<script>
+var re = /d(b+)(d)/ig;
+var result = re.exec(window.location.href);
+var s = "";
+for (var key in result) {
+	var obj = result[key];
+	s += "key:[" + key + "," + obj + "]<br/>";
+}
+document.write(s);
+</script>

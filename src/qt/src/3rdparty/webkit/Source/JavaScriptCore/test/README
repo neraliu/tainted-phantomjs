@@ -1,0 +1,57 @@
+[qmake tutorial]
+* http://qt-project.org/doc/qt-4.8/qmake-tutorial.html
+
+[qmake variables]
+* http://doc.qt.digia.com/stable/qmake-variable-reference.html
+
+[gdb quick start]
+* http://www.cis.nctu.edu.tw/~is93007/acd.htm
+
+[webkit-dev] about the class of "jscell" and "jsvalueptr"
+* https://lists.webkit.org/pipermail/webkit-dev/2009-March/007149.html
+
+[webkit-dev] opcode for Webkit JavaScript Engine opcode
+* https://lists.webkit.org/pipermail/webkit-dev/2009-March/007204.html
+
+[webkit-dev] JSObjectMakeFunction question
+* http://www.mail-archive.com/webkit-dev@lists.webkit.org/msg06528.html
+
+Taming JavascriptCore within and without WebView
+* http://parmanoir.com/Taming_JavascriptCore_within_and_without_WebView
+
+Comparing JSValue representations in JavaScriptCore. A short overview.
+* http://webkit.sed.hu/blog/20100225/comparing-jsvalue-representations-javascriptcore-short-overview
+
+JavaScriptCore/interpreter/Interpreter.cpp
+* privateExecute()
+
+IEEE 754-1985
+* http://en.wikipedia.org/wiki/IEEE_754-1985
+* http://msdn.microsoft.com/en-us/library/00a1awxf.aspx
+
+[compiling jsc on linux]
+* http://www.sencha.com/blog/javascript-engines-how-to-compile-them/
+
+[marco definition is here]
+* JavaScriptCore/wtf/Platform.h
+
+[casting in c++]
+* http://www.cplusplus.com/doc/tutorial/typecasting/
+
+[webcore rendering basic 1]
+* https://www.webkit.org/blog/114/webcore-rendering-i-the-basics/
+
+[webcore hacking note]
+* edit the DOM object, like dom/Document.cpp
+* edit the DOM idl, like dom/Document.idl
+* run the binding script to generate the code WebCore/bindings/scripts/generate-bindings.pl ../../dom/Document.idl -generator=JS -outputdir=./tmp/ -defines=CPP
+* copy the generated file to generated/*.cpp and *.h
+* recompiling everything.
+
+[conversion of string]
+* UString to char
+snprintf(msg, 50, "%s", value.utf8(true).data());
+* JSString to UString
+JSString.toString(exec);
+* JSValue to UString
+JSValue.toString(exec);
