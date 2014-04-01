@@ -1017,58 +1017,6 @@ describe("JSC Tainted Mode", function () {
     });
 */
 
-    it("test for bug#6131102 (it may fail due to the execution delay of js)", function() {
-	var server = require('webserver').create();
-	server.listen(12345, function(request, response) {
-            response.write('\
-	    <div id="output"></div>\
-            <script>\
-            function gup(name) {\
-		 name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");\
-		 var regexS = "[\\?&]"+name+"=([^&#]*)";\
-		 var regex = new RegExp(regexS);\
-		 var results = regex.exec(window.location.href);\
-		 if (results == null) {\
-		      return "";\
-	         } else {\
-		      return results[1];\
-	    	 }\
-	    }\
-	    var s1 = "<script" + " src=http://ads.yimg.com/ja/a/ysm/hk/kplus/ysm_pmcm.js?v=" + encodeURIComponent(gup("v")) + "></" +"script>";\
-	    document.write(s1);\
-            </script>\
-	    ');
-            response.close();
-        });
-
-    	var page = new WebPage();
-        var url = "http://localhost:12345/foo/headers.txt?v=dummy&ctxtID=math&p=&bcm=%E7%A7%91%E5%AD%B8%E7%9F%A5%E8%AD%98%7C%E6%95%B8%E5%AD%B8";
-
-        var handled = false;
-	runs(function() {
-            expect(handled).toEqual(false);
-            page.open(url, function (status) {
-		expect(status == 'success').toEqual(true);
-            });
-	    // make sure the js has been run?
-            page.onLoadFinished = function(status) {
-                expect(status == 'success').toEqual(true);
-		var tainted = page.evaluate(function () {
-		    return document.tainted;
-		});
-        	expect(tainted).toBe(0);
-                handled = true;
-	    };
-        });
-
-        waits(50);
-
-        runs(function() {
-            expect(handled).toEqual(true);
-            server.close();
-        });
-    });
-
     it("window.name is not tainted by user input", function() {
 	var server = require('webserver').create();
 	server.listen(12345, function(request, response) {
