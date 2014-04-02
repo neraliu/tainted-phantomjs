@@ -1,0 +1,140 @@
+# Copyright (C) 2014 Yahoo! Inc. All Rights Reserved.
+
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+# 1. Redistributions of source code must retain the above copyright
+#   notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. All advertising materials mentioning features or use of this software
+#    must display the following acknowledgement:
+#    This product includes software developed by the Yahoo! Inc..
+# 4. Neither the name of the Yahoo! Inc. nor the
+#    names of its contributors may be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+
+# THIS SOFTWARE IS PROVIDED BY YAHOO! INC. ''AS IS'' AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL YAHOO! INC. BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Author: Nera Liu <neraliu@yahoo-inc.com>
+
+#!/bin/bash
+
+URL=""
+COOKIE_FILE=""
+TIMEOUT=""
+RENDERING_PATH=""
+SCRIPT=""
+VERBOSE=""
+
+usage() { 
+	echo "-------------------"
+	echo "USAGE: $0"
+	echo "	-l 	the target url to scan"		
+	echo "	-c 	set the cookie file (in mozilla format)"
+	echo "	-t 	the execution time of the javascript before time out (in msec)"
+	echo "	-p 	the screenshot rendering path"
+	echo "	-s 	the scanning script [domxss.js|domxss-fuzz.js]"
+	echo "	-d 	enable the level of message [default|info|debug]"
+	echo "-------------------"
+	echo ""
+}
+
+while getopts ":l:c:t:p:s:d:" o; do
+    case "${o}" in
+        l)
+            URL=${OPTARG}
+            ;;
+        c)
+            COOKIE_FILE=${OPTARG}
+	    if ! [[ -f $COOKIE_FILE ]] ; then
+		usage
+        	echo "[ERROR] '$COOKIE_FILE' not existed!"
+		echo "-------------------"
+		exit 1;
+	    fi
+            ;;
+        t)
+            TIMEOUT=${OPTARG}
+	    re='^[0-9]+$'
+	    if ! [[ $TIMEOUT =~ $re ]] ; then
+	        usage
+        	echo "[ERROR] '$TIMEOUT' is not a integer!"
+		echo "-------------------"
+		exit 1;
+	    fi
+            ;;
+        p)
+            RENDERING_PATH=${OPTARG}
+	    if ! [[ -d $RENDERING_PATH ]] ; then
+		usage
+        	echo "[ERROR] '$RENDERING_PATH' is not a path!"
+		echo "-------------------"
+		exit 1;
+	    fi
+            ;;
+        s)
+            SCRIPT=${OPTARG}
+	    if ! [[ $SCRIPT == "domxss.js" || $SCRIPT == "domxss-fuzz.js" ]] ; then
+	        usage
+        	echo "[ERROR] SCRIPT can be either domxss.js or domxss-fuzz.js!"
+		echo "-------------------"
+		exit 1;
+	    fi
+            ;;
+        d)
+            VERBOSE=${OPTARG}
+	    if ! [[ $VERBOSE == "default" || $VERBOSE == "info" || $VERBOSE == "debug" || $VERBOSE == "gryffin" ]] ; then
+	        usage
+        	echo "[ERROR] VERBOSE must be default, info or debug"
+		echo "-------------------"
+		exit 1;
+	    fi
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+# URL must be set
+if [ -z "${URL}" ]; then
+    usage
+    echo "[ERROR] target url is required!"
+    echo "-------------------"
+    exit 1;
+fi
+if [ -z "${COOKIE_FILE}" ]; then
+    COOKIE_FILE="cookie.txt"
+fi
+if [ -z "${TIMEOUT}" ]; then
+    TIMEOUT=1000
+fi
+if [ -z "${RENDERING_PATH}" ]; then
+    RENDERING_PATH="./"
+fi
+if [ -z "${SCRIPT}" ]; then
+    SCRIPT="domxss.js"
+fi
+if [ -z "${VERBOSE}" ]; then
+    VERBOSE="default"
+fi
+if [ -z "${TPJS_HOME}" ]; then
+    TPJS_HOME=/usr/local/
+fi
+
+if [ $SCRIPT == "domxss.js" ]; then
+	${TPJS_HOME}bin/phantomjs ${TPJS_HOME}share/phantomjs/domxss.js "${URL}" $COOKIE_FILE $TIMEOUT 0 $RENDERING_PATH $VERBOSE
+elif [ $SCRIPT == "domxss-fuzz.js" ]; then
+	${TPJS_HOME}bin/phantomjs ${TPJS_HOME}share/phantomjs/domxss.js "${URL}" $COOKIE_FILE $TIMEOUT 1 $RENDERING_PATH $VERBOSE
+fi
