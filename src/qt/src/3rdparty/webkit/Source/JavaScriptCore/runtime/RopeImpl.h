@@ -76,6 +76,20 @@ public:
             destructNonRecursive();
     }
 
+/*
+#ifdef JSC_TAINTED
+    unsigned int isTainted() const
+    {
+	return this->m_tainted;
+    }
+
+    void setTainted(unsigned int tainted)
+    {
+   	this->m_tainted = tainted;
+    }
+#endif
+*/
+
 private:
     RopeImpl(unsigned fiberCount)
         : StringImplBase(ConstructNonStringImpl)
@@ -90,6 +104,11 @@ private:
 
     unsigned m_size;
     Fiber m_fibers[1];
+/*
+#ifdef JSC_TAINTED
+    unsigned int m_tainted;
+#endif
+*/
 };
 
 }

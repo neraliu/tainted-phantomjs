@@ -240,7 +240,6 @@ namespace JSC {
 #ifdef JSC_TAINTED
 	void setTainted(unsigned int tainted);
         unsigned int isTainted() const;
-        // int TaintedTag() const;
 #endif
 
 // #ifndef NDEBUG

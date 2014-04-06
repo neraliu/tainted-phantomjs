@@ -574,15 +574,41 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToString(ExecState* exec)
 {
 #ifdef JSC_TAINTED_DEBUG
 // no need to propagage, as it passes back the JSValue pointer directly
+std::cerr << "StringObejct::stringProtoFuncToString:" << std::endl;
 #endif
     JSValue thisValue = exec->hostThisValue();
     // Also used for valueOf.
+#ifdef JSC_TAINTED
+    /*
+    unsigned int tainted = 0;
+    if (thisValue.isString() && thisValue.isTainted()) {
+	tainted = thisValue.isTainted();
+    }
+    if (thisValue.inherits(&StringObject::s_info) && asStringObject(thisValue)->isTainted()) {
+	tainted = asStringObject(thisValue)->isTainted();
+    }
+    if (thisValue.isObject()) {
+        UString s = thisValue.toString(exec);
+        if (s.isTainted()) {
+		tainted = s.isTainted();
+	}
+    }
+    */
+#endif
 
+#ifdef JSC_TAINTED 
     if (thisValue.isString())
         return JSValue::encode(thisValue);
 
     if (thisValue.inherits(&StringObject::s_info))
         return JSValue::encode(asStringObject(thisValue)->internalValue());
+#else
+    if (thisValue.isString())
+        return JSValue::encode(thisValue);
+
+    if (thisValue.inherits(&StringObject::s_info))
+        return JSValue::encode(asStringObject(thisValue)->internalValue());
+#endif
 
     return throwVMTypeError(exec);
 }

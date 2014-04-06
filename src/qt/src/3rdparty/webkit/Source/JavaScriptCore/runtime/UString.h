@@ -39,7 +39,11 @@ class UString {
 public:
     // Construct a null string, distinguishable from an empty string.
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_FIX_64
+    UString() { }
+#else
     UString() { m_tainted = 0; } 
+#endif
 #else
     UString() { }
 #endif
@@ -58,9 +62,15 @@ public:
 
     // Construct a string referencing an existing StringImpl.
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_FIX_64
+    UString(StringImpl* impl) : m_impl(impl) { }
+    UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { }
+    UString(RefPtr<StringImpl> impl) : m_impl(impl) { }
+#else
     UString(StringImpl* impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
     UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
     UString(RefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
+#endif
 #else
     UString(StringImpl* impl) : m_impl(impl) { }
     UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { }
@@ -130,19 +140,30 @@ public:
 #ifdef JSC_TAINTED
     unsigned int isTainted() const
     {
+#ifdef JSC_TAINTED_FIX_64
+	return this->impl()->isTainted();
+#else
 	return this->m_tainted;
+#endif
     }
 
     void setTainted(unsigned int tainted)
     {
+#ifdef JSC_TAINTED_FIX_64
+	return this->impl()->setTainted(tainted);
+#else
     	this->m_tainted = tainted;
+#endif
     }
 #endif
 
 private:
     RefPtr<StringImpl> m_impl;
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_FIX_64
+#else
     unsigned int m_tainted;
+#endif
 #endif
 };
 

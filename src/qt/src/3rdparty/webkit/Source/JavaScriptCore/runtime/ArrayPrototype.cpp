@@ -334,13 +334,18 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
 #endif
     JSStringBuilder strBuffer;
 
+#ifdef JSC_TAINTED
+    UString separator;
+    if (!exec->argument(0).isUndefined()) {
+        separator = exec->argument(0).toString(exec);
+        if (separator.isTainted()) {
+	    tainted = separator.isTainted();
+        }
+    }
+#else
     UString separator;
     if (!exec->argument(0).isUndefined())
         separator = exec->argument(0).toString(exec);
-#ifdef JSC_TAINTED
-    if (separator.isTainted()) {
-	tainted = separator.isTainted();
-    }
 #endif
 
     unsigned k = 0;

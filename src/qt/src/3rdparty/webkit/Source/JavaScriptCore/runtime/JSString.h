@@ -96,7 +96,7 @@ namespace JSC {
                 m_rope->initializeFiber(m_index, fiber);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "RopeBuilder::append(RopeImpl::Fiber& fiber)" << std::endl;
+std::cerr << "RopeBuilder::append(RopeImpl::Fiber& fiber)" << std::endl;
 #endif
 #endif
             }
@@ -106,7 +106,7 @@ namespace JSC {
                 m_rope->initializeFiber(m_index, string.impl());
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "RopeBuilder::append(const UString& string):" << string.isTainted() << std::endl;
+std::cerr << "RopeBuilder::append(const UString& string):" << string.isTainted() << std::endl;
 #endif
 #endif
             }
@@ -119,7 +119,7 @@ namespace JSC {
                     append(jsString->string());
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "RopeBuilder::append(JSString* jsString):" << jsString->isTainted() << std::endl;
+std::cerr << "RopeBuilder::append(JSString* jsString):" << jsString->isTainted() << std::endl;
 #endif
 #endif
             }
@@ -220,10 +220,13 @@ namespace JSC {
             Heap::heap(this)->reportExtraMemoryCost(value.impl()->cost());
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
+char msg[50];
+snprintf(msg, 50, "%s", value.utf8(true).data());
+std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
+#endif
 // char msg[50];
 // snprintf(msg, 50, "%s", value.utf8(true).data());
-// std::cerr << "JSString(JSGlobalData* globalData, const UString& value):" << msg << ":" << value.isTainted() << std::endl;
-#endif
+// std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
             if(value.isTainted()) {
 		this->setTainted(value.isTainted()); 
 	    } else {
@@ -258,10 +261,14 @@ namespace JSC {
             ASSERT(!m_value.isNull());
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
+char msg[50];
+snprintf(msg, 50, "%s", value.utf8(true).data());
+std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
+#endif
+// this is where primitive comes from, must be tainted = 0;
 // char msg[50];
 // snprintf(msg, 50, "%s", value.utf8(true).data());
-// std::cerr << "JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType):" << msg << ":" << value.isTainted() << std::endl;
-#endif
+// std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
             if(value.isTainted()) {
 		this->setTainted(value.isTainted()); 
 	    } else {
@@ -293,9 +300,8 @@ namespace JSC {
         {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "JSString(JSGlobalData* globalData, PassRefPtr<StringImpl> value, HasOtherOwnerType)" << std::endl;
+// std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<StringImpl> value, HasOtherOwnerType):" << value->isTainted() << std::endl;
 #endif
-	    this->setTainted(0); 
 #endif
             ASSERT(!m_value.isNull());
         }
@@ -306,7 +312,7 @@ namespace JSC {
         {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)" << std::endl;
+// std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)" << std::endl;
 #endif
 #endif
             m_fibers[0] = rope.leakRef();
@@ -324,11 +330,11 @@ namespace JSC {
             appendStringInConstruct(index, s2);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// char msg1[50];
-// char msg2[50];
-// snprintf(msg1, 50, "%s", s1->string().utf8(true).data());
-// snprintf(msg2, 50, "%s", s2->string().utf8(true).data());
-// std::cerr << "JSString + JSString" << " s1:" << s1->isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << std::endl;
+char msg1[50];
+char msg2[50];
+snprintf(msg1, 50, "%s", s1->string().utf8(true).data());
+snprintf(msg2, 50, "%s", s2->string().utf8(true).data());
+std::cerr << this << ":JSString + JSString" << " s1:" << s1->isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << std::endl;
 #endif
             if(s1->isTainted()) {
 		this->setTainted(s1->isTainted()); 
@@ -375,11 +381,11 @@ namespace JSC {
             appendStringInConstruct(index, u2);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// char msg1[50];
-// char msg2[50];
-// snprintf(msg1, 50, "%s", s1->string().utf8(true).data());
-// snprintf(msg2, 50, "%s", u2.utf8(true).data());
-// std::cerr << "JSString + UString" << " s1:" << s1->isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << std::endl;
+char msg1[50];
+char msg2[50];
+snprintf(msg1, 50, "%s", s1->string().utf8(true).data());
+snprintf(msg2, 50, "%s", u2.utf8(true).data());
+std::cerr << this << ":JSString + UString" << " s1:" << s1->isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << std::endl;
 #endif
             if(s1->isTainted()) {
 		this->setTainted(s1->isTainted()); 
@@ -426,11 +432,11 @@ namespace JSC {
             appendStringInConstruct(index, s2);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// char msg1[50];
-// char msg2[50];
-// snprintf(msg1, 50, "%s", u1.utf8(true).data());
-// snprintf(msg2, 50, "%s", s2->string().utf8(true).data());
-// std::cerr << "UString + JSString" << " u1:" << u1.isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << std::endl;
+char msg1[50];
+char msg2[50];
+snprintf(msg1, 50, "%s", u1.utf8(true).data());
+snprintf(msg2, 50, "%s", s2->string().utf8(true).data());
+std::cerr << this << ":UString + JSString" << " u1:" << u1.isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << std::endl;
 #endif
             if(u1.isTainted()) {
 		this->setTainted(u1.isTainted()); 
@@ -478,13 +484,13 @@ namespace JSC {
             appendValueInConstructAndIncrementLength(exec, index, v3);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// char msg1[50];
-// char msg2[50];
-// char msg3[50];
-// snprintf(msg1, 50, "%s", v1.toString(exec).utf8(true).data());
-// snprintf(msg2, 50, "%s", v2.toString(exec).utf8(true).data());
-// snprintf(msg3, 50, "%s", v3.toString(exec).utf8(true).data());
-// std::cerr << "JSValue + JSValue + JSValue " << " v1:" << v1.isTainted() << ":" << msg1 << " v2:" << v2.isTainted() << ":" << msg2 << " v3:" << v3.isTainted() << ":" << msg3 << std::endl;
+char msg1[50];
+char msg2[50];
+char msg3[50];
+snprintf(msg1, 50, "%s", v1.toString(exec).utf8(true).data());
+snprintf(msg2, 50, "%s", v2.toString(exec).utf8(true).data());
+snprintf(msg3, 50, "%s", v3.toString(exec).utf8(true).data());
+std::cerr << this << ":JSValue + JSValue + JSValue " << " v1:" << v1.isTainted() << ":" << msg1 << " v2:" << v2.isTainted() << ":" << msg2 << " v3:" << v3.isTainted() << ":" << msg3 << std::endl;
 #endif
             if(v1.isTainted()) { 
 		this->setTainted(v1.isTainted()); 
@@ -536,11 +542,11 @@ namespace JSC {
             appendStringInConstruct(index, u2);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// char msg1[50];
-// char msg2[50];
-// snprintf(msg1, 50, "%s", u1.utf8(true).data());
-// snprintf(msg2, 50, "%s", u2.utf8(true).data());
-// std::cerr << "UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << std::endl;
+char msg1[50];
+char msg2[50];
+snprintf(msg1, 50, "%s", u1.utf8(true).data());
+snprintf(msg2, 50, "%s", u2.utf8(true).data());
+std::cerr << this << ":UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << std::endl;
 #endif
             if(u1.isTainted()) { 
 		this->setTainted(u1.isTainted()); 
@@ -586,13 +592,13 @@ namespace JSC {
             appendStringInConstruct(index, u3);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// char msg1[50];
-// char msg2[50];
-// char msg3[50];
-// snprintf(msg1, 50, "%s", u1.utf8(true).data());
-// snprintf(msg2, 50, "%s", u2.utf8(true).data());
-// snprintf(msg3, 50, "%s", u3.utf8(true).data());
-// std::cerr << "UString + UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << " u3:" << u3.isTainted() << ":" << msg3 << std::endl;
+char msg1[50];
+char msg2[50];
+char msg3[50];
+snprintf(msg1, 50, "%s", u1.utf8(true).data());
+snprintf(msg2, 50, "%s", u2.utf8(true).data());
+snprintf(msg3, 50, "%s", u3.utf8(true).data());
+std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << " u3:" << u3.isTainted() << ":" << msg3 << std::endl;
 #endif
             if(u1.isTainted()) { 
 		this->setTainted(u1.isTainted()); 
@@ -644,12 +650,18 @@ namespace JSC {
         {
             if (isRope())
                 resolveRope(exec);
+#ifdef JSC_TAINTED
+// std::cerr << this << ":UString::value():" << m_tainted << std::endl;
+#endif
             return m_value;
         }
         const UString& tryGetValue() const
         {
             if (isRope())
                 resolveRope(0);
+#ifdef JSC_TAINTED
+// std::cerr << "UString::tryGetValue()" << std::endl;
+#endif
             return m_value;
         }
         unsigned length() { return m_length; }
@@ -684,11 +696,14 @@ namespace JSC {
             if (isRope()) {
 	        m_tainted = tainted;
 	    } else {
-                this->string().setTainted(tainted);
+#ifdef JSC_TAINTED_FIX_64
+	        m_tainted = tainted;
+#endif
+		this->string().setTainted(tainted);
 	    }
 	}
 
-	unsigned int m_tainted;
+    	unsigned int m_tainted;
 #endif
 
     private:
@@ -697,7 +712,7 @@ namespace JSC {
             , m_fiberCount(0)
         {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "JSString(VPtrStealingHackType)" << std::endl;
+std::cerr << "JSString(VPtrStealingHackType)" << std::endl;
 #endif
         }
         static const ClassInfo s_info;
@@ -869,7 +884,7 @@ namespace JSC {
     inline JSString* jsString(JSGlobalData* globalData, const UString& s)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsString(JSGlobalData* globalData, const UString& s)" << std::endl;
+std::cerr << this << ":jsString(JSGlobalData* globalData, const UString& s)" << std::endl;
 #endif
         int size = s.length();
         if (!size)
