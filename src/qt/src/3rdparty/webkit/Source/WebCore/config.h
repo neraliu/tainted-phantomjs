@@ -265,13 +265,6 @@ typedef float CGFloat;
 #define JSC_TAINTED             1
 #define	JSC_TAINTED_32		1
 // #define	JSC_TAINTED_64		1
-// if I use 16 bits for storing the tainted number, i can identify 2^16 sources. it is enough for most of the use case.
-/*
-| 8 bits | 8 bits | 8 bits | 8 bits |
-- the last 16 bits is used for carrying the tainted number for identifying how the sources and sinks.
-*/
-#define JSC_TAINTED_BIT         32
-#define JSC_TAINTED_MAX         0xffff
 // the debug flag of the hack
 #define JSC_TAINTED_DEBUG    	1
 #endif /* JSC_TAINTED */
