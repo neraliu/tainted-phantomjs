@@ -279,7 +279,14 @@ public:
     unsigned hash() const { if (!m_hash) m_hash = StringHasher::computeHash(m_data, m_length); return m_hash; }
     unsigned existingHash() const { ASSERT(m_hash); return m_hash; }
 
+#ifdef JSC_TAINTED
+    ALWAYS_INLINE void deref() { 
+	m_refCountAndFlags -= s_refCountIncrement;
+	if (!(m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic))) delete this; 
+    }
+#else
     ALWAYS_INLINE void deref() { m_refCountAndFlags -= s_refCountIncrement; if (!(m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic))) delete this; }
+#endif
     ALWAYS_INLINE bool hasOneRef() const { return (m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic)) == s_refCountIncrement; }
 
     static StringImpl* empty();
@@ -390,7 +397,7 @@ private:
         SharedUChar* m_sharedBuffer;
     };
     mutable unsigned m_hash;
-#ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_FIX_64
     unsigned int m_tainted;
 #endif
 };

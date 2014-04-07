@@ -136,9 +136,10 @@
 #define JSC_TAINTED             1
 
 // #define JSC_TAINTED_FIX_64	1
-// #define JSC_TAINTED_32          1
+
+// #define JSC_TAINTED_32       1
 #define JSC_TAINTED_64          1
 // the debug flag of the hack
 // #define JSC_TAINTED_DEBUG	1
-//
+
 #endif /* JSC_TAINTED */

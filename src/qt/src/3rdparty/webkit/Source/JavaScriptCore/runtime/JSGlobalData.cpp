@@ -130,7 +130,11 @@ void JSGlobalData::storeVPtrs()
 #ifdef JSC_TAINTED_32
     char storage[64];
 #elif JSC_TAINTED_64
+#ifdef JSC_TAINTED_FIX_64
+    char storage[64];
+#else
     char storage[128];
+#endif
 #else
     char storage[64];
 #endif

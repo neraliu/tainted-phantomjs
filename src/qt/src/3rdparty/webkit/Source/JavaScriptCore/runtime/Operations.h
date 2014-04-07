@@ -47,8 +47,9 @@ namespace JSC {
     ALWAYS_INLINE JSValue jsString(ExecState* exec, JSString* s1, JSString* s2)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::endl;
+std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::endl;
 #endif
+
         unsigned length1 = s1->length();
         if (!length1)
             return s2;

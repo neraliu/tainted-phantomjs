@@ -222,11 +222,8 @@ std::cerr << "RopeBuilder::append(JSString* jsString):" << jsString->isTainted()
 #ifdef JSC_TAINTED_DEBUG
 char msg[50];
 snprintf(msg, 50, "%s", value.utf8(true).data());
-std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
+std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):" << msg << ":" << value.isTainted() << std::endl;
 #endif
-// char msg[50];
-// snprintf(msg, 50, "%s", value.utf8(true).data());
-// std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
             if(value.isTainted()) {
 		this->setTainted(value.isTainted()); 
 	    } else {
@@ -263,12 +260,8 @@ std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):
 #ifdef JSC_TAINTED_DEBUG
 char msg[50];
 snprintf(msg, 50, "%s", value.utf8(true).data());
-std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
+std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType):" << msg << ":" << value.isTainted() << std::endl;
 #endif
-// this is where primitive comes from, must be tainted = 0;
-// char msg[50];
-// snprintf(msg, 50, "%s", value.utf8(true).data());
-// std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType):" << msg << ":" << *value << ":" << value.isTainted() << std::endl;
             if(value.isTainted()) {
 		this->setTainted(value.isTainted()); 
 	    } else {
@@ -650,18 +643,12 @@ std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted()
         {
             if (isRope())
                 resolveRope(exec);
-#ifdef JSC_TAINTED
-// std::cerr << this << ":UString::value():" << m_tainted << std::endl;
-#endif
             return m_value;
         }
         const UString& tryGetValue() const
         {
             if (isRope())
                 resolveRope(0);
-#ifdef JSC_TAINTED
-// std::cerr << "UString::tryGetValue()" << std::endl;
-#endif
             return m_value;
         }
         unsigned length() { return m_length; }
@@ -684,23 +671,44 @@ std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted()
 #ifdef JSC_TAINTED
 	unsigned int isTainted() const
 	{
+#ifdef JSC_TAINTED_FIX_64
+	    // move the flag into the JSString.
+	    return m_tainted;
+/*
             if (isRope()) {
 	        return m_tainted;
 	    } else {
 	        return this->m_value.isTainted();
 	    }
+*/
+#else
+            if (isRope()) {
+	        return m_tainted;
+	    } else {
+	        return this->m_value.isTainted();
+	    }
+#endif
 	}
 
 	void setTainted(unsigned int tainted)
 	{
+#ifdef JSC_TAINTED_FIX_64
+	    // move the flag into the JSString.
+	    m_tainted = tainted;
+/*
             if (isRope()) {
 	        m_tainted = tainted;
 	    } else {
-#ifdef JSC_TAINTED_FIX_64
-	        m_tainted = tainted;
-#endif
 		this->string().setTainted(tainted);
 	    }
+*/
+#else
+            if (isRope()) {
+	        m_tainted = tainted;
+	    } else {
+		this->string().setTainted(tainted);
+	    }
+#endif
 	}
 
     	unsigned int m_tainted;
