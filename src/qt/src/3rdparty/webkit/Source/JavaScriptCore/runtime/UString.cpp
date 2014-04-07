@@ -68,7 +68,7 @@ COMPILE_ASSERT(sizeof(UString) == sizeof(void*) + sizeof(int), UString_should_st
 #ifdef JSC_TAINTED_FIX_64
 COMPILE_ASSERT(sizeof(UString) == sizeof(void*), UString_should_stay_small);
 #else
-COMPILE_ASSERT(sizeof(UString) == sizeof(void*) + sizeof(long), UString_should_stay_small);
+COMPILE_ASSERT(sizeof(UString) == sizeof(void*) + sizeof(void*), UString_should_stay_small);
 #endif
 #endif
 
