@@ -111,12 +111,7 @@ EncodedJSValue JSC_HOST_CALL regExpProtoFuncExec(ExecState* exec)
             trace_struct.internalfunc = "regExpProtoFuncExec";
             trace_struct.jsfunc = "RegExp.exec";
 	    trace_struct.action = "propagate";
-
-	    char msg[20];
-            stringstream msgss;
-            snprintf(msg, 20, "%s", s.toString(exec).utf8(true).data());
-            msgss << msg;
-            msgss >> trace_struct.value;
+    	    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
 
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);

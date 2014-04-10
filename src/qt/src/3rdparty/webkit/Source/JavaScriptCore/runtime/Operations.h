@@ -100,13 +100,7 @@ std::cerr << s1->length() << ":" << s2->length() << std::endl;
 		trace_struct.internalfunc = "jsString";
 		trace_struct.jsfunc = "String._manipulation";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", s1->string().utf8(true).data());
-		snprintf(msg+10, 10, "%s", s2->string().utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+                trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(s2->string());
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -138,6 +132,8 @@ std::cerr << u1.length() << ":" << s2->length() << std::endl;
         JSGlobalData* globalData = &exec->globalData();
 
 #ifdef JSC_TAINTED_DEBUG
+// the u1 and s2 will carry the tainted information, and the following function will do the propagation
+// JSString(globalData, fiberCount, u1, s2);
 #endif
         if (fiberCount <= JSString::s_maxInternalRopeLength)
             return new (globalData) JSString(globalData, fiberCount, u1, s2);
@@ -172,13 +168,7 @@ std::cerr << u1.length() << ":" << s2->length() << std::endl;
 		trace_struct.internalfunc = "jsString";
 		trace_struct.jsfunc = "String._manipulation";
 		trace_struct.action = "propagate";
-
-	  	char msg[20];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", u1.utf8(true).data());
-		snprintf(msg+10, 10, "%s", s2->string().utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+                trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(s2->string());
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -210,6 +200,8 @@ std::cerr << s1->length() << ":" << u2.length() << std::endl;
         JSGlobalData* globalData = &exec->globalData();
 
 #ifdef JSC_TAINTED_DEBUG
+// the s1 and u2 will carry the tainted information, and the following function will do the propagation
+// JSString(globalData, fiberCount, s1, u2);
 #endif
         if (fiberCount <= JSString::s_maxInternalRopeLength)
             return new (globalData) JSString(globalData, fiberCount, s1, u2);
@@ -244,13 +236,7 @@ std::cerr << s1->length() << ":" << u2.length() << std::endl;
 		trace_struct.internalfunc = "jsString";
 		trace_struct.jsfunc = "String._manipulation";
 		trace_struct.action = "propagate";
-
-	  	char msg[20];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", s1->string().utf8(true).data());
-		snprintf(msg+10, 10, "%s", u2.utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+                trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(u2);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -279,6 +265,8 @@ std::cerr << u1.length() << ":" << u2.length() << std::endl;
             return throwOutOfMemoryError(exec);
 
 #ifdef JSC_TAINTED_DEBUG
+// the u1 and u2 will carry the tainted information, and the following function will do the propagation
+// JSString(globalData, fiberCount, u1, u2);
 #endif
         JSGlobalData* globalData = &exec->globalData();
         return new (globalData) JSString(globalData, u1, u2);
@@ -307,6 +295,8 @@ std::cerr << u1.length() << ":" << u2.length() << ":" << u3.length() << std::end
             return throwOutOfMemoryError(exec);
 
 #ifdef JSC_TAINTED_DEBUG
+// the u1, u2 and u3 will carry the tainted information, and the following function will do the propagation
+// JSString(globalData, u1, u2, u3);
 #endif
         JSGlobalData* globalData = &exec->globalData();
         return new (globalData) JSString(globalData, u1, u2, u3);
@@ -330,6 +320,8 @@ std::cerr << u1.length() << ":" << u2.length() << ":" << u3.length() << std::end
         }
 
 #ifdef JSC_TAINTED_DEBUG
+// the v1, v2 and v3 will carry the tainted information, and the following function will do the propagation
+// JSString(globalData, v1, v2, v3);
 #endif
         JSGlobalData* globalData = &exec->globalData();
         if (fiberCount == 3)
@@ -393,12 +385,7 @@ std::cerr << u1.length() << ":" << u2.length() << ":" << u3.length() << std::end
 	    trace_struct.internalfunc = "jsString";
 	    trace_struct.jsfunc = "String._manipulation";
 	    trace_struct.action = "propagate";
-
-	    char msg[20];
-	    stringstream msgss;
-	    snprintf(msg, 20, "%s", s->string().utf8(true).data());
-	    msgss << msg;
-	    msgss >> trace_struct.value;
+	    trace_struct.value = TaintedTrace::UString2string(s->string());
 
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);
@@ -493,12 +480,7 @@ std::cerr << "jsString(ExecState* exec, JSValue thisValue)" << std::endl;
 		trace_struct.internalfunc = "jsString";
 		trace_struct.jsfunc = "String._manipulation";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 20, "%s", s->string().utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+	        trace_struct.value = TaintedTrace::UString2string(s->string());
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);

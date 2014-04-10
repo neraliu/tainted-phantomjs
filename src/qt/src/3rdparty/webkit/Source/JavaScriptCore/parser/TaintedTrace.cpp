@@ -62,4 +62,17 @@ TaintedTrace::~TaintedTrace()
 {
 }
 
+string TaintedTrace::UString2string(const UString& u)
+{
+	// we just peek 20 bytes of data.
+	int size = 20;
+	char msg[size];
+	string str;
+       	stringstream msgss;
+       	snprintf(msg, size, "%s", u.utf8(true).data());
+	msgss << msg;
+	msgss >> str;
+	return str;
+}
+
 } // namespace JSC

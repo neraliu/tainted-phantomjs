@@ -236,14 +236,9 @@ std::cerr << UString::getUStringAddr(value) << ":" << msg << ":" << value.isTain
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = value.isTainted();
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 20, "%s", value.utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(value);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -276,14 +271,9 @@ std::cerr << "UString::getUStringAddr(value)" << ":" << msg << ":" << value.isTa
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = value.isTainted();
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 20, "%s", value.utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(value);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -351,15 +341,9 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
 			trace_struct.taintedno = s2->isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", s1->string().utf8(true).data());
-		snprintf(msg+10, 10, "%s", s2->string().utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(s2->string());
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -403,15 +387,9 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
 			trace_struct.taintedno = u2.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", s1->string().utf8(true).data());
-		snprintf(msg+10, 10, "%s", u2.utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(u2);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -455,14 +433,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(s2->s
 			trace_struct.taintedno = s2->isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", u1.utf8(true).data());
-		snprintf(msg+10, 10, "%s", s2->string().utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(s2->string());
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -515,15 +488,9 @@ std::cerr << UString::getUStringAddr(this->string()) << ":JSValue + JSValue + JS
 			trace_struct.taintedno = v3.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[10];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", v1.toString(exec).utf8(true).data());
-		snprintf(msg+10, 10, "%s", v2.toString(exec).utf8(true).data());
-		snprintf(msg+20, 10, "%s", v3.toString(exec).utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(v1.toString(exec)) + TaintedTrace::UString2string(v2.toString(exec)) + TaintedTrace::UString2string(v3.toString(exec));
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -566,14 +533,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 			trace_struct.taintedno = u2.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[20];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", u1.utf8(true).data());
-		snprintf(msg+10, 10, "%s", u2.utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(u2);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -625,15 +587,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 			trace_struct.taintedno = u3.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
+		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-
-		char msg[30];
-		stringstream msgss;
-		snprintf(msg, 10, "%s", u1.utf8(true).data());
-		snprintf(msg+10, 10, "%s", u2.utf8(true).data());
-		snprintf(msg+20, 10, "%s", u3.utf8(true).data());
-		msgss << msg;
-		msgss >> trace_struct.value;
+		trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(u2) + TaintedTrace::UString2string(u3);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -714,7 +670,6 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 	}
 
 #ifdef JSC_TAINTED_FIX_64
-// potential bug: if ResolveRope, do we need to set it back to m_value?
     	unsigned int m_tainted;
 #else
     	unsigned int m_tainted;
@@ -883,12 +838,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 	    trace_struct.internalfunc = "JSString::getIndex";
 	    trace_struct.jsfunc = "String[]";
 	    trace_struct.action = "propagate";
-
-	    char msg[20];
-	    stringstream msgss;
-	    snprintf(msg, 20, "%s", s->toString(exec).utf8(true).data());
-	    msgss << msg;
-	    msgss >> trace_struct.value;
+            trace_struct.value = TaintedTrace::UString2string(s->toString(exec));
 
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);
@@ -899,12 +849,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 #endif
     }
 
+    /* the following inline will finally go to the JSString constructor */
     inline JSString* jsString(JSGlobalData* globalData, const UString& s)
     {
-#ifdef JSC_TAINTED_DEBUG
-// std::cerr << this << ":jsString(JSGlobalData* globalData, const UString& s)" << std::endl;
-#endif
-
         int size = s.length();
         if (!size)
             return globalData->smallStrings.emptyString(globalData);

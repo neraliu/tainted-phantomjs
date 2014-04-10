@@ -300,7 +300,6 @@ JS_EXPORT void JSValueProtect(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT void JSValueUnprotect(JSContextRef ctx, JSValueRef value);
 
-// #define JSC_TAINTED
 #ifdef JSC_TAINTED
 /*!
 @function

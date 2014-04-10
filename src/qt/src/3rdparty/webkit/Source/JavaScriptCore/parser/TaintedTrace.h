@@ -29,6 +29,9 @@
 
 #include <string>
 #include <vector>
+#include <stdio.h>
+#include "UString.h"
+#include <wtf/text/CString.h>
 
 using namespace std;
 
@@ -46,6 +49,8 @@ namespace JSC {
 	class TaintedTrace {
                 public:
                         static TaintedTrace* getInstance();
+			static string UString2string(const UString& u);
+
 			vector<TaintedStructure> getTrace();	
 			void addTaintedTrace(TaintedStructure s);
 			void clearTrace();

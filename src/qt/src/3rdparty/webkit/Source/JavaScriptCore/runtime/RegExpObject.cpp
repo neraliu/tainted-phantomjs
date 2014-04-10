@@ -155,12 +155,7 @@ JSValue RegExpObject::exec(ExecState* exec)
         trace_struct.internalfunc = "stringProtoFuncReplace::exec";
         trace_struct.jsfunc = "RegExp.exec";
         trace_struct.action = "propagate";
-
-        char msg[20];
-        stringstream msgss;
-        snprintf(msg, 20, "%s", thisValue.toString(exec).utf8(true).data());
-        msgss << msg;
-        msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
