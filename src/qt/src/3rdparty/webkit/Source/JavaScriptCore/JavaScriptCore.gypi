@@ -415,6 +415,8 @@
             'parser/TaintedCounter.h',
             'parser/TaintedTrace.cpp',
             'parser/TaintedTrace.h',
+            'parser/TaintedMap.cpp',
+            'parser/TaintedMap.h',
             'profiler/Profile.cpp',
             'profiler/ProfileGenerator.cpp',
             'profiler/ProfileGenerator.h',

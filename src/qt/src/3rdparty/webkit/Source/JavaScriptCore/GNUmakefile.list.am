@@ -207,6 +207,8 @@ javascriptcore_sources += \
 	Source/JavaScriptCore/parser/TaintedCounter.h \
 	Source/JavaScriptCore/parser/TaintedTrace.cpp \
 	Source/JavaScriptCore/parser/TaintedTrace.h \
+	Source/JavaScriptCore/parser/TaintedMap.cpp \
+	Source/JavaScriptCore/parser/TaintedMap.h \
 	Source/JavaScriptCore/profiler/CallIdentifier.h \
 	Source/JavaScriptCore/profiler/Profile.cpp \
 	Source/JavaScriptCore/profiler/ProfileGenerator.cpp \
