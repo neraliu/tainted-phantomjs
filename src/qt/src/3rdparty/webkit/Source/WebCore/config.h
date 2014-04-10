@@ -271,4 +271,4 @@ typedef float CGFloat;
 // the debug flag of the hack
 // #define JSC_TAINTED_DEBUG    1
 
-// #endif /* JSC_TAINTED */
+#endif /* JSC_TAINTED */
