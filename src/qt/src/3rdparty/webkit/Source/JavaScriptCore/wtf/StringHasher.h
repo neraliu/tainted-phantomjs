@@ -21,6 +21,8 @@
 #ifndef WTF_StringHasher_h
 #define WTF_StringHasher_h
 
+#include <time.h>
+#include <stdlib.h>
 #include <wtf/unicode/Unicode.h>
 
 namespace WTF {
@@ -85,7 +87,7 @@ public:
         if (!result)
             return 0x40000000;
 
-        return result;
+	return result;
     }
 
     template<typename T, UChar Converter(T)> static inline unsigned computeHash(const T* data, unsigned length)

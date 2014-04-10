@@ -97,7 +97,6 @@ private:
         hash();
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-	m_tainted = 0;
 #endif
 #endif
     }
@@ -113,7 +112,6 @@ private:
         ASSERT(m_length);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-	m_tainted = 0;
 #endif
 #endif
     }
@@ -129,7 +127,6 @@ private:
         ASSERT(m_length);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-	m_tainted = 0;
 #endif
 #endif
     }
@@ -146,7 +143,6 @@ private:
         ASSERT(m_substringBuffer->bufferOwnership() != BufferSubstring);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-	m_tainted = 0;
 #endif
 #endif
     }
@@ -162,7 +158,6 @@ private:
         ASSERT(m_length);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-	m_tainted = 0;
 #endif
 #endif
     }
@@ -176,7 +171,6 @@ private:
         m_hash = hash;
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-	m_tainted = 0;
 #endif
 #endif
     }
@@ -280,10 +274,7 @@ public:
     unsigned existingHash() const { ASSERT(m_hash); return m_hash; }
 
 #ifdef JSC_TAINTED
-    ALWAYS_INLINE void deref() { 
-	m_refCountAndFlags -= s_refCountIncrement;
-	if (!(m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic))) delete this; 
-    }
+    ALWAYS_INLINE void deref() { m_refCountAndFlags -= s_refCountIncrement; if (!(m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic))) delete this; }
 #else
     ALWAYS_INLINE void deref() { m_refCountAndFlags -= s_refCountIncrement; if (!(m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic))) delete this; }
 #endif
@@ -370,15 +361,6 @@ public:
 
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-    unsigned int isTainted() const
-    {
-	return m_tainted;
-    }
-
-    void setTainted(unsigned int tainted)
-    {
-	m_tainted = tainted;
-    }
 #endif
 #endif
 
@@ -398,7 +380,6 @@ private:
     };
     mutable unsigned m_hash;
 #ifdef JSC_TAINTED_FIX_64
-    unsigned int m_tainted;
 #endif
 };
 
