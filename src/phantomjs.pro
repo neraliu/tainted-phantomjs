@@ -3,8 +3,6 @@ TARGET = phantomjs
 QT += network webkit
 CONFIG += console
 
-QMAKE_RPATHDIR = /home/y/lib
-
 DESTDIR = ../bin
 
 RESOURCES = phantomjs.qrc \
