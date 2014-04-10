@@ -33,6 +33,12 @@
 #include "config.h"
 #include <wtf/text/StringImpl.h>
 
+#include "TaintedMap.h"
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <stdio.h>
+
 namespace JSC {
 
 class UString {
@@ -40,7 +46,20 @@ public:
     // Construct a null string, distinguishable from an empty string.
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-    UString() { }
+    UString() { 
+	TaintedMap* map = TaintedMap::getInstance();
+	map->add(getUStringAddr(), 0);
+    }
+
+    // copy constructor
+    UString(const UString& u) {
+#ifdef JSC_TAINTED_DEBUG
+std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAddr(u) << std::endl;
+#endif
+	TaintedMap* map = TaintedMap::getInstance();
+	map->add(getUStringAddr(), map->get(UString::getUStringAddr(u)));
+	m_impl = u.m_impl;
+    }
 #else
     UString() { m_tainted = 0; } 
 #endif
@@ -63,9 +82,18 @@ public:
     // Construct a string referencing an existing StringImpl.
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
-    UString(StringImpl* impl) : m_impl(impl) { }
-    UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { }
-    UString(RefPtr<StringImpl> impl) : m_impl(impl) { }
+    UString(StringImpl* impl) : m_impl(impl) { 
+	TaintedMap* map = TaintedMap::getInstance();
+	map->add(getUStringAddr(), 0);
+    }
+    UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { 
+	TaintedMap* map = TaintedMap::getInstance();
+	map->add(getUStringAddr(), 0);
+    }
+    UString(RefPtr<StringImpl> impl) : m_impl(impl) { 
+	TaintedMap* map = TaintedMap::getInstance();
+	map->add(getUStringAddr(), 0);
+    }
 #else
     UString(StringImpl* impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
     UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
@@ -78,7 +106,10 @@ public:
 #endif
 
     // Inline the destructor.
-    ALWAYS_INLINE ~UString() { }
+    ALWAYS_INLINE ~UString() { 
+	TaintedMap* map = TaintedMap::getInstance();
+	map->remove(getUStringAddr());
+    }
 
     void swap(UString& o) { m_impl.swap(o.m_impl); }
 
@@ -141,7 +172,8 @@ public:
     unsigned int isTainted() const
     {
 #ifdef JSC_TAINTED_FIX_64
-	return this->impl()->isTainted();
+	TaintedMap* map = TaintedMap::getInstance();
+	return map->get(getUStringAddr());
 #else
 	return this->m_tainted;
 #endif
@@ -150,10 +182,33 @@ public:
     void setTainted(unsigned int tainted)
     {
 #ifdef JSC_TAINTED_FIX_64
-	return this->impl()->setTainted(tainted);
+	TaintedMap* map = TaintedMap::getInstance();
+	map->update(getUStringAddr(), tainted);
 #else
     	this->m_tainted = tainted;
 #endif
+    }
+
+    std::string getUStringAddr() const
+    {
+	char loc[16];
+	std::string addr;
+       	std::stringstream msgss;
+	snprintf(loc, 16, "%p", this);
+       	msgss << loc;
+       	msgss >> addr;
+	return addr;
+    }
+
+    static std::string getUStringAddr(const UString& u)
+    {
+	char loc[16];
+	std::string addr;
+       	std::stringstream msgss;
+	snprintf(loc, 16, "%p", &u);
+       	msgss << loc;
+       	msgss >> addr;
+	return addr;
     }
 #endif
 

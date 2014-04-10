@@ -163,7 +163,7 @@ int32_t toInt32(double number)
 
     // Select the appropriate 32-bits from the floating point mantissa.  If the
     // exponent is 52 then the bits we need to select are already aligned to the
-    // lowest bits of the 64-bit integer representation of tghe number, no need
+    // lowest bits of the 64-bit integer representation of the number, no need
     // to shift.  If the exponent is greater than 52 we need to shift the value
     // left by (exp - 52), if the value is less than 52 we need to shift right
     // accordingly.

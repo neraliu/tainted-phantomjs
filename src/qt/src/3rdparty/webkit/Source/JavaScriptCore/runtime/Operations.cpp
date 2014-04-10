@@ -47,14 +47,28 @@ NEVER_INLINE JSValue jsAddSlowCase(CallFrame* callFrame, JSValue v1, JSValue v2)
     JSValue p1 = v1.toPrimitive(callFrame);
     JSValue p2 = v2.toPrimitive(callFrame);
 
+#ifdef JSC_TAINTED_DEBUG
+std::cerr << "jsAddSlowCase(CallFrame* callFrame, JSValue v1, JSValue v2)" << std::endl;
+#endif
+
     if (p1.isString()) {
+#ifdef JSC_TAINTED_DEBUG
+std::cerr << "jsAddSlowCase:p1.isString():" << p2.isString() << std::endl;
+#endif
         return p2.isString()
             ? jsString(callFrame, asString(p1), asString(p2))
             : jsString(callFrame, asString(p1), p2.toString(callFrame));
     }
-    if (p2.isString())
+    if (p2.isString()) {
+#ifdef JSC_TAINTED_DEBUG
+std::cerr << "jsAddSlowCase:p2.isString()" << std::endl;
+#endif
         return jsString(callFrame, p1.toString(callFrame), asString(p2));
+    }
 
+#ifdef JSC_TAINTED_DEBUG
+std::cerr << "jsAddSlowCase:number+number" << std::endl;
+#endif
     return jsNumber(p1.toNumber(callFrame) + p2.toNumber(callFrame));
 }
 

@@ -68,7 +68,7 @@ COMPILE_ASSERT(sizeof(UString) == sizeof(void*) + sizeof(int), UString_should_st
 #ifdef JSC_TAINTED_FIX_64
 COMPILE_ASSERT(sizeof(UString) == sizeof(void*), UString_should_stay_small);
 #else
-COMPILE_ASSERT(sizeof(UString) == sizeof(void*) + sizeof(void*), UString_should_stay_small);
+COMPILE_ASSERT(sizeof(UString) == sizeof(void*) + sizeof(long), UString_should_stay_small);
 #endif
 #endif
 
@@ -82,8 +82,10 @@ UString::UString(const UChar* characters, unsigned length)
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
+	TaintedMap* map = TaintedMap::getInstance();
+        map->add(getUStringAddr(), 0);
 #else
-    m_tainted = 0;
+	m_tainted = 0;
 #endif
 #endif
 }
@@ -101,8 +103,10 @@ UString::UString(const UChar* characters)
     m_impl = StringImpl::create(characters, length);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
+	TaintedMap* map = TaintedMap::getInstance();
+        map->add(getUStringAddr(), 0);
 #else
-    m_tainted = 0;
+	m_tainted = 0;
 #endif
 #endif
 }
@@ -113,8 +117,10 @@ UString::UString(const char* characters, unsigned length)
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
+	TaintedMap* map = TaintedMap::getInstance();
+        map->add(getUStringAddr(), 0);
 #else
-    m_tainted = 0;
+	m_tainted = 0;
 #endif
 #endif
 }
@@ -125,8 +131,10 @@ UString::UString(const char* characters)
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_FIX_64
+	TaintedMap* map = TaintedMap::getInstance();
+        map->add(getUStringAddr(), 0);
 #else
-    m_tainted = 0;
+	m_tainted = 0;
 #endif
 #endif
 }

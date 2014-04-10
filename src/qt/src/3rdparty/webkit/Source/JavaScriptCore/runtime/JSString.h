@@ -37,13 +37,13 @@
 #include "PropertySlot.h"
 #include "RopeImpl.h"
 #include "Structure.h"
+
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedMap.h"
+#include <string>
 #include <sstream>
-
-// #ifdef JSC_TAINTED
 #include <iostream>
-// #endif
 
 namespace JSC {
 
@@ -222,8 +222,11 @@ std::cerr << "RopeBuilder::append(JSString* jsString):" << jsString->isTainted()
 #ifdef JSC_TAINTED_DEBUG
 char msg[50];
 snprintf(msg, 50, "%s", value.utf8(true).data());
-std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):" << msg << ":" << value.isTainted() << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":";
+std::cerr << "JSString(JSGlobalData* globalData, const UString& value)" << ":";
+std::cerr << UString::getUStringAddr(value) << ":" << msg << ":" << value.isTainted() << std::endl;
 #endif
+
             if(value.isTainted()) {
 		this->setTainted(value.isTainted()); 
 	    } else {
@@ -260,7 +263,9 @@ std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value):
 #ifdef JSC_TAINTED_DEBUG
 char msg[50];
 snprintf(msg, 50, "%s", value.utf8(true).data());
-std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType):" << msg << ":" << value.isTainted() << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":";
+std::cerr << "JSString(JSGlobalData* globalData, const UString& value, HasOtherOwnerType)" << ":";
+std::cerr << "UString::getUStringAddr(value)" << ":" << msg << ":" << value.isTainted() << std::endl;
 #endif
             if(value.isTainted()) {
 		this->setTainted(value.isTainted()); 
@@ -293,7 +298,7 @@ std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, 
         {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<StringImpl> value, HasOtherOwnerType):" << value->isTainted() << std::endl;
+std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<StringImpl> value, HasOtherOwnerType):" << std::endl;
 #endif
 #endif
             ASSERT(!m_value.isNull());
@@ -305,7 +310,7 @@ std::cerr << this << ":JSString(JSGlobalData* globalData, const UString& value, 
         {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)" << std::endl;
+std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)" << std::endl;
 #endif
 #endif
             m_fibers[0] = rope.leakRef();
@@ -327,7 +332,8 @@ char msg1[50];
 char msg2[50];
 snprintf(msg1, 50, "%s", s1->string().utf8(true).data());
 snprintf(msg2, 50, "%s", s2->string().utf8(true).data());
-std::cerr << this << ":JSString + JSString" << " s1:" << s1->isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":JSString + JSString" << " s1:" << s1->isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << ":";
+std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUStringAddr(s2->string()) << std::endl;
 #endif
             if(s1->isTainted()) {
 		this->setTainted(s1->isTainted()); 
@@ -378,7 +384,8 @@ char msg1[50];
 char msg2[50];
 snprintf(msg1, 50, "%s", s1->string().utf8(true).data());
 snprintf(msg2, 50, "%s", u2.utf8(true).data());
-std::cerr << this << ":JSString + UString" << " s1:" << s1->isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":JSString + UString" << " s1:" << s1->isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << ":";
+std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUStringAddr(u2) << std::endl;
 #endif
             if(s1->isTainted()) {
 		this->setTainted(s1->isTainted()); 
@@ -429,7 +436,8 @@ char msg1[50];
 char msg2[50];
 snprintf(msg1, 50, "%s", u1.utf8(true).data());
 snprintf(msg2, 50, "%s", s2->string().utf8(true).data());
-std::cerr << this << ":UString + JSString" << " u1:" << u1.isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":UString + JSString" << " u1:" << u1.isTainted() << ":" << msg1 << " s2:" << s2->isTainted() << ":" << msg2 << ":";
+std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(s2->string()) << std::endl;
 #endif
             if(u1.isTainted()) {
 		this->setTainted(u1.isTainted()); 
@@ -483,7 +491,7 @@ char msg3[50];
 snprintf(msg1, 50, "%s", v1.toString(exec).utf8(true).data());
 snprintf(msg2, 50, "%s", v2.toString(exec).utf8(true).data());
 snprintf(msg3, 50, "%s", v3.toString(exec).utf8(true).data());
-std::cerr << this << ":JSValue + JSValue + JSValue " << " v1:" << v1.isTainted() << ":" << msg1 << " v2:" << v2.isTainted() << ":" << msg2 << " v3:" << v3.isTainted() << ":" << msg3 << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":JSValue + JSValue + JSValue " << " v1:" << v1.isTainted() << ":" << msg1 << " v2:" << v2.isTainted() << ":" << msg2 << " v3:" << v3.isTainted() << ":" << msg3 << std::endl;
 #endif
             if(v1.isTainted()) { 
 		this->setTainted(v1.isTainted()); 
@@ -539,7 +547,8 @@ char msg1[50];
 char msg2[50];
 snprintf(msg1, 50, "%s", u1.utf8(true).data());
 snprintf(msg2, 50, "%s", u2.utf8(true).data());
-std::cerr << this << ":UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << ":";
+std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) << std::endl;
 #endif
             if(u1.isTainted()) { 
 		this->setTainted(u1.isTainted()); 
@@ -591,7 +600,8 @@ char msg3[50];
 snprintf(msg1, 50, "%s", u1.utf8(true).data());
 snprintf(msg2, 50, "%s", u2.utf8(true).data());
 snprintf(msg3, 50, "%s", u3.utf8(true).data());
-std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << " u3:" << u3.isTainted() << ":" << msg3 << std::endl;
+std::cerr << UString::getUStringAddr(this->string()) << ":UString + UString + UString " << " u1:" << u1.isTainted() << ":" << msg1 << " u2:" << u2.isTainted() << ":" << msg2 << " u3:" << u3.isTainted() << ":" << msg3 << ":";
+std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) << ":" << UString::getUStringAddr(u3) << std::endl;
 #endif
             if(u1.isTainted()) { 
 		this->setTainted(u1.isTainted()); 
@@ -672,15 +682,11 @@ std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted()
 	unsigned int isTainted() const
 	{
 #ifdef JSC_TAINTED_FIX_64
-	    // move the flag into the JSString.
-	    return m_tainted;
-/*
             if (isRope()) {
 	        return m_tainted;
 	    } else {
 	        return this->m_value.isTainted();
 	    }
-*/
 #else
             if (isRope()) {
 	        return m_tainted;
@@ -693,15 +699,11 @@ std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted()
 	void setTainted(unsigned int tainted)
 	{
 #ifdef JSC_TAINTED_FIX_64
-	    // move the flag into the JSString.
-	    m_tainted = tainted;
-/*
             if (isRope()) {
 	        m_tainted = tainted;
 	    } else {
 		this->string().setTainted(tainted);
 	    }
-*/
 #else
             if (isRope()) {
 	        m_tainted = tainted;
@@ -711,7 +713,12 @@ std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted()
 #endif
 	}
 
+#ifdef JSC_TAINTED_FIX_64
+// potential bug: if ResolveRope, do we need to set it back to m_value?
     	unsigned int m_tainted;
+#else
+    	unsigned int m_tainted;
+#endif
 #endif
 
     private:
@@ -720,7 +727,7 @@ std::cerr << this << ":UString + UString + UString " << " u1:" << u1.isTainted()
             , m_fiberCount(0)
         {
 #ifdef JSC_TAINTED_DEBUG
-std::cerr << "JSString(VPtrStealingHackType)" << std::endl;
+// std::cerr << "JSString(VPtrStealingHackType)" << std::endl;
 #endif
         }
         static const ClassInfo s_info;
@@ -814,6 +821,9 @@ std::cerr << "JSString(VPtrStealingHackType)" << std::endl;
 
     inline JSString* asString(JSValue value)
     {
+#ifdef JSC_TAINTED_DEBUG
+// std::cerr << "asString()" << std::endl;
+#endif
         ASSERT(value.asCell()->isString());
         return static_cast<JSString*>(value.asCell());
     }
@@ -892,8 +902,9 @@ std::cerr << "JSString(VPtrStealingHackType)" << std::endl;
     inline JSString* jsString(JSGlobalData* globalData, const UString& s)
     {
 #ifdef JSC_TAINTED_DEBUG
-std::cerr << this << ":jsString(JSGlobalData* globalData, const UString& s)" << std::endl;
+// std::cerr << this << ":jsString(JSGlobalData* globalData, const UString& s)" << std::endl;
 #endif
+
         int size = s.length();
         if (!size)
             return globalData->smallStrings.emptyString(globalData);
@@ -989,15 +1000,12 @@ std::cerr << this << ":jsString(JSGlobalData* globalData, const UString& s)" << 
     {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// JSC_TAINTED_BUG
-// static_cast<JSString*>(asCell())->value(exec) return the reference of the UString, so no need to re-tainted it again.
-// if (this->isTainted()) { us.setTainted(true); }
+// the return of the function will copy the m_tainted flag back
+// will it has the deep copy of UString below?
+// http://www.learncpp.com/cpp-tutorial/912-shallow-vs-deep-copying/
 #endif
         if (isString()) {
             UString us = static_cast<JSString*>(asCell())->value(exec);
-            // if (this->isTainted()) { us.setTainted(true); }
-	    // will it has the deep copy of UString below?
-	    // http://www.learncpp.com/cpp-tutorial/912-shallow-vs-deep-copying/
             return us;
 	}
 #else

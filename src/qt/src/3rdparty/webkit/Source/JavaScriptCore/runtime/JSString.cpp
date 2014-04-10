@@ -305,6 +305,7 @@ double JSString::toNumber(ExecState* exec) const
 UString JSString::toString(ExecState* exec) const
 {
 #ifdef JSC_TAINTED
+// std::cerr << "JSString::toString" << std::endl;
 #endif
     return value(exec);
 }

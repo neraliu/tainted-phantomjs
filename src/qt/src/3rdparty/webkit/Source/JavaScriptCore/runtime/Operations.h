@@ -47,7 +47,8 @@ namespace JSC {
     ALWAYS_INLINE JSValue jsString(ExecState* exec, JSString* s1, JSString* s2)
     {
 #ifdef JSC_TAINTED_DEBUG
-std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::endl;
+std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << ":";
+std::cerr << s1->length() << ":" << s2->length() << std::endl;
 #endif
 
         unsigned length1 = s1->length();
@@ -63,7 +64,8 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         JSGlobalData* globalData = &exec->globalData();
 
 #ifdef JSC_TAINTED_DEBUG
-// the s1 and s2 will carry the tainted information
+// the s1 and s2 will carry the tainted information, and the following function will do the propagation
+// JSString(JSGlobalData* globalData, unsigned fiberCount, JSString* s1, JSString* s2)
 #endif
         if (fiberCount <= JSString::s_maxInternalRopeLength)
             return new (globalData) JSString(globalData, fiberCount, s1, s2);
@@ -74,6 +76,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         ropeBuilder.append(s1);
         ropeBuilder.append(s2);
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_DEBUG
+// this block of code explain why there is no need to have tainted check in the following call
+// JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
+#endif
 	unsigned int tainted = 0;
 	if (s1->isTainted()) {
 		tainted = s1->isTainted();
@@ -89,21 +95,21 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
 	}
 
 	if (tainted) {
-	    TaintedStructure trace_struct;
-	    trace_struct.taintedno = tainted;
-	    trace_struct.internalfunc = "jsString";
-	    trace_struct.jsfunc = "String._manipulation";
-	    trace_struct.action = "propagate";
+		TaintedStructure trace_struct;
+		trace_struct.taintedno = tainted;
+		trace_struct.internalfunc = "jsString";
+		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.action = "propagate";
 
-	    char msg[20];
-            stringstream msgss;
-            snprintf(msg, 10, "%s", s1->string().utf8(true).data());
-            snprintf(msg+10, 10, "%s", s2->string().utf8(true).data());
-            msgss << msg;
-            msgss >> trace_struct.value;
+		char msg[20];
+		stringstream msgss;
+		snprintf(msg, 10, "%s", s1->string().utf8(true).data());
+		snprintf(msg+10, 10, "%s", s2->string().utf8(true).data());
+		msgss << msg;
+		msgss >> trace_struct.value;
 
-	    TaintedTrace* trace = TaintedTrace::getInstance();
-	    trace->addTaintedTrace(trace_struct);
+		TaintedTrace* trace = TaintedTrace::getInstance();
+		trace->addTaintedTrace(trace_struct);
     	}
 
   	return s;
@@ -115,8 +121,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
     ALWAYS_INLINE JSValue jsString(ExecState* exec, const UString& u1, JSString* s2)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsString(ExecState* exec, const UString& u1, JSString* s2)" << std::endl;
+std::cerr << "jsString(ExecState* exec, const UString& u1, JSString* s2)" << ":";
+std::cerr << u1.length() << ":" << s2->length() << std::endl;
 #endif
+
         unsigned length1 = u1.length();
         if (!length1)
             return s2;
@@ -129,6 +137,8 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         unsigned fiberCount = 1 + s2->fiberCount();
         JSGlobalData* globalData = &exec->globalData();
 
+#ifdef JSC_TAINTED_DEBUG
+#endif
         if (fiberCount <= JSString::s_maxInternalRopeLength)
             return new (globalData) JSString(globalData, fiberCount, u1, s2);
 
@@ -138,6 +148,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         ropeBuilder.append(u1);
         ropeBuilder.append(s2);
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_DEBUG
+// this block of code explain why there is no need to have tainted check in the following call
+// JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
+#endif
 	unsigned int tainted = 0;
 	if (u1.isTainted()) {
 		tainted = u1.isTainted();
@@ -179,8 +193,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
     ALWAYS_INLINE JSValue jsString(ExecState* exec, JSString* s1, const UString& u2)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsString(ExecState* exec, JSString* s1, const UString& u2)" << std::endl;
+std::cerr << "jsString(ExecState* exec, JSString* s1, const UString& u2)" << ":";
+std::cerr << s1->length() << ":" << u2.length() << std::endl;
 #endif
+
         unsigned length1 = s1->length();
         if (!length1)
             return jsString(exec, u2);
@@ -193,6 +209,8 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         unsigned fiberCount = s1->fiberCount() + 1;
         JSGlobalData* globalData = &exec->globalData();
 
+#ifdef JSC_TAINTED_DEBUG
+#endif
         if (fiberCount <= JSString::s_maxInternalRopeLength)
             return new (globalData) JSString(globalData, fiberCount, s1, u2);
 
@@ -202,6 +220,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         ropeBuilder.append(s1);
         ropeBuilder.append(u2);
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_DEBUG
+// this block of code explain why there is no need to have tainted check in the following call
+// JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
+#endif
 	unsigned int tainted = 0;
 	if (s1->isTainted()) {
 		tainted = s1->isTainted();
@@ -243,8 +265,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
     ALWAYS_INLINE JSValue jsString(ExecState* exec, const UString& u1, const UString& u2)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsString(ExecState* exec, const UString& u1, const UString& u2)" << std::endl;
+std::cerr << "jsString(ExecState* exec, const UString& u1, const UString& u2)" << ":";
+std::cerr << u1.length() << ":" << u2.length() << std::endl;
 #endif
+
         unsigned length1 = u1.length();
         if (!length1)
             return jsString(exec, u2);
@@ -254,6 +278,8 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         if ((length1 + length2) < length1)
             return throwOutOfMemoryError(exec);
 
+#ifdef JSC_TAINTED_DEBUG
+#endif
         JSGlobalData* globalData = &exec->globalData();
         return new (globalData) JSString(globalData, u1, u2);
     }
@@ -261,8 +287,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
     ALWAYS_INLINE JSValue jsString(ExecState* exec, const UString& u1, const UString& u2, const UString& u3)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsString(ExecState* exec, const UString& u1, const UString& u2, const UString& u3)" << std::endl;
+std::cerr << "jsString(ExecState* exec, const UString& u1, const UString& u2, const UString& u3)" << ":";
+std::cerr << u1.length() << ":" << u2.length() << ":" << u3.length() << std::endl;
 #endif
+
         unsigned length1 = u1.length();
         unsigned length2 = u2.length();
         unsigned length3 = u3.length();
@@ -278,6 +306,8 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
         if ((length1 + length2 + length3) < length3)
             return throwOutOfMemoryError(exec);
 
+#ifdef JSC_TAINTED_DEBUG
+#endif
         JSGlobalData* globalData = &exec->globalData();
         return new (globalData) JSString(globalData, u1, u2, u3);
     }
@@ -287,6 +317,7 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
 #ifdef JSC_TAINTED_DEBUG
 // std::cerr << "jsString(ExecState* exec, Register* strings, unsigned count)" << std::endl;
 #endif
+
         ASSERT(count >= 3);
 
         unsigned fiberCount = 0;
@@ -298,6 +329,8 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
                 ++fiberCount;
         }
 
+#ifdef JSC_TAINTED_DEBUG
+#endif
         JSGlobalData* globalData = &exec->globalData();
         if (fiberCount == 3)
             return new (globalData) JSString(exec, strings[0].jsValue(), strings[1].jsValue(), strings[2].jsValue());
@@ -343,6 +376,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
             return throwOutOfMemoryError(exec);
 
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_DEBUG
+// this block of code explain why there is no need to have tainted check in the following call
+// JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
+#endif
 	JSString* s = new (globalData) JSString(globalData, ropeBuilder.release());
 	if (tainted) {
 		s->setTainted(tainted); 
@@ -376,8 +413,9 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
     ALWAYS_INLINE JSValue jsString(ExecState* exec, JSValue thisValue)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsString(ExecState* exec, JSValue thisValue)" << std::endl;
+std::cerr << "jsString(ExecState* exec, JSValue thisValue)" << std::endl;
 #endif
+
         unsigned fiberCount = 0;
         if (LIKELY(thisValue.isString()))
             fiberCount += asString(thisValue)->fiberCount();
@@ -438,6 +476,10 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
 
         JSGlobalData* globalData = &exec->globalData();
 #ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_DEBUG
+// this block of code explain why there is no need to have tainted check in the following call
+// JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
+#endif
 	JSString* s = new (globalData) JSString(globalData, ropeBuilder.release());
 	if (tainted) {
 		s->setTainted(tainted); 
@@ -446,20 +488,20 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
 	}
 
 	if (tainted) {
- 	    TaintedStructure trace_struct;
-	    trace_struct.taintedno = tainted;
-	    trace_struct.internalfunc = "jsString";
-	    trace_struct.jsfunc = "String._manipulation";
-	    trace_struct.action = "propagate";
+		TaintedStructure trace_struct;
+		trace_struct.taintedno = tainted;
+		trace_struct.internalfunc = "jsString";
+		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.action = "propagate";
 
-	    char msg[20];
-	    stringstream msgss;
-	    snprintf(msg, 20, "%s", s->string().utf8(true).data());
-	    msgss << msg;
-	    msgss >> trace_struct.value;
+		char msg[20];
+		stringstream msgss;
+		snprintf(msg, 20, "%s", s->string().utf8(true).data());
+		msgss << msg;
+		msgss >> trace_struct.value;
 
-	    TaintedTrace* trace = TaintedTrace::getInstance();
-	    trace->addTaintedTrace(trace_struct);
+		TaintedTrace* trace = TaintedTrace::getInstance();
+		trace->addTaintedTrace(trace_struct);
     	}
 
   	return s;
@@ -629,13 +671,17 @@ std::cerr << "jsString(ExecState* exec, JSString* s1, JSString* s2)" << std::end
     ALWAYS_INLINE JSValue jsAdd(CallFrame* callFrame, JSValue v1, JSValue v2)
     {
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "jsAdd(CallFrame* callFrame, JSValue v1, JSValue v2)" << std::endl;
+std::cerr << "jsAdd(CallFrame* callFrame, JSValue v1, JSValue v2)" << std::endl;
 #endif
+
         double left = 0.0, right;
         if (v1.getNumber(left) && v2.getNumber(right))
             return jsNumber(left + right);
         
         if (v1.isString()) {
+#ifdef JSC_TAINTED_DEBUG
+std::cerr << "jsAdd(CallFrame* callFrame, JSValue v1, JSValue v2):" << v1.isString() << ":" << v2.isString() << std::endl;
+#endif
             return v2.isString()
                 ? jsString(callFrame, asString(v1), asString(v2))
                 : jsString(callFrame, asString(v1), v2.toPrimitiveString(callFrame));
