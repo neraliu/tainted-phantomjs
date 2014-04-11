@@ -352,12 +352,7 @@ JSValue jsHTMLTextAreaElementValue(ExecState* exec, JSValue slotBase, const Iden
         trace_struct.internalfunc = "jsHTMLTextAreaElementValue";
 	trace_struct.jsfunc = "textarea.value";
         trace_struct.action = "propagate";
-
-        char msg[20];
-        stringstream msgss;
-        snprintf(msg, 20, "%s", result.toString(exec).utf8(true).data());
-        msgss << msg;
-        msgss >> trace_struct.value;
+        trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -555,6 +550,8 @@ void setJSHTMLTextAreaElementValue(ExecState* exec, JSObject* thisObject, JSValu
 	trace_struct.internalfunc = "setJSHTMLTextAreaElementValue";
 	trace_struct.jsfunc = "textarea.value";
         trace_struct.action = "propagate";
+        trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
 

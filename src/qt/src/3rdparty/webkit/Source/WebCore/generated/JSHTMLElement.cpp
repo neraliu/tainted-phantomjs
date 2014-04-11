@@ -295,12 +295,7 @@ JSValue jsHTMLElementInnerHTML(ExecState* exec, JSValue slotBase, const Identifi
         trace_struct.internalfunc = "jsHTMLElementInnerHTML";
         trace_struct.jsfunc = "htmlelement.innerHTML";
         trace_struct.action = "propagate";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", result.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -326,12 +321,7 @@ JSValue jsHTMLElementInnerText(ExecState* exec, JSValue slotBase, const Identifi
         trace_struct.internalfunc = "jsHTMLElementInnerText";
         trace_struct.jsfunc = "htmlelement.innerText";
         trace_struct.action = "propagate";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", result.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -357,12 +347,7 @@ JSValue jsHTMLElementOuterHTML(ExecState* exec, JSValue slotBase, const Identifi
         trace_struct.internalfunc = "jsHTMLElementOuterHTML";
         trace_struct.jsfunc = "htmlelement.outerHTML";
         trace_struct.action = "propagate";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", result.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -388,12 +373,7 @@ JSValue jsHTMLElementOuterText(ExecState* exec, JSValue slotBase, const Identifi
         trace_struct.internalfunc = "jsHTMLElementOuterText";
         trace_struct.jsfunc = "htmlelement.outerText";
         trace_struct.action = "propagate";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", result.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -577,12 +557,7 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementInnerHTML";
 	trace_struct.jsfunc = "HTMLElement.innerHTML";
 	trace_struct.action = "sink";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -611,12 +586,7 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementInnerHTML";
 	trace_struct.jsfunc = "HTMLElement.innerHTML";
 	trace_struct.action = "reset";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -661,12 +631,7 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementInnerText";
 	trace_struct.jsfunc = "HTMLElement.innerText";
 	trace_struct.action = "sink";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -680,12 +645,7 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementInnerText";
 	trace_struct.jsfunc = "HTMLElement.innerText";
 	trace_struct.action = "reset";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -730,12 +690,7 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementOuterHTML";
 	trace_struct.jsfunc = "HTMLElement.outerHTML";
 	trace_struct.action = "sink";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -749,12 +704,7 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementOuterHTML";
 	trace_struct.jsfunc = "HTMLElement.outerHTML";
 	trace_struct.action = "reset";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -799,12 +749,7 @@ void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementOuterText";
 	trace_struct.jsfunc = "HTMLElement.outerText";
 	trace_struct.action = "sink";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -818,12 +763,7 @@ void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue va
 	trace_struct.internalfunc = "setJSHTMLElementOuterText";
 	trace_struct.jsfunc = "HTMLElement.outerText";
 	trace_struct.action = "reset";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);

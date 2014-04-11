@@ -292,12 +292,7 @@ JSValue JSLocation::toStringFunction(ExecState* exec)
     trace_struct.internalfunc = "JSLocation::toStringFunction";
     trace_struct.jsfunc = "";
     trace_struct.action = "source";
-
-    char msg[20];
-    stringstream msgss;
-    snprintf(msg, 20, "%s", s.toString(exec).utf8(true).data());
-    msgss << msg;
-    msgss >> trace_struct.value;
+    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);

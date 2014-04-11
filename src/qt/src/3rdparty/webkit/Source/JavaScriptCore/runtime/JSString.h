@@ -290,6 +290,7 @@ std::cerr << "UString::getUStringAddr(value)" << ":" << msg << ":" << value.isTa
 #ifdef JSC_TAINTED_DEBUG
 std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<StringImpl> value, HasOtherOwnerType):" << std::endl;
 #endif
+	    this->setTainted(0);
 #endif
             ASSERT(!m_value.isNull());
         }
@@ -302,6 +303,7 @@ std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<StringImpl>
 #ifdef JSC_TAINTED_DEBUG
 std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)" << std::endl;
 #endif
+	    this->setTainted(0);
 #endif
             m_fibers[0] = rope.leakRef();
         }

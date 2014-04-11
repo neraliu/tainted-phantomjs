@@ -1422,12 +1422,7 @@ JSValue jsDOMWindowName(ExecState* exec, JSValue slotBase, const Identifier&)
         trace_struct.internalfunc = "jsDOMWindowName";
         trace_struct.jsfunc = "window.name";
         trace_struct.action = "propagate";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", result.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+        trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -6070,12 +6065,7 @@ void setJSDOMWindowLocation(ExecState* exec, JSObject* thisObject, JSValue value
         trace_struct.internalfunc = "setJSDOMWindowLocation";
         trace_struct.jsfunc = "window.location";
         trace_struct.action = "sink";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+        trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -6232,12 +6222,7 @@ void setJSDOMWindowName(ExecState* exec, JSObject* thisObject, JSValue value)
         trace_struct.internalfunc = "setJSDOMWindowName";
         trace_struct.jsfunc = "window.name";
         trace_struct.action = "sink";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", value.toString(exec).utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+        trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);

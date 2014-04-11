@@ -155,12 +155,7 @@ static inline void documentWrite(ExecState* exec, HTMLDocument* document, Newlin
         trace_struct.internalfunc = "documentWrite";
         trace_struct.jsfunc = "document.write/writeln";
         trace_struct.action = "sink";
-
-	char msg[20];
-	stringstream msgss;
-	snprintf(msg, 20, "%s", firstString.utf8(true).data());
-	msgss << msg;
-	msgss >> trace_struct.value;
+        trace_struct.value = TaintedTrace::UString2string(firstString);
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -185,12 +180,7 @@ static inline void documentWrite(ExecState* exec, HTMLDocument* document, Newlin
 		    trace_struct.internalfunc = "documentWrite";
 		    trace_struct.jsfunc = "document.write/writeln";
 		    trace_struct.action = "sink";
-
-		    char msg[20];
-		    stringstream msgss;
-		    snprintf(msg, 20, "%s", subsequentString.utf8(true).data());
-		    msgss << msg;
-		    msgss >> trace_struct.value;
+		    trace_struct.value = TaintedTrace::UString2string(subsequentString);
 
 		    TaintedTrace* trace = TaintedTrace::getInstance();
 		    trace->addTaintedTrace(trace_struct);
