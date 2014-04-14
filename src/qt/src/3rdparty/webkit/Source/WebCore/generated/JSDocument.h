@@ -277,11 +277,10 @@ JSC::JSValue jsDocumentOntouchcancel(JSC::ExecState*, JSC::JSValue, const JSC::I
 void setJSDocumentOntouchcancel(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
 JSC::JSValue jsDocumentOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 void setJSDocumentOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
-<<<<<<< HEAD
+#ifdef JSC_TAINTED 
 JSC::JSValue jsDocumentTainted(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 JSC::JSValue jsDocumentTaintedTrace(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
-=======
->>>>>>> upstream/master
+#endif
 JSC::JSValue jsDocumentConstructor(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 
 } // namespace WebCore

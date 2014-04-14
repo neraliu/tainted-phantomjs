@@ -38,6 +38,8 @@
 #include <wtf/GetPtr.h>
 
 #ifdef JSC_TAINTED
+#include "Frame.h"
+#include "Document.h"
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>

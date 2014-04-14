@@ -54,6 +54,7 @@
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>
+#endif
 
 using namespace JSC;
 
