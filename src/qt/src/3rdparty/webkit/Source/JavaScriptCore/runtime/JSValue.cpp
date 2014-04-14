@@ -106,7 +106,7 @@ JSObject* JSValue::synthesizePrototype(ExecState* exec) const
     return new (exec) JSNotAnObject(exec);
 }
 
-// #ifndef NDEBUG
+#ifndef NDEBUG
 char* JSValue::description()
 {
     static const size_t size = 32;
@@ -118,14 +118,8 @@ char* JSValue::description()
         snprintf(description, size, "Int32: %d", asInt32());
     else if (isDouble())
         snprintf(description, size, "Double: %lf", asDouble());
-    else if (isCell()) {
-        if (isString()) 
-            snprintf(description, size, "Cell:isString %p", asCell());
-        else if (isObject())
-            snprintf(description, size, "Cell:isObject %p", asCell());
-        else
-            snprintf(description, size, "Cell: %p", asCell());
-    }
+    else if (isCell())
+        snprintf(description, size, "Cell: %p", asCell());
     else if (isTrue())
         snprintf(description, size, "True");
     else if (isFalse())
@@ -139,7 +133,7 @@ char* JSValue::description()
 
     return description;
 }
-// #endif
+#endif
 
 // This in the ToInt32 operation is defined in section 9.5 of the ECMA-262 spec.
 // Note that this operation is identical to ToUInt32 other than to interpretation
@@ -163,7 +157,7 @@ int32_t toInt32(double number)
 
     // Select the appropriate 32-bits from the floating point mantissa.  If the
     // exponent is 52 then the bits we need to select are already aligned to the
-    // lowest bits of the 64-bit integer representation of the number, no need
+    // lowest bits of the 64-bit integer representation of tghe number, no need
     // to shift.  If the exponent is greater than 52 we need to shift the value
     // left by (exp - 52), if the value is less than 52 we need to shift right
     // accordingly.

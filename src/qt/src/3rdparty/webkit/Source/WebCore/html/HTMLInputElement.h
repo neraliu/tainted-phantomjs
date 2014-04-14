@@ -202,7 +202,7 @@ public:
     void updateCheckedRadioButtons();
 
     bool lastChangeWasUserEdit() const;
-
+    
 protected:
     HTMLInputElement(const QualifiedName&, Document*, HTMLFormElement*, bool createdByParser);
 

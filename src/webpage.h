@@ -36,6 +36,8 @@
 #include <QWebPage>
 #include <QWebFrame>
 
+#include "cookiejar.h"
+
 class Config;
 class CustomPage;
 class WebpageCallbacks;
@@ -358,6 +360,21 @@ public slots:
     QString currentFrameName() const;
 
     /**
+     * Allows to set cookie jar for this page.
+     */
+    void setCookieJar(CookieJar *cookieJar);
+
+    /**
+     * Allows to set cookie jar in through QtWebKit Bridge
+     */
+    void setCookieJarFromQObject(QObject *cookieJar);
+
+    /**
+     * Returns the CookieJar object
+     */
+    CookieJar *cookieJar();
+
+    /**
      * Allows to set cookies by this Page, at the current URL.
      * This means that loading new URLs, causes the cookies to change dynamically
      * as in a normal desktop browser.
@@ -468,7 +485,7 @@ signals:
     void loadFinished(const QString &status);
     void javaScriptAlertSent(const QString &msg);
     void javaScriptConsoleMessageSent(const QString &message);
-    void javaScriptErrorSent(const QString &msg, const QString &stack);
+    void javaScriptErrorSent(const QString &msg, int lineNumber, const QString &sourceID, const QString &stack);
     void resourceRequested(const QVariant &requestData, QObject *request);
     void resourceReceived(const QVariant &resource);
     void resourceError(const QVariant &errorData);
@@ -477,11 +494,13 @@ signals:
     void navigationRequested(const QUrl &url, const QString &navigationType, bool navigationLocked, bool isMainFrame);
     void rawPageCreated(QObject *page);
     void closing(QObject *page);
+    void repaintRequested(const int x, const int y, const int width, const int height);
 
 private slots:
     void finish(bool ok);
     void setupFrame(QWebFrame *frame = NULL);
     void updateLoadingProgress(int progress);
+    void handleRepaintRequested(const QRect &dirtyRect);
 
 private:
     QImage renderImage();
@@ -518,6 +537,7 @@ private:
     bool m_ownsPages;
     int m_loadingProgress;
     bool m_shouldInterruptJs;
+    CookieJar *m_cookieJar;
 
     friend class Phantom;
     friend class CustomPage;

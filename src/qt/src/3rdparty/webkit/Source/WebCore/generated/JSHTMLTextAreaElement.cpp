@@ -25,6 +25,7 @@
  * Author: Nera Liu <neraliu@yahoo-inc.com>
  *
  */
+
 #include "config.h"
 #include "JSHTMLTextAreaElement.h"
 
@@ -40,12 +41,15 @@
 #include "NameNodeList.h"
 #include "NodeList.h"
 #include "ValidityState.h"
-#include "TaintedCounter.h"
-#include "TaintedTrace.h"
-#include <sstream>
 #include <runtime/Error.h>
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
+
+#ifdef JSC_TAINTED
+#include "TaintedCounter.h"
+#include "TaintedTrace.h"
+#include <sstream>
+#endif
 
 using namespace JSC;
 
@@ -341,7 +345,6 @@ JSValue jsHTMLTextAreaElementValue(ExecState* exec, JSValue slotBase, const Iden
     UNUSED_PARAM(exec);
     HTMLTextAreaElement* imp = static_cast<HTMLTextAreaElement*>(castedThis->impl());
     JSValue result = jsString(exec, imp->value());
-
 #ifdef JSC_TAINTED
     if (imp->tainted()) {
         unsigned int tainted = imp->tainted();
@@ -528,7 +531,6 @@ void setJSHTMLTextAreaElementValue(ExecState* exec, JSObject* thisObject, JSValu
     JSHTMLTextAreaElement* castedThis = static_cast<JSHTMLTextAreaElement*>(thisObject);
     HTMLTextAreaElement* imp = static_cast<HTMLTextAreaElement*>(castedThis->impl());
     imp->setValue(valueToStringWithNullCheck(exec, value));
-
 #ifdef JSC_TAINTED
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {

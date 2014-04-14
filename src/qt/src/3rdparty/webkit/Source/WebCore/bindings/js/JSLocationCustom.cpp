@@ -31,10 +31,13 @@
 #include "JSLocationCustom.h"
 
 #include "Location.h"
+#include <runtime/JSFunction.h>
+
+#ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>
-#include <runtime/JSFunction.h>
+#endif
 
 using namespace JSC;
 

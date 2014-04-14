@@ -47,14 +47,17 @@
 #include "Timer.h"
 #include "TreeScope.h"
 #include "ViewportArguments.h"
-#include "TaintedCounter.h"
-#include "TaintedTrace.h"
-#include <sstream>
 #include <wtf/Deque.h>
 #include <wtf/FixedArray.h>
 #include <wtf/OwnPtr.h>
 #include <wtf/PassOwnPtr.h>
 #include <wtf/PassRefPtr.h>
+
+#ifdef JSC_TAINTED
+#include "TaintedCounter.h"
+#include "TaintedTrace.h"
+#include <sstream>
+#endif
 
 namespace WebCore {
 
@@ -1414,7 +1417,6 @@ private:
 #ifdef JSC_TAINTED
     unsigned int m_tainted;
 #endif
-
 };
 
 // Put these methods here, because they require the Document definition, but we really want to inline them.

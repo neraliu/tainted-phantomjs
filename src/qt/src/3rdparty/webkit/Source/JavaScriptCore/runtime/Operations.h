@@ -33,9 +33,12 @@
 #include "Interpreter.h"
 #include "JSString.h"
 #include "JSValueInlineMethods.h"
+
+#ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>
+#endif
 
 namespace JSC {
 
@@ -98,7 +101,7 @@ std::cerr << s1->length() << ":" << s2->length() << std::endl;
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "String.operations";
 		trace_struct.action = "propagate";
                 trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(s2->string());
 
@@ -166,7 +169,7 @@ std::cerr << u1.length() << ":" << s2->length() << std::endl;
         	TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "String.operations";
 		trace_struct.action = "propagate";
                 trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(s2->string());
 
@@ -234,7 +237,7 @@ std::cerr << s1->length() << ":" << u2.length() << std::endl;
         	TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "String.operations";
 		trace_struct.action = "propagate";
                 trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(u2);
 
@@ -383,7 +386,7 @@ std::cerr << u1.length() << ":" << u2.length() << ":" << u3.length() << std::end
 	    TaintedStructure trace_struct;
 	    trace_struct.taintedno = tainted;
 	    trace_struct.internalfunc = "jsString";
-	    trace_struct.jsfunc = "String._manipulation";
+	    trace_struct.jsfunc = "String.operations";
 	    trace_struct.action = "propagate";
 	    trace_struct.value = TaintedTrace::UString2string(s->string());
 
@@ -478,7 +481,7 @@ std::cerr << "jsString(ExecState* exec, JSValue thisValue)" << std::endl;
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String._manipulation";
+		trace_struct.jsfunc = "String.operations";
 		trace_struct.action = "propagate";
 	        trace_struct.value = TaintedTrace::UString2string(s->string());
 

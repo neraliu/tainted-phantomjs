@@ -93,7 +93,11 @@ ASSERT_CLASS_FITS_IN_CELL(JSDocument);
 #define THUNK_GENERATOR(generator)
 #endif
 
+#ifdef JSC_TAINTED
 static const HashTableValue JSDocumentTableValues[80] =
+#else
+static const HashTableValue JSDocumentTableValues[78] =
+#endif
 {
     { "doctype", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentDoctype), (intptr_t)0 THUNK_GENERATOR(0) },
     { "implementation", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentImplementation), (intptr_t)0 THUNK_GENERATOR(0) },
@@ -181,8 +185,10 @@ static const HashTableValue JSDocumentTableValues[80] =
 #if ENABLE(FULLSCREEN_API)
     { "onwebkitfullscreenchange", DontDelete | DontEnum, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentOnwebkitfullscreenchange), (intptr_t)setJSDocumentOnwebkitfullscreenchange THUNK_GENERATOR(0) },
 #endif
+#ifdef JSC_TAINTED
     { "tainted", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentTainted), (intptr_t)0 THUNK_GENERATOR(0) },
     { "taintedTrace", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentTaintedTrace), (intptr_t)0 THUNK_GENERATOR(0) },
+#endif
     { "constructor", DontEnum | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentConstructor), (intptr_t)0 THUNK_GENERATOR(0) },
     { 0, 0, 0, 0 THUNK_GENERATOR(0) }
 };

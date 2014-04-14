@@ -40,12 +40,15 @@
 #include "ObjectPrototype.h"
 #include "Operations.h"
 #include "StringRecursionChecker.h"
-#include "TaintedCounter.h"
-#include "TaintedTrace.h"
-#include <sstream>
 #include <algorithm>
 #include <wtf/Assertions.h>
 #include <wtf/HashSet.h>
+
+#ifdef JSC_TAINTED
+#include "TaintedCounter.h"
+#include "TaintedTrace.h"
+#include <sstream>
+#endif
 
 namespace JSC {
 

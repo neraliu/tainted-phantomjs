@@ -66,7 +66,11 @@ ASSERT_CLASS_FITS_IN_CELL(JSElement);
 #define THUNK_GENERATOR(generator)
 #endif
 
+#ifdef JSC_TAINTED
 static const HashTableValue JSElementTableValues[67] =
+#else
+static const HashTableValue JSElementTableValues[66] =
+#endif
 {
     { "tagName", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementTagName), (intptr_t)0 THUNK_GENERATOR(0) },
     { "style", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementStyle), (intptr_t)0 THUNK_GENERATOR(0) },
@@ -143,7 +147,9 @@ static const HashTableValue JSElementTableValues[67] =
 #if ENABLE(FULLSCREEN_API)
     { "onwebkitfullscreenchange", DontDelete | DontEnum, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementOnwebkitfullscreenchange), (intptr_t)setJSElementOnwebkitfullscreenchange THUNK_GENERATOR(0) },
 #endif
+#ifdef JSC_TAINTED
     { "tainted", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementTainted), (intptr_t)0 THUNK_GENERATOR(0) },
+#endif
     { "constructor", DontEnum | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementConstructor), (intptr_t)0 THUNK_GENERATOR(0) },
     { 0, 0, 0, 0 THUNK_GENERATOR(0) }
 };

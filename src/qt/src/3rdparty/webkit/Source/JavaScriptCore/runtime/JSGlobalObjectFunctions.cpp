@@ -43,9 +43,6 @@
 #include "Parser.h"
 #include "UStringBuilder.h"
 #include "dtoa.h"
-#include "TaintedCounter.h"
-#include "TaintedTrace.h"
-#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <wtf/ASCIICType.h>
@@ -53,6 +50,12 @@
 #include <wtf/MathExtras.h>
 #include <wtf/StringExtras.h>
 #include <wtf/unicode/UTF8.h>
+
+#ifdef JSC_TAINTED 
+#include "TaintedCounter.h"
+#include "TaintedTrace.h"
+#include <sstream>
+#endif
 
 using namespace WTF;
 using namespace Unicode;

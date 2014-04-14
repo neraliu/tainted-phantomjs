@@ -33,8 +33,11 @@
 #include "JSFunction.h"
 #include "JSString.h"
 #include "JSObject.h"
-#include "StringObject.h"
 #include <wtf/MathExtras.h>
+
+#ifdef JSC_TAINTED
+#include "StringObject.h"
+#endif
 
 namespace JSC {
 
@@ -133,7 +136,7 @@ bool JSCell::getString(ExecState* exec, UString&stringValue) const
 
 UString JSCell::getString(ExecState* exec) const
 {
-#ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_DEBUG
 #endif
     return isString() ? static_cast<const JSString*>(this)->value(exec) : UString();
 }

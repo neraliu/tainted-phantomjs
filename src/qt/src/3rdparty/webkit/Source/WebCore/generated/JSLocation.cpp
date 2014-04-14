@@ -28,19 +28,20 @@
 #include "config.h"
 #include "JSLocation.h"
 
-#include "Frame.h"
-#include "Document.h"
 #include "ExceptionCode.h"
 #include "JSDOMBinding.h"
 #include "JSLocationCustom.h"
 #include "KURL.h"
 #include "Location.h"
-#include "TaintedCounter.h"
-#include "TaintedTrace.h"
-#include <sstream>
 #include <runtime/Error.h>
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
+
+#ifdef JSC_TAINTED
+#include "TaintedCounter.h"
+#include "TaintedTrace.h"
+#include <sstream>
+#endif
 
 using namespace JSC;
 

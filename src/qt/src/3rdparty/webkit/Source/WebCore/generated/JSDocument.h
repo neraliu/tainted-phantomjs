@@ -18,6 +18,13 @@
     Boston, MA 02110-1301, USA.
 */
 
+/*
+ * Portions of this code are Copyright (C) 2014 Yahoo! Inc. Licensed 
+ * under the LGPL license.
+ * 
+ * Author: Nera Liu <neraliu@yahoo-inc.com>
+ *
+ */
 #ifndef JSDocument_h
 #define JSDocument_h
 
@@ -132,7 +139,9 @@ JSC::EncodedJSValue JSC_HOST_CALL jsDocumentPrototypeFunctionQuerySelector(JSC::
 JSC::EncodedJSValue JSC_HOST_CALL jsDocumentPrototypeFunctionQuerySelectorAll(JSC::ExecState*);
 JSC::EncodedJSValue JSC_HOST_CALL jsDocumentPrototypeFunctionCreateTouch(JSC::ExecState*);
 JSC::EncodedJSValue JSC_HOST_CALL jsDocumentPrototypeFunctionCreateTouchList(JSC::ExecState*);
+// #ifdef JSC_TAINTED
 JSC::EncodedJSValue JSC_HOST_CALL jsDocumentClearTaintedTrace(JSC::ExecState*);
+// #endif
 // Attributes
 
 JSC::JSValue jsDocumentDoctype(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
@@ -268,8 +277,11 @@ JSC::JSValue jsDocumentOntouchcancel(JSC::ExecState*, JSC::JSValue, const JSC::I
 void setJSDocumentOntouchcancel(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
 JSC::JSValue jsDocumentOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 void setJSDocumentOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
+<<<<<<< HEAD
 JSC::JSValue jsDocumentTainted(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 JSC::JSValue jsDocumentTaintedTrace(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
+=======
+>>>>>>> upstream/master
 JSC::JSValue jsDocumentConstructor(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 
 } // namespace WebCore

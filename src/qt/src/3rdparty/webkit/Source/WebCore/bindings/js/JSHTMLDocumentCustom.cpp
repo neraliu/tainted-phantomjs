@@ -49,9 +49,12 @@
 #include <runtime/Error.h>
 #include <runtime/JSCell.h>
 #include <wtf/unicode/CharacterNames.h>
+
+#ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>
+#endif
 
 using namespace JSC;
 

@@ -18,6 +18,13 @@
     Boston, MA 02110-1301, USA.
 */
 
+/*
+ * Portions of this code are Copyright (C) 2014 Yahoo! Inc. Licensed 
+ * under the LGPL license.
+ * 
+ * Author: Nera Liu <neraliu@yahoo-inc.com>
+ *
+ */
 #ifndef JSElement_h
 #define JSElement_h
 
@@ -227,7 +234,9 @@ JSC::JSValue jsElementOntouchcancel(JSC::ExecState*, JSC::JSValue, const JSC::Id
 void setJSElementOntouchcancel(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
 JSC::JSValue jsElementOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 void setJSElementOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
+// #ifdef JSC_TAINTED
 JSC::JSValue jsElementTainted(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
+// #endif
 JSC::JSValue jsElementConstructor(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 
 } // namespace WebCore

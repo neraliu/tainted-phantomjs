@@ -46,9 +46,12 @@
 #include <wtf/ASCIICType.h>
 #include <wtf/MathExtras.h>
 #include <wtf/unicode/Collator.h>
+
+#ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>
+#endif
 
 using namespace WTF;
 

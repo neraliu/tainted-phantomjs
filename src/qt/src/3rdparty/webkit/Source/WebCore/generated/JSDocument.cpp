@@ -97,12 +97,15 @@
 #include "XPathExpression.h"
 #include "XPathNSResolver.h"
 #include "XPathResult.h"
-#include "TaintedCounter.h"
-#include "TaintedTrace.h"
-#include <sstream>
 #include <runtime/Error.h>
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
+
+#ifdef JSC_TAINTED
+#include "TaintedCounter.h"
+#include "TaintedTrace.h"
+#include <sstream>
+#endif
 
 using namespace JSC;
 
@@ -117,7 +120,11 @@ ASSERT_CLASS_FITS_IN_CELL(JSDocument);
 #define THUNK_GENERATOR(generator)
 #endif
 
+#ifdef JSC_TAINTED
 static const HashTableValue JSDocumentTableValues[80] =
+#else
+static const HashTableValue JSDocumentTableValues[78] =
+#endif
 {
     { "doctype", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentDoctype), (intptr_t)0 THUNK_GENERATOR(0) },
     { "implementation", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentImplementation), (intptr_t)0 THUNK_GENERATOR(0) },
@@ -206,8 +213,10 @@ static const HashTableValue JSDocumentTableValues[80] =
 #if ENABLE(FULLSCREEN_API)
     { "onwebkitfullscreenchange", DontDelete | DontEnum, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentOnwebkitfullscreenchange), (intptr_t)setJSDocumentOnwebkitfullscreenchange THUNK_GENERATOR(0) },
 #endif
+#ifdef JSC_TAINTED
     { "tainted", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentTainted), (intptr_t)0 THUNK_GENERATOR(0) },
     { "taintedTrace", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentTaintedTrace), (intptr_t)0 THUNK_GENERATOR(0) },
+#endif
     { "constructor", DontEnum | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentConstructor), (intptr_t)0 THUNK_GENERATOR(0) },
     { 0, 0, 0, 0 THUNK_GENERATOR(0) }
 };
@@ -269,7 +278,11 @@ bool JSDocumentConstructor::getOwnPropertyDescriptor(ExecState* exec, const Iden
 #define THUNK_GENERATOR(generator)
 #endif
 
+#ifdef JSC_TAINTED
 static const HashTableValue JSDocumentPrototypeTableValues[41] =
+#else
+static const HashTableValue JSDocumentPrototypeTableValues[40] =
+#endif
 {
     { "createElement", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionCreateElement), (intptr_t)1 THUNK_GENERATOR(0) },
     { "createDocumentFragment", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionCreateDocumentFragment), (intptr_t)0 THUNK_GENERATOR(0) },
@@ -310,7 +323,9 @@ static const HashTableValue JSDocumentPrototypeTableValues[41] =
     { "querySelectorAll", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionQuerySelectorAll), (intptr_t)1 THUNK_GENERATOR(0) },
     { "createTouch", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionCreateTouch), (intptr_t)7 THUNK_GENERATOR(0) },
     { "createTouchList", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionCreateTouchList), (intptr_t)0 THUNK_GENERATOR(0) },
+#ifdef JSC_TAINTED
     { "clearTaintedTrace", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentClearTaintedTrace), (intptr_t)0 THUNK_GENERATOR(0) },
+#endif
     { 0, 0, 0, 0 THUNK_GENERATOR(0) }
 };
 

@@ -242,9 +242,9 @@ namespace JSC {
         unsigned int isTainted() const;
 #endif
 
-// #ifndef NDEBUG
+#ifndef NDEBUG
         char* description();
-// #endif
+#endif
 
     private:
         template <class T> JSValue(WriteBarrierBase<T>);
@@ -327,12 +327,10 @@ namespace JSC {
          * The tag 0x0000 denotes a pointer, or another form of tagged immediate. Boolean,
          * null and undefined values are represented by specific, invalid pointer values:
          *
-         *     False:     0x06 - 0000:0110 (binary)
-         *     True:      0x07 - 0000:0111 (binary)
-         *     Undefined: 0x0a - 0000:1010 (binary)
-         *     Null:      0x02 - 0000:0010 (binary)
-	 *                Bit	      3 1
-	 *     NoValue:	  0x00 - 0000:0000 (binary)
+         *     False:     0x06
+         *     True:      0x07
+         *     Undefined: 0x0a
+         *     Null:      0x02
          *
          * These values have the following properties:
          * - Bit 1 (TagBitTypeOther) is set for all four values, allowing real pointers to be
@@ -348,26 +346,23 @@ namespace JSC {
 
         // This value is 2^48, used to encode doubles such that the encoded value will begin
         // with a 16-bit pattern within the range 0x0001..0xFFFE.
-        #define DoubleEncodeOffset 0x1000000000000ll // 0x0001000000000000ll
+        #define DoubleEncodeOffset 0x1000000000000ll
         // If all bits in the mask are set, this indicates an integer number,
         // if any but not all are set this value is a double precision number.
-        #define TagTypeNumber 0xffff000000000000ll   // 0xffff000000000000ll
+        #define TagTypeNumber 0xffff000000000000ll
 
         // All non-numeric (bool, null, undefined) immediates have bit 2 set.
-        #define TagBitTypeOther 0x2ll 		     // 0x0000000000000002ll
-        #define TagBitBool      0x4ll 		     // 0x0000000000000004ll
-        #define TagBitUndefined 0x8ll		     // 0x0000000000000008ll
+        #define TagBitTypeOther 0x2ll
+        #define TagBitBool      0x4ll
+        #define TagBitUndefined 0x8ll
         // Combined integer value for non-numeric immediates.
-	// 0x0000000000000002ll | 0x0000000000000004ll | 0x0000000000000000ll = 0x0000000000000006ll
-        #define ValueFalse     (TagBitTypeOther | TagBitBool | false) 	
-	// 0x0000000000000002ll | 0x0000000000000004ll | 0x0000000000000001ll = 0x0000000000000007ll
-        #define ValueTrue      (TagBitTypeOther | TagBitBool | true) 	
-        #define ValueUndefined (TagBitTypeOther | TagBitUndefined) 	// 0x0000000000000002ll | 0x0000000000000008ll = 0x000000000000000all
-        #define ValueNull      (TagBitTypeOther) 			// 0x0000000000000002ll
+        #define ValueFalse     (TagBitTypeOther | TagBitBool | false)
+        #define ValueTrue      (TagBitTypeOther | TagBitBool | true)
+        #define ValueUndefined (TagBitTypeOther | TagBitUndefined)
+        #define ValueNull      (TagBitTypeOther)
 
         // TagMask is used to check for all types of immediate values (either number or 'other').
-	// 0xffff000000000000ll | 0x0000000000000002ll = 0xffff000000000002ll
-        #define TagMask (TagTypeNumber | TagBitTypeOther) 
+        #define TagMask (TagTypeNumber | TagBitTypeOther)
 
         // These special values are never visible to JavaScript code; Empty is used to represent
         // Array holes, and for uninitialized JSValues. Deleted is used in hash table code.

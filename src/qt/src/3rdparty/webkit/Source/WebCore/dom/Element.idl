@@ -213,7 +213,6 @@ module core {
 #endif
 
         readonly attribute boolean tainted;
-        // readonly attribute DOMString taintedMessage;
     };
 
 }

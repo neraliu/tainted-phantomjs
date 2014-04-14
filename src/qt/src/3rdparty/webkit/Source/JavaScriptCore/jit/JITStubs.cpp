@@ -1309,9 +1309,6 @@ DEFINE_STUB_FUNCTION(EncodedJSValue, op_add)
     JSValue v2 = stackFrame.args[1].jsValue();
     CallFrame* callFrame = stackFrame.callFrame;
 
-#ifdef JSC_TAINTED
-// std::cerr << "DEFINE_STUB_FUNCTION(EncodedJSValue, op_add)" << std::endl;
-#endif
     if (v1.isString()) {
         JSValue result = v2.isString()
             ? jsString(callFrame, asString(v1), asString(v2))
@@ -3339,9 +3336,6 @@ DEFINE_STUB_FUNCTION(EncodedJSValue, op_strcat)
 {
     STUB_INIT_STACK_FRAME(stackFrame);
 
-#ifdef JSC_TAINTED
-// std::cerr << "DEFINE_STUB_FUNCTION(EncodedJSValue, op_strcat)" << std::endl;
-#endif
     JSValue result = jsString(stackFrame.callFrame, &stackFrame.callFrame->registers()[stackFrame.args[0].int32()], stackFrame.args[1].int32());
     CHECK_FOR_EXCEPTION_AT_END();
     return JSValue::encode(result);

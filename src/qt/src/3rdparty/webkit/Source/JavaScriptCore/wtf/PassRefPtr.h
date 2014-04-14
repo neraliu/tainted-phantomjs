@@ -24,8 +24,6 @@
 #include "AlwaysInline.h"
 #include "NullPtr.h"
 
-#include <iostream>
-
 namespace WTF {
 
     template<typename T> class RefPtr;

@@ -46,12 +46,14 @@
 #include "NameNodeList.h"
 #include "NodeList.h"
 #include "ValidityState.h"
-#include "TaintedCounter.h"
-#include "TaintedTrace.h"
-#include <sstream>
 #include <runtime/Error.h>
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
+
+#ifdef JSC_TAINTED
+#include "TaintedCounter.h"
+#include "TaintedTrace.h"
+#include <sstream>
 
 using namespace JSC;
 
@@ -542,8 +544,6 @@ JSValue jsHTMLInputElementValue(ExecState* exec, JSValue slotBase, const Identif
     UNUSED_PARAM(exec);
     HTMLInputElement* imp = static_cast<HTMLInputElement*>(castedThis->impl());
     JSValue result = jsString(exec, imp->value());
-
-// the return string will be tainted
 #ifdef JSC_TAINTED
     if (imp->tainted()) {
 	unsigned int tainted = imp->tainted();
@@ -910,7 +910,6 @@ void setJSHTMLInputElementValue(ExecState* exec, JSObject* thisObject, JSValue v
     JSHTMLInputElement* castedThis = static_cast<JSHTMLInputElement*>(thisObject);
     HTMLInputElement* imp = static_cast<HTMLInputElement*>(castedThis->impl());
     imp->setValue(valueToStringWithNullCheck(exec, value));
-
 #ifdef JSC_TAINTED
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {

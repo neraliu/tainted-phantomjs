@@ -267,7 +267,7 @@ JSValue JSString::replaceCharacter(ExecState* exec, UChar character, const UStri
 
 JSString* JSString::getIndexSlowCase(ExecState* exec, unsigned i)
 {
-#ifdef JSC_TAINTED 
+#ifdef JSC_TAINTED_DEBUG
 // do we need to support rope implementation?
 #endif
     ASSERT(isRope());
@@ -304,7 +304,7 @@ double JSString::toNumber(ExecState* exec) const
 
 UString JSString::toString(ExecState* exec) const
 {
-#ifdef JSC_TAINTED
+#ifdef JSC_TAINTED_DEBUG
 // std::cerr << "JSString::toString" << std::endl;
 #endif
     return value(exec);

@@ -158,7 +158,6 @@ namespace JSC {
         virtual void setTainted(unsigned int tainted) {} 
         virtual unsigned int isTainted() const { return 0; }
 #endif
-
     protected:
         static const unsigned AnonymousSlotCount = 0;
 

@@ -28,11 +28,6 @@
 #include "config.h"
 #include "RegExpPrototype.h"
 
-#ifdef JSC_TAINTED
-#include "JSArray.h"
-#include "ArrayConstructor.h"
-#endif
-
 #include "ArrayPrototype.h"
 #include "Error.h"
 #include "JSArray.h"
@@ -47,9 +42,14 @@
 #include "RegExpCache.h"
 #include "StringRecursionChecker.h"
 #include "UStringConcatenate.h"
+
+#ifdef JSC_TAINTED
+#include "JSArray.h"
+#include "ArrayConstructor.h"
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>
+#endif
 
 namespace JSC {
 

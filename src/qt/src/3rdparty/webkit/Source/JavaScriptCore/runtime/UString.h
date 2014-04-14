@@ -33,11 +33,13 @@
 #include "config.h"
 #include <wtf/text/StringImpl.h>
 
+#ifdef JSC_TAINTED
 #include "TaintedMap.h"
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <stdio.h>
+#endif
 
 namespace JSC {
 

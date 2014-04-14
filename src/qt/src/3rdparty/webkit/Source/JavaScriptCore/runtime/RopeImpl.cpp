@@ -23,12 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
-/*
- * Portions of this code are Copyright (C) 2014 Yahoo! Inc. Licensed 
- * under the BSD license.
- *
- * Author: Nera Liu <neraliu@yahoo-inc.com>
- */
 #include "config.h"
 #include "RopeImpl.h"
 

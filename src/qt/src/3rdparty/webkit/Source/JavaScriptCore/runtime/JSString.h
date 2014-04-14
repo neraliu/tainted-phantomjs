@@ -38,12 +38,14 @@
 #include "RopeImpl.h"
 #include "Structure.h"
 
+#ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedMap.h"
 #include <string>
 #include <sstream>
 #include <iostream>
+#endif
 
 namespace JSC {
 

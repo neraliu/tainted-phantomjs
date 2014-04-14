@@ -44,7 +44,6 @@
 #include <runtime/Protect.h>
 #include <runtime/UString.h>
 #include <runtime/JSValue.h>
-#include <runtime/StringObject.h>
 
 #include <wtf/Assertions.h>
 #include <wtf/text/StringHash.h>

@@ -1,4 +1,6 @@
-// Automatically generated from runtime/StringPrototype.cpp using ./create_hash_table. DO NOT EDIT!
+// Automatically generated from ../Source/JavaScriptCore/runtime/StringPrototype.cpp using /Source/JavaScriptCore/create_hash_table. DO NOT EDIT!
+
+#include "Lookup.h"
 
 namespace JSC {
 #if ENABLE(JIT)
@@ -7,7 +9,11 @@ namespace JSC {
 #define THUNK_GENERATOR(generator)
 #endif
 
+// #ifdef JSC_TAINTED
 static const struct HashTableValue stringTableValues[38] = {
+// #else
+// static const struct HashTableValue stringTableValues[36] = {
+// #endif
    { "toString", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncToString), (intptr_t)0 THUNK_GENERATOR(0) },
    { "valueOf", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncToString), (intptr_t)0 THUNK_GENERATOR(0) },
    { "charAt", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncCharAt), (intptr_t)1 THUNK_GENERATOR(charAtThunkGenerator) },
@@ -43,8 +49,10 @@ static const struct HashTableValue stringTableValues[38] = {
    { "trim", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTrim), (intptr_t)0 THUNK_GENERATOR(0) },
    { "trimLeft", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTrimLeft), (intptr_t)0 THUNK_GENERATOR(0) },
    { "trimRight", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTrimRight), (intptr_t)0 THUNK_GENERATOR(0) },
+// #ifdef JSC_TAINTED
    { "tainted", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTainted), (intptr_t)1 THUNK_GENERATOR(0) },
    { "isTainted", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncIsTainted), (intptr_t)0 THUNK_GENERATOR(0) },
+// #endif
    { 0, 0, 0, 0 THUNK_GENERATOR(0) }
 };
 

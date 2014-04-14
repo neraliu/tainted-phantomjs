@@ -41,10 +41,6 @@
 #include <wtf/text/StringImplBase.h>
 #include <wtf/unicode/Unicode.h>
 
-#ifdef JSC_TAINTED
-#include <iostream>
-#endif
-
 #if USE(CF)
 typedef const struct __CFString * CFStringRef;
 #endif
@@ -95,10 +91,6 @@ private:
         // with impunity. The empty string is special because it is never entered into
         // AtomicString's HashKey, but still needs to compare correctly.
         hash();
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#endif
-#endif
     }
 
     // Create a normal string with internal storage (BufferInternal)
@@ -110,10 +102,6 @@ private:
     {
         ASSERT(m_data);
         ASSERT(m_length);
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#endif
-#endif
     }
 
     // Create a StringImpl adopting ownership of the provided buffer (BufferOwned)
@@ -125,10 +113,6 @@ private:
     {
         ASSERT(m_data);
         ASSERT(m_length);
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#endif
-#endif
     }
 
     // Used to create new strings that are a substring of an existing StringImpl (BufferSubstring)
@@ -141,10 +125,6 @@ private:
         ASSERT(m_data);
         ASSERT(m_length);
         ASSERT(m_substringBuffer->bufferOwnership() != BufferSubstring);
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#endif
-#endif
     }
 
     // Used to construct new strings sharing an existing SharedUChar (BufferShared)
@@ -156,10 +136,6 @@ private:
     {
         ASSERT(m_data);
         ASSERT(m_length);
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#endif
-#endif
     }
 
     // For use only by AtomicString's XXXTranslator helpers.
@@ -169,10 +145,6 @@ private:
         ASSERT(!m_hash);
         ASSERT(hash == StringHasher::computeHash(m_data, m_length));
         m_hash = hash;
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#endif
-#endif
     }
 
 public:
@@ -273,11 +245,7 @@ public:
     unsigned hash() const { if (!m_hash) m_hash = StringHasher::computeHash(m_data, m_length); return m_hash; }
     unsigned existingHash() const { ASSERT(m_hash); return m_hash; }
 
-#ifdef JSC_TAINTED
     ALWAYS_INLINE void deref() { m_refCountAndFlags -= s_refCountIncrement; if (!(m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic))) delete this; }
-#else
-    ALWAYS_INLINE void deref() { m_refCountAndFlags -= s_refCountIncrement; if (!(m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic))) delete this; }
-#endif
     ALWAYS_INLINE bool hasOneRef() const { return (m_refCountAndFlags & (s_refCountMask | s_refCountFlagStatic)) == s_refCountIncrement; }
 
     static StringImpl* empty();
@@ -359,11 +327,6 @@ public:
     operator NSString*();
 #endif
 
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#endif
-#endif
-
 private:
     // This number must be at least 2 to avoid sharing empty, null as well as 1 character strings from SmallStrings.
     static const unsigned s_copyCharsInlineCutOff = 20;
@@ -379,8 +342,6 @@ private:
         SharedUChar* m_sharedBuffer;
     };
     mutable unsigned m_hash;
-#ifdef JSC_TAINTED_FIX_64
-#endif
 };
 
 bool equal(const StringImpl*, const StringImpl*);

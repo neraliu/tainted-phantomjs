@@ -79,6 +79,7 @@ SET(JavaScriptCore_SOURCES
     parser/SourceProviderCache.cpp
     parser/TaintedCounter.cpp
     parser/TaintedTrace.cpp
+    parser/TaintedMap.cpp
 
     profiler/Profile.cpp
     profiler/ProfileGenerator.cpp
