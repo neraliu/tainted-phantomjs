@@ -47,7 +47,8 @@ class UString {
 public:
     // Construct a null string, distinguishable from an empty string.
 #ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
+
+#ifdef JSC_TAINTED_64
     UString() { 
 	TaintedMap* map = TaintedMap::getInstance();
 	map->add(getUStringAddr(), 0);
@@ -62,9 +63,10 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 	map->add(getUStringAddr(), map->get(UString::getUStringAddr(u)));
 	m_impl = u.m_impl;
     }
-#else
+#elif JSC_TAINTED_32
     UString() { m_tainted = 0; } 
 #endif
+
 #else
     UString() { }
 #endif
@@ -83,7 +85,8 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 
     // Construct a string referencing an existing StringImpl.
 #ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
+
+#ifdef JSC_TAINTED_64
     UString(StringImpl* impl) : m_impl(impl) { 
 	TaintedMap* map = TaintedMap::getInstance();
 	map->add(getUStringAddr(), 0);
@@ -96,11 +99,12 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 	TaintedMap* map = TaintedMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
-#else
-    UString(StringImpl* impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
-    UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
-    UString(RefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } // m_tainted_tag = 0; }
+#elif JSC_TAINTED_32
+    UString(StringImpl* impl) : m_impl(impl) { m_tainted = 0; } 
+    UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } 
+    UString(RefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } 
 #endif
+
 #else
     UString(StringImpl* impl) : m_impl(impl) { }
     UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { }
@@ -173,20 +177,20 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 #ifdef JSC_TAINTED
     unsigned int isTainted() const
     {
-#ifdef JSC_TAINTED_FIX_64
+#ifdef JSC_TAINTED_64
 	TaintedMap* map = TaintedMap::getInstance();
 	return map->get(getUStringAddr());
-#else
+#elif JSC_TAINTED_32
 	return this->m_tainted;
 #endif
     }
 
     void setTainted(unsigned int tainted)
     {
-#ifdef JSC_TAINTED_FIX_64
+#ifdef JSC_TAINTED_64
 	TaintedMap* map = TaintedMap::getInstance();
 	map->update(getUStringAddr(), tainted);
-#else
+#elif JSC_TAINTED_32
     	this->m_tainted = tainted;
 #endif
     }
@@ -217,10 +221,12 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 private:
     RefPtr<StringImpl> m_impl;
 #ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_FIX_64
-#else
+
+#ifdef JSC_TAINTED_64
+#elif JSC_TAINTED_32
     unsigned int m_tainted;
 #endif
+
 #endif
 };
 

@@ -641,13 +641,13 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 #ifdef JSC_TAINTED
 	unsigned int isTainted() const
 	{
-#ifdef JSC_TAINTED_FIX_64
+#ifdef JSC_TAINTED_64
             if (isRope()) {
 	        return m_tainted;
 	    } else {
 	        return this->m_value.isTainted();
 	    }
-#else
+#elif JSC_TAINTED_32
             if (isRope()) {
 	        return m_tainted;
 	    } else {
@@ -658,13 +658,13 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 
 	void setTainted(unsigned int tainted)
 	{
-#ifdef JSC_TAINTED_FIX_64
+#ifdef JSC_TAINTED_64
             if (isRope()) {
 	        m_tainted = tainted;
 	    } else {
 		this->string().setTainted(tainted);
 	    }
-#else
+#elif JSC_TAINTED_32
             if (isRope()) {
 	        m_tainted = tainted;
 	    } else {
@@ -673,9 +673,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 #endif
 	}
 
-#ifdef JSC_TAINTED_FIX_64
+#ifdef JSC_TAINTED_64
     	unsigned int m_tainted;
-#else
+#elif JSC_TAINTED_32
     	unsigned int m_tainted;
 #endif
 #endif
