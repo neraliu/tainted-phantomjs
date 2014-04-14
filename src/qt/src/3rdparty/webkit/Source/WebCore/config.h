@@ -264,14 +264,13 @@ typedef float CGFloat;
 /* 
  * there are 2 implementation of tpjs - 32 bit and 64 bit.
  * please define JSC_TAINTED and JSC_TAINTED_32 for 32 bit implementation.
- * please define JSC_TAINTED, JSC_TAINTED_64 and JSC_TAINTED_FIX_64 for 64 bit implementation.
+ * please define JSC_TAINTED and JSC_TAINTED_64 for 64 bit implementation.
  */
 #if !defined(JSC_TAINTED)
 #define JSC_TAINTED             1
 
-// #define JSC_TAINTED_32      	1
-#define JSC_TAINTED_64          1
-#define JSC_TAINTED_FIX_64   	1
+#define JSC_TAINTED_32      	1
+// #define JSC_TAINTED_64          1
 
 // the debug flag of the hack
 // #define JSC_TAINTED_DEBUG    1
