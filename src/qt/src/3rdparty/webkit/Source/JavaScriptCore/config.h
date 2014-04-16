@@ -140,8 +140,21 @@
 #if !defined(JSC_TAINTED)
 #define JSC_TAINTED             1
 
-// #define JSC_TAINTED_32      	1
-#define JSC_TAINTED_64      	1
+#if _WIN32 || _WIN64
+#if _WIN64
+#define JSC_TAINTED_64		1
+#else
+#define JSC_TAINTED_32		1
+#endif
+#endif
+
+#if __GNUC__
+#if __x86_64__ || __ppc64__
+#define JSC_TAINTED_64		1
+#else
+#define JSC_TAINTED_32		1
+#endif
+#endif
 
 // the debug flag of the hack
 // #define JSC_TAINTED_DEBUG	1
