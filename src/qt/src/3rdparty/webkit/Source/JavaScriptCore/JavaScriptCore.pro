@@ -115,9 +115,6 @@ SOURCES += \
     parser/ParserArena.cpp \
     parser/Parser.cpp \
     parser/SourceProviderCache.cpp \
-    parser/TaintedCounter.cpp \
-    parser/TaintedTrace.cpp \
-    parser/TaintedMap.cpp \
     profiler/Profile.cpp \
     profiler/ProfileGenerator.cpp \
     profiler/ProfileNode.cpp \
@@ -200,6 +197,9 @@ SOURCES += \
     runtime/StringRecursionChecker.cpp \
     runtime/StructureChain.cpp \
     runtime/Structure.cpp \
+    runtime/TaintedCounter.cpp \
+    runtime/TaintedTrace.cpp \
+    runtime/TaintedHashMap.cpp \
     runtime/TimeoutChecker.cpp \
     runtime/UString.cpp \
     yarr/YarrJIT.cpp \

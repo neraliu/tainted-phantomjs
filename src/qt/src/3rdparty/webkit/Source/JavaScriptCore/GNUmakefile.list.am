@@ -203,12 +203,6 @@ javascriptcore_sources += \
 	Source/JavaScriptCore/parser/SourceProviderCache.h \
 	Source/JavaScriptCore/parser/SourceProviderCacheItem.h \
 	Source/JavaScriptCore/parser/SyntaxChecker.h \
-	Source/JavaScriptCore/parser/TaintedCounter.cpp \
-	Source/JavaScriptCore/parser/TaintedCounter.h \
-	Source/JavaScriptCore/parser/TaintedTrace.cpp \
-	Source/JavaScriptCore/parser/TaintedTrace.h \
-	Source/JavaScriptCore/parser/TaintedMap.cpp \
-	Source/JavaScriptCore/parser/TaintedMap.h \
 	Source/JavaScriptCore/profiler/CallIdentifier.h \
 	Source/JavaScriptCore/profiler/Profile.cpp \
 	Source/JavaScriptCore/profiler/ProfileGenerator.cpp \
@@ -391,6 +385,12 @@ javascriptcore_sources += \
 	Source/JavaScriptCore/runtime/Structure.h \
 	Source/JavaScriptCore/runtime/StructureTransitionTable.h \
 	Source/JavaScriptCore/runtime/SymbolTable.h \
+	Source/JavaScriptCore/runtime/TaintedCounter.cpp \
+	Source/JavaScriptCore/runtime/TaintedCounter.h \
+	Source/JavaScriptCore/runtime/TaintedTrace.cpp \
+	Source/JavaScriptCore/runtime/TaintedTrace.h \
+	Source/JavaScriptCore/runtime/TaintedHashMap.cpp \
+	Source/JavaScriptCore/runtime/TaintedHashMap.h \
 	Source/JavaScriptCore/runtime/Terminator.h \
 	Source/JavaScriptCore/runtime/TimeoutChecker.cpp \
 	Source/JavaScriptCore/runtime/TimeoutChecker.h \

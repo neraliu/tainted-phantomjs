@@ -289,7 +289,7 @@ int InspectorServerRequestHandlerQt::webSocketSend(const char* data, size_t leng
     m_tcpConnection->putChar(0x81);
     if (length <= 125)
         m_tcpConnection->putChar(static_cast<uint8_t>(length));
-#ifdef JSC_TAINTED_32
+#ifdef JSC_TAINTED_EXTENDED
     else if (length <= pow(2.0,16.0)) {
 #else
     else if (length <= pow(2,16)) {

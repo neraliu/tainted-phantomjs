@@ -41,7 +41,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
-#include "TaintedMap.h"
+#include "TaintedHashMap.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -641,13 +641,13 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 #ifdef JSC_TAINTED
 	unsigned int isTainted() const
 	{
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
             if (isRope()) {
 	        return m_tainted;
 	    } else {
 	        return this->m_value.isTainted();
 	    }
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
             if (isRope()) {
 	        return m_tainted;
 	    } else {
@@ -658,13 +658,13 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 
 	void setTainted(unsigned int tainted)
 	{
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
             if (isRope()) {
 	        m_tainted = tainted;
 	    } else {
 		this->string().setTainted(tainted);
 	    }
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
             if (isRope()) {
 	        m_tainted = tainted;
 	    } else {
@@ -673,9 +673,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 #endif
 	}
 
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
     	unsigned int m_tainted;
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
     	unsigned int m_tainted;
 #endif
 #endif
