@@ -1928,6 +1928,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncIsTainted(ExecState* exec)
         UString s = thisValue.toString(exec);
         return JSValue::encode(jsNumber(s.isTainted()));
     }
+    return JSValue::encode(jsNumber(0));
 }
 
 EncodedJSValue JSC_HOST_CALL stringProtoFuncTainted(ExecState* exec)
@@ -1961,6 +1962,8 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTainted(ExecState* exec)
 	s.setTainted(tainted.toNumber(exec));
         return JSValue::encode(jsNumber(s.isTainted()));
     }
+
+    return JSValue::encode(jsNumber(0));
 }
 #endif
     
