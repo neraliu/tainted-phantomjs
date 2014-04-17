@@ -79,7 +79,7 @@ UString::UString(const UChar* characters, unsigned length)
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_HASHMAP
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
         map->add(getUStringAddr(), 0);
 #elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;
@@ -100,7 +100,7 @@ UString::UString(const UChar* characters)
     m_impl = StringImpl::create(characters, length);
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_HASHMAP
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
         map->add(getUStringAddr(), 0);
 #elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;
@@ -114,7 +114,7 @@ UString::UString(const char* characters, unsigned length)
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_HASHMAP
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
         map->add(getUStringAddr(), 0);
 #elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;
@@ -128,7 +128,7 @@ UString::UString(const char* characters)
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_HASHMAP
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
         map->add(getUStringAddr(), 0);
 #elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;

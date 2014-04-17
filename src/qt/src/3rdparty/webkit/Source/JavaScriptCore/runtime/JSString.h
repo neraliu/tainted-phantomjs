@@ -41,7 +41,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
-#include "TaintedMap.h"
+#include "TaintedHashMap.h"
 #include <string>
 #include <sstream>
 #include <iostream>

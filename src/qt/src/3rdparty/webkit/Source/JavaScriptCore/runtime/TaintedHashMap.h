@@ -24,8 +24,8 @@
  *
  */
 
-#ifndef TaintedMap_h
-#define TaintedMap_h
+#ifndef TaintedHashMap_h
+#define TaintedHashMap_h
 
 #include <string>
 #include <map>
@@ -34,21 +34,21 @@ using namespace std;
 
 namespace JSC {
 
-	class TaintedMap {
+	class TaintedHashMap {
                 public:
-                        static TaintedMap* getInstance();
+                        static TaintedHashMap* getInstance();
 			void add(string l, unsigned int t);
 			void update(string l, unsigned int t);
 			unsigned int get(string l);
 			void remove(string l);
 			void clear();
                 private:
-                        TaintedMap();
-                        ~TaintedMap();
-                        static TaintedMap* m_tainted_map;
+                        TaintedHashMap();
+                        ~TaintedHashMap();
+                        static TaintedHashMap* m_tainted_map;
 			map<string, unsigned int> m_map;
 	};
 
 } // namespace JSC
 
-#endif // TaintedMap_h
+#endif // TaintedHashMap_h

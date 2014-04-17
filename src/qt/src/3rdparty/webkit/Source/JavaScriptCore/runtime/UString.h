@@ -34,7 +34,7 @@
 #include <wtf/text/StringImpl.h>
 
 #ifdef JSC_TAINTED
-#include "TaintedMap.h"
+#include "TaintedHashMap.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -50,7 +50,7 @@ public:
 
 #ifdef JSC_TAINTED_HASHMAP
     UString() { 
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
 
@@ -59,7 +59,7 @@ public:
 #ifdef JSC_TAINTED_DEBUG
 std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAddr(u) << std::endl;
 #endif
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), map->get(UString::getUStringAddr(u)));
 	m_impl = u.m_impl;
     }
@@ -88,15 +88,15 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 
 #ifdef JSC_TAINTED_HASHMAP
     UString(StringImpl* impl) : m_impl(impl) { 
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
     UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { 
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
     UString(RefPtr<StringImpl> impl) : m_impl(impl) { 
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
 #elif JSC_TAINTED_EXTENDED
@@ -113,7 +113,7 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 
     // Inline the destructor.
     ALWAYS_INLINE ~UString() { 
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->remove(getUStringAddr());
     }
 
@@ -178,7 +178,7 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
     unsigned int isTainted() const
     {
 #ifdef JSC_TAINTED_HASHMAP
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	return map->get(getUStringAddr());
 #elif JSC_TAINTED_EXTENDED
 	return this->m_tainted;
@@ -188,7 +188,7 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
     void setTainted(unsigned int tainted)
     {
 #ifdef JSC_TAINTED_HASHMAP
-	TaintedMap* map = TaintedMap::getInstance();
+	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->update(getUStringAddr(), tainted);
 #elif JSC_TAINTED_EXTENDED
     	this->m_tainted = tainted;

@@ -25,36 +25,36 @@
  */
 
 #include "config.h"
-#include "TaintedMap.h"
+#include "TaintedHashMap.h"
 
 namespace JSC {
 
-TaintedMap* TaintedMap::m_tainted_map = NULL;
+TaintedHashMap* TaintedHashMap::m_tainted_map = NULL;
 
-TaintedMap* TaintedMap::getInstance() 
+TaintedHashMap* TaintedHashMap::getInstance() 
 {
         if (!m_tainted_map) {
-                m_tainted_map = new TaintedMap();
+                m_tainted_map = new TaintedHashMap();
         }
         return m_tainted_map;
 }
 
-void TaintedMap::add(string l, unsigned int t)
+void TaintedHashMap::add(string l, unsigned int t)
 {
 	m_map.insert(std::pair<string,unsigned int>(l,t));
 }
 
-void TaintedMap::update(string l, unsigned int t)
+void TaintedHashMap::update(string l, unsigned int t)
 {
 	m_map[l] = t;
 }
 
-void TaintedMap::remove(string l)
+void TaintedHashMap::remove(string l)
 {
 	m_map.erase(l);
 }
 
-unsigned int TaintedMap::get(string l)
+unsigned int TaintedHashMap::get(string l)
 {
 	if(m_map.find(l) == m_map.end()) {
 		return 0;
@@ -63,17 +63,17 @@ unsigned int TaintedMap::get(string l)
 	}
 }
 
-void TaintedMap::clear()
+void TaintedHashMap::clear()
 {
 	m_map.clear();
 }
 
-TaintedMap::TaintedMap()
+TaintedHashMap::TaintedHashMap()
 {
 	m_map.clear();
 }
 
-TaintedMap::~TaintedMap()
+TaintedHashMap::~TaintedHashMap()
 {
 	m_map.clear();
 }
