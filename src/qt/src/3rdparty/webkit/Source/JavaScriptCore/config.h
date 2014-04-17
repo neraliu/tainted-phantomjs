@@ -132,27 +132,22 @@
 /* Using V8 implies not using JSC and vice versa */
 #define WTF_USE_JSC !WTF_USE_V8
 
-/* 
- * there are 2 implementation of tpjs - 32 bit and 64 bit.
- * please define JSC_TAINTED and JSC_TAINTED_32 for 32 bit implementation.
- * please define JSC_TAINTED and JSC_TAINTED_64 for 64 bit implementation.
- */
 #if !defined(JSC_TAINTED)
-#define JSC_TAINTED             1
+#define JSC_TAINTED             	1
 
 #if _WIN32 || _WIN64
 #if _WIN64
-#define JSC_TAINTED_64		1
+#define JSC_TAINTED_HASHMAP		1
 #else
-#define JSC_TAINTED_32		1
+#define JSC_TAINTED_EXTENDED		1
 #endif
 #endif
 
 #if __GNUC__
 #if __x86_64__ || __ppc64__
-#define JSC_TAINTED_64		1
+#define JSC_TAINTED_HASHMAP		1
 #else
-#define JSC_TAINTED_32		1
+#define JSC_TAINTED_EXTENDED		1
 #endif
 #endif
 

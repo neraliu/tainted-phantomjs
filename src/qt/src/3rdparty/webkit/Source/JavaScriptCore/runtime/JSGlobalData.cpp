@@ -127,10 +127,14 @@ void JSGlobalData::storeVPtrs()
 {
     // Enough storage to fit a JSArray, JSByteArray, JSString, or JSFunction.
     // COMPILE_ASSERTS below check that this is true.
-#ifdef JSC_TAINTED_32
+#ifdef JSC_TAINTED
+
+#ifdef JSC_TAINTED_EXTENDED
     char storage[64];
-#elif JSC_TAINTED_64
+#elif JSC_TAINTED_HASHMAP
     char storage[64];
+#endif
+
 #else
     char storage[64];
 #endif

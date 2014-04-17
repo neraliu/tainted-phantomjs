@@ -63,9 +63,9 @@ extern const double Inf;
 
 #ifdef JSC_TAINTED
 
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
 COMPILE_ASSERT(sizeof(UString) == sizeof(void*), UString_should_stay_small);
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
 COMPILE_ASSERT(sizeof(UString) == sizeof(void*) + sizeof(int), UString_should_stay_small);
 #endif
 
@@ -78,10 +78,10 @@ UString::UString(const UChar* characters, unsigned length)
     : m_impl(characters ? StringImpl::create(characters, length) : 0)
 {
 #ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
 	TaintedMap* map = TaintedMap::getInstance();
         map->add(getUStringAddr(), 0);
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;
 #endif
 #endif
@@ -99,10 +99,10 @@ UString::UString(const UChar* characters)
 
     m_impl = StringImpl::create(characters, length);
 #ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
 	TaintedMap* map = TaintedMap::getInstance();
         map->add(getUStringAddr(), 0);
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;
 #endif
 #endif
@@ -113,10 +113,10 @@ UString::UString(const char* characters, unsigned length)
     : m_impl(characters ? StringImpl::create(characters, length) : 0)
 {
 #ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
 	TaintedMap* map = TaintedMap::getInstance();
         map->add(getUStringAddr(), 0);
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;
 #endif
 #endif
@@ -127,10 +127,10 @@ UString::UString(const char* characters)
     : m_impl(characters ? StringImpl::create(characters) : 0)
 {
 #ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_64
+#ifdef JSC_TAINTED_HASHMAP
 	TaintedMap* map = TaintedMap::getInstance();
         map->add(getUStringAddr(), 0);
-#elif JSC_TAINTED_32
+#elif JSC_TAINTED_EXTENDED
 	m_tainted = 0;
 #endif
 #endif
