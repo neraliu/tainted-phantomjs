@@ -41,10 +41,10 @@ usage() {
 	echo "-------------------"
 	echo "USAGE: $0 <target url to scan>"
 	echo "	-c 	set the cookie file (in mozilla format)"
-	echo "	-t 	the execution time of the javascript before time out (in msec)"
-	echo "	-p 	the screenshot rendering path"
-	echo "	-f 	fuzz the sources (0 or 1)"
-	echo "	-s 	the scanning script [domxss.js|domxss-fuzz.js]"
+	echo "	-t 	set the execution time of the javascript before time out (in msec)"
+	echo "	-p 	set the screenshot rendering path"
+	echo "	-z 	fuzz the sources (0 for disable or 1 for enable)"
+	echo "	-s 	set the scanning script file"
 	echo "	-d 	enable the level of message [default|info|debug|json]"
 	echo "-------------------"
 	echo ""
@@ -82,7 +82,7 @@ if [ -z "${URL}" ]; then
 	exit 1;
 fi
 
-while getopts ":c:t:p:f:s:d:" o; do
+while getopts ":c:t:p:z:s:d:" o; do
 	case "${o}" in
 		c)
 			COOKIE_FILE=${OPTARG}
@@ -112,7 +112,7 @@ while getopts ":c:t:p:f:s:d:" o; do
 				exit 1;
 			fi
 			;;
-		f)
+		z)
 			FUZZ=${OPTARG}
 			re='[0-1]'
 			if ! [[ $FUZZ =~ $re ]] ; then
