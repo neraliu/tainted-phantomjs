@@ -24,42 +24,22 @@
  *
  */
 
-#include "config.h"
-#include "TaintedTrace.h"
+#ifndef TaintedUtils_h
+#define TaintedUtils_h
+
+#include <string>
+#include <vector>
+#include <stdio.h>
+#include "UString.h"
+#include <wtf/text/CString.h>
 
 namespace JSC {
 
-TaintedTrace* TaintedTrace::m_taintedtrace = NULL;
-
-TaintedTrace* TaintedTrace::getInstance() 
-{
-        if (!m_taintedtrace) {
-                m_taintedtrace = new TaintedTrace();
-        }
-        return m_taintedtrace;
-}
-
-vector<TaintedStructure> TaintedTrace::getTrace()
-{
-	return m_trace;
-}
-
-void TaintedTrace::addTaintedTrace(TaintedStructure s)
-{
-	m_trace.push_back(s);
-}
-
-void TaintedTrace::clearTrace()
-{
-	m_trace.clear();
-}
-
-TaintedTrace::TaintedTrace()
-{
-}
-
-TaintedTrace::~TaintedTrace()
-{
-}
+	class TaintedUtils {
+		public:
+			static string UString2string(const UString& u);
+	};
 
 } // namespace JSC
+
+#endif // TaintedUtils_h

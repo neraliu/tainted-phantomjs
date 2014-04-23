@@ -36,6 +36,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -295,7 +296,7 @@ JSValue JSLocation::toStringFunction(ExecState* exec)
     trace_struct.internalfunc = "JSLocation::toStringFunction";
     trace_struct.jsfunc = "";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);

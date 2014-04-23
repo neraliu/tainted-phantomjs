@@ -25,41 +25,21 @@
  */
 
 #include "config.h"
-#include "TaintedTrace.h"
+#include "TaintedUtils.h"
 
 namespace JSC {
 
-TaintedTrace* TaintedTrace::m_taintedtrace = NULL;
-
-TaintedTrace* TaintedTrace::getInstance() 
+string TaintedUtils::UString2string(const UString& u)
 {
-        if (!m_taintedtrace) {
-                m_taintedtrace = new TaintedTrace();
-        }
-        return m_taintedtrace;
-}
-
-vector<TaintedStructure> TaintedTrace::getTrace()
-{
-	return m_trace;
-}
-
-void TaintedTrace::addTaintedTrace(TaintedStructure s)
-{
-	m_trace.push_back(s);
-}
-
-void TaintedTrace::clearTrace()
-{
-	m_trace.clear();
-}
-
-TaintedTrace::TaintedTrace()
-{
-}
-
-TaintedTrace::~TaintedTrace()
-{
+	// we just peek 20 bytes of data.
+        int size = 20;
+        char msg[size];
+        string str;
+        stringstream msgss;
+        snprintf(msg, size, "%s", u.utf8(true).data());
+        msgss << msg;
+        msgss >> str;
+        return str;
 }
 
 } // namespace JSC

@@ -48,6 +48,7 @@
 #include "ArrayConstructor.h"
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -111,7 +112,7 @@ EncodedJSValue JSC_HOST_CALL regExpProtoFuncExec(ExecState* exec)
             trace_struct.internalfunc = "regExpProtoFuncExec";
             trace_struct.jsfunc = "RegExp.exec";
 	    trace_struct.action = "propagate";
-    	    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+    	    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);

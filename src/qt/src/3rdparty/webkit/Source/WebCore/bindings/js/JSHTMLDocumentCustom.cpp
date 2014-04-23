@@ -53,6 +53,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -158,7 +159,7 @@ static inline void documentWrite(ExecState* exec, HTMLDocument* document, Newlin
         trace_struct.internalfunc = "documentWrite";
         trace_struct.jsfunc = "document.write/writeln";
         trace_struct.action = "sink";
-        trace_struct.value = TaintedTrace::UString2string(firstString);
+        trace_struct.value = TaintedUtils::UString2string(firstString);
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -183,7 +184,7 @@ static inline void documentWrite(ExecState* exec, HTMLDocument* document, Newlin
 		    trace_struct.internalfunc = "documentWrite";
 		    trace_struct.jsfunc = "document.write/writeln";
 		    trace_struct.action = "sink";
-		    trace_struct.value = TaintedTrace::UString2string(subsequentString);
+		    trace_struct.value = TaintedUtils::UString2string(subsequentString);
 
 		    TaintedTrace* trace = TaintedTrace::getInstance();
 		    trace->addTaintedTrace(trace_struct);

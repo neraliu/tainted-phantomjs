@@ -200,6 +200,7 @@ SOURCES += \
     runtime/TaintedCounter.cpp \
     runtime/TaintedTrace.cpp \
     runtime/TaintedHashMap.cpp \
+    runtime/TaintedUtils.cpp \
     runtime/TimeoutChecker.cpp \
     runtime/UString.cpp \
     yarr/YarrJIT.cpp \

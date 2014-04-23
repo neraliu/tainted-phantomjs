@@ -391,6 +391,8 @@ javascriptcore_sources += \
 	Source/JavaScriptCore/runtime/TaintedTrace.h \
 	Source/JavaScriptCore/runtime/TaintedHashMap.cpp \
 	Source/JavaScriptCore/runtime/TaintedHashMap.h \
+	Source/JavaScriptCore/runtime/TaintedUtils.cpp \
+	Source/JavaScriptCore/runtime/TaintedUtils.h \
 	Source/JavaScriptCore/runtime/Terminator.h \
 	Source/JavaScriptCore/runtime/TimeoutChecker.cpp \
 	Source/JavaScriptCore/runtime/TimeoutChecker.h \

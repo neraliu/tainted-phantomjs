@@ -47,6 +47,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -266,7 +267,7 @@ std::cerr << "ArrayProtocol::arrayProtoFuncToString:" << tainted << std::endl;
         trace_struct.internalfunc = "arrayProtoFuncToString";
         trace_struct.jsfunc = "Array.toString";
         trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(v.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(v.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -443,7 +444,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
         trace_struct.internalfunc = "arrayProtoFuncJoin";
         trace_struct.jsfunc = "Array.join";
         trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(v.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(v.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);

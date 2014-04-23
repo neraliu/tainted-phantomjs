@@ -44,6 +44,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -473,7 +474,7 @@ the guess is the following code does not cover the primitive string.
 	trace_struct.internalfunc = "jsHTMLDocumentPrototypeFunctionWrite";
 	trace_struct.jsfunc = "document.write";
 	trace_struct.action = "sink";
-	trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -489,7 +490,7 @@ the guess is the following code does not cover the primitive string.
 	    trace_struct.internalfunc = "jsHTMLDocumentPrototypeFunctionWrite";
 	    trace_struct.jsfunc = "document.write";
 	    trace_struct.action = "sink";
-	    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+	    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);
@@ -516,7 +517,7 @@ EncodedJSValue JSC_HOST_CALL jsHTMLDocumentPrototypeFunctionWriteln(ExecState* e
 	trace_struct.internalfunc = "jsHTMLDocumentPrototypeFunctionWriteln";
 	trace_struct.jsfunc = "document.writeln";
 	trace_struct.action = "sink";
-	trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -532,7 +533,7 @@ EncodedJSValue JSC_HOST_CALL jsHTMLDocumentPrototypeFunctionWriteln(ExecState* e
 	    trace_struct.internalfunc = "jsHTMLDocumentPrototypeFunctionWriteln";
 	    trace_struct.jsfunc = "document.writeln";
 	    trace_struct.action = "sink";
-	    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+	    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);

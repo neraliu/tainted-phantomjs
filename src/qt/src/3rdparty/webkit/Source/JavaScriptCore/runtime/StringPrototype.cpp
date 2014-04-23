@@ -50,6 +50,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -341,7 +342,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncReplace";
 	trace_struct.jsfunc = "String.replace";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -637,7 +638,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncCharAt(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncCharAt";
 	trace_struct.jsfunc = "String.charAt";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -743,7 +744,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncConcat(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncConcat";
 	trace_struct.jsfunc = "String.concat";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -867,7 +868,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncMatch(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncMatch";
 	trace_struct.jsfunc = "String.match";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -979,7 +980,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSlice(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncSlice";
 	trace_struct.jsfunc = "String.slice";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1043,7 +1044,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncSplit";
 	trace_struct.jsfunc = "String.split";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1191,7 +1192,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstr(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncSubstr";
 	trace_struct.jsfunc = "String.substr";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1274,7 +1275,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstring(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncSubstring";
 	trace_struct.jsfunc = "String.substring";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1366,7 +1367,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncToLowerCase";
 	trace_struct.jsfunc = "String.LowerCase";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1488,7 +1489,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncToUpperCase";
 	trace_struct.jsfunc = "String.UpperCase";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1817,7 +1818,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrim(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncTrim";
 	trace_struct.jsfunc = "String.trim";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1859,7 +1860,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimLeft(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncTrimLeft";
 	trace_struct.jsfunc = "String.trimLeft";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1901,7 +1902,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimRight(ExecState* exec)
 	trace_struct.internalfunc = "stringProtoFuncTrimRight";
 	trace_struct.jsfunc = "String.trimRight";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1944,7 +1945,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTainted(ExecState* exec)
     trace_struct.internalfunc = "stringProtoFuncTainted";
     trace_struct.jsfunc = "String.tainted()";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);

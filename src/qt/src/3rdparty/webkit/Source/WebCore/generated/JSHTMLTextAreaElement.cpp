@@ -48,6 +48,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -355,7 +356,7 @@ JSValue jsHTMLTextAreaElementValue(ExecState* exec, JSValue slotBase, const Iden
         trace_struct.internalfunc = "jsHTMLTextAreaElementValue";
 	trace_struct.jsfunc = "textarea.value";
         trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -552,7 +553,7 @@ void setJSHTMLTextAreaElementValue(ExecState* exec, JSObject* thisObject, JSValu
 	trace_struct.internalfunc = "setJSHTMLTextAreaElementValue";
 	trace_struct.jsfunc = "textarea.value";
         trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
