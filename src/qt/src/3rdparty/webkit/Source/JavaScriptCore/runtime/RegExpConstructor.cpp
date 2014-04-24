@@ -120,7 +120,7 @@ RegExpMatchesArray::RegExpMatchesArray(ExecState* exec, RegExpConstructorPrivate
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "RegExpMatchesArray::RegExpMatchesArray" << std::endl;
+std::cerr << "RegExpMatchesArray::RegExpMatchesArray" << std::endl;
 #endif
 #endif
     RegExpConstructorPrivate* d = new RegExpConstructorPrivate;
@@ -167,7 +167,7 @@ JSObject* RegExpConstructor::arrayOfMatches(ExecState* exec) const
 {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
-// std::cerr << "RegExpConstructor::arrayOfMatches" << std::endl;
+std::cerr << "RegExpConstructor::arrayOfMatches" << std::endl;
 #endif
 #endif
     return new (exec) RegExpMatchesArray(exec, d.get());

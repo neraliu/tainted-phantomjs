@@ -30,6 +30,8 @@
 #include <string>
 #include <vector>
 #include <stdio.h>
+
+#include "JSValue.h"
 #include "UString.h"
 #include <wtf/text/CString.h>
 
@@ -38,6 +40,7 @@ namespace JSC {
 	class TaintedUtils {
 		public:
 			static string UString2string(const UString& u);
+			static unsigned int isTainted(ExecState* exec, JSValue& thisValue);
 	};
 
 } // namespace JSC

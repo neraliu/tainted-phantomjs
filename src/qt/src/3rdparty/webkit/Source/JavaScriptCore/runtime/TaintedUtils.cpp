@@ -27,6 +27,8 @@
 #include "config.h"
 #include "TaintedUtils.h"
 
+#include "StringObject.h"
+
 namespace JSC {
 
 string TaintedUtils::UString2string(const UString& u)
@@ -40,6 +42,28 @@ string TaintedUtils::UString2string(const UString& u)
         msgss << msg;
         msgss >> str;
         return str;
+}
+
+unsigned int TaintedUtils::isTainted(ExecState* exec, JSValue& thisValue)
+{
+	unsigned int tainted = 0;
+	if (thisValue.isString() && thisValue.isTainted()) {
+		tainted = thisValue.isTainted();
+		return tainted;
+	}
+	if (thisValue.inherits(&StringObject::s_info) && asStringObject(thisValue)->isTainted()) {
+		StringObject* sobj = asStringObject(thisValue);
+		tainted = sobj->isTainted();
+		return tainted;
+	}
+	if (thisValue.isObject()) {
+        	UString s = thisValue.toString(exec);
+		if (s.isTainted()) {
+                	tainted = s.isTainted();
+			return tainted;
+		}
+    	}
+	return tainted;
 }
 
 } // namespace JSC

@@ -322,6 +322,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
     JSValue replacement = exec->argument(1);
 
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -335,7 +336,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -618,6 +621,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncCharAt(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -631,7 +635,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncCharAt(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -708,6 +714,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncConcat(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
 
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -721,7 +728,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncConcat(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (exec->argumentCount() == 1) {
         JSValue v = exec->argument(0);
     	if (v.isString() && v.isTainted()) {
@@ -848,6 +857,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncMatch(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -861,7 +871,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncMatch(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -960,6 +972,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSlice(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -973,7 +986,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSlice(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -1024,6 +1039,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1037,7 +1053,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -1172,6 +1190,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstr(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1185,7 +1204,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstr(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -1255,6 +1276,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstring(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1268,7 +1290,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstring(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -1347,6 +1371,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1360,7 +1385,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -1469,6 +1496,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1482,7 +1510,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
 	trace_struct.taintedno = tainted;
@@ -1792,6 +1822,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrim(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1805,6 +1836,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrim(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     JSValue s = trimString(exec, thisValue, TrimLeft | TrimRight);
     if (tainted) {
 	s.setTainted(tainted); 
@@ -1834,6 +1868,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimLeft(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1847,6 +1882,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimLeft(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     JSValue s = trimString(exec, thisValue, TrimLeft);
     if (tainted) {
 	s.setTainted(tainted); 
@@ -1876,6 +1914,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimRight(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
 #ifdef JSC_TAINTED
+/*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
 	tainted = thisValue.isTainted();
@@ -1889,6 +1928,9 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimRight(ExecState* exec)
 		tainted = s.isTainted();
 	}
     }
+*/
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     JSValue s = trimString(exec, thisValue, TrimRight);
     if (tainted) {
 	s.setTainted(tainted); 
