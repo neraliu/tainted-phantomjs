@@ -6045,6 +6045,7 @@ void setJSDOMWindowClientInformation(ExecState* exec, JSObject* thisObject, JSVa
 void setJSDOMWindowLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -6058,7 +6059,9 @@ void setJSDOMWindowLocation(ExecState* exec, JSObject* thisObject, JSValue value
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSDOMWindow* castedThis = static_cast<JSDOMWindow*>(thisObject);
         DOMWindow* imp = static_cast<DOMWindow*>(castedThis->impl());
@@ -6203,6 +6206,7 @@ void setJSDOMWindowName(ExecState* exec, JSObject* thisObject, JSValue value)
     JSDOMWindow* castedThis = static_cast<JSDOMWindow*>(thisObject);
     DOMWindow* imp = static_cast<DOMWindow*>(castedThis->impl());
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -6216,7 +6220,9 @@ void setJSDOMWindowName(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
     	Document* d = imp->document();
 	d->setTainted(tainted);

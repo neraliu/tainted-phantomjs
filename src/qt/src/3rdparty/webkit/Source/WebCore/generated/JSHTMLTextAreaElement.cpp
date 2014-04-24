@@ -533,6 +533,7 @@ void setJSHTMLTextAreaElementValue(ExecState* exec, JSObject* thisObject, JSValu
     HTMLTextAreaElement* imp = static_cast<HTMLTextAreaElement*>(castedThis->impl());
     imp->setValue(valueToStringWithNullCheck(exec, value));
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -546,7 +547,9 @@ void setJSHTMLTextAreaElementValue(ExecState* exec, JSObject* thisObject, JSValu
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         TaintedStructure trace_struct;
         trace_struct.taintedno = tainted;

@@ -516,6 +516,7 @@ this method has the side effect, if the element is untatined, then we need to cl
 void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -529,6 +530,9 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());
@@ -604,6 +608,7 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
 void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -617,6 +622,9 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());
@@ -663,6 +671,7 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
 void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -676,6 +685,9 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());
@@ -722,6 +734,7 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
 void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -735,6 +748,9 @@ void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue va
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());

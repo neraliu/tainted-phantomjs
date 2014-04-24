@@ -381,6 +381,7 @@ void JSLocation::put(ExecState* exec, const Identifier& propertyName, JSValue va
 void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -394,6 +395,9 @@ void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -417,6 +421,7 @@ void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -430,6 +435,9 @@ void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -453,6 +461,7 @@ void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -466,6 +475,9 @@ void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -489,6 +501,7 @@ void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -502,6 +515,9 @@ void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -525,6 +541,7 @@ void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -538,6 +555,9 @@ void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -561,6 +581,7 @@ void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -574,6 +595,9 @@ void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -597,6 +621,7 @@ void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -610,6 +635,9 @@ void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -633,6 +661,7 @@ void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHash(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -646,6 +675,9 @@ void setJSLocationHash(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());

@@ -913,6 +913,7 @@ void setJSHTMLInputElementValue(ExecState* exec, JSObject* thisObject, JSValue v
     HTMLInputElement* imp = static_cast<HTMLInputElement*>(castedThis->impl());
     imp->setValue(valueToStringWithNullCheck(exec, value));
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -926,7 +927,9 @@ void setJSHTMLInputElementValue(ExecState* exec, JSObject* thisObject, JSValue v
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         TaintedStructure trace_struct;
  	trace_struct.taintedno = tainted;

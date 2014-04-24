@@ -1529,6 +1529,7 @@ void setJSDocumentCookie(ExecState* exec, JSObject* thisObject, JSValue value)
     imp->setCookie(valueToStringWithNullCheck(exec, value), ec);
     setDOMException(exec, ec);
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -1542,7 +1543,9 @@ void setJSDocumentCookie(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
 	imp->setTainted(tainted);
 
@@ -1573,6 +1576,7 @@ void setJSDocumentBody(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSDocumentLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -1586,7 +1590,9 @@ void setJSDocumentLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     JSDocument* castedThis = static_cast<JSDocument*>(thisObject);
     Document* imp = static_cast<Document*>(castedThis->impl());
     if (tainted) {
