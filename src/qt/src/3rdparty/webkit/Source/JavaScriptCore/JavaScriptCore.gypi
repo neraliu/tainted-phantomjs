@@ -573,6 +573,8 @@
             'runtime/TaintedTrace.h',
             'runtime/TaintedHashMap.cpp',
             'runtime/TaintedHashMap.h',
+            'runtime/TaintedUtils.cpp',
+            'runtime/TaintedUtils.h',
             'runtime/TimeoutChecker.cpp',
             'runtime/Tracing.d',
             'runtime/Tracing.h',

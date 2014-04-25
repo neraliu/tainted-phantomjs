@@ -42,6 +42,7 @@
 #include "Document.h"
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -161,7 +162,7 @@ JSValue jsLocationHref(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationHref";
     trace_struct.jsfunc = "location.href";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -186,7 +187,7 @@ JSValue jsLocationProtocol(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationProtocol";
     trace_struct.jsfunc = "location.protocol";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -211,7 +212,7 @@ JSValue jsLocationHost(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationHost";
     trace_struct.jsfunc = "location.host";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -236,7 +237,7 @@ JSValue jsLocationHostname(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationHostname";
     trace_struct.jsfunc = "location.hostname";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -261,7 +262,7 @@ JSValue jsLocationPort(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationPort";
     trace_struct.jsfunc = "location.port";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -286,7 +287,7 @@ JSValue jsLocationPathname(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationPathname";
     trace_struct.jsfunc = "location.pathname";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -311,7 +312,7 @@ JSValue jsLocationSearch(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationSearch";
     trace_struct.jsfunc = "location.search";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -336,7 +337,7 @@ JSValue jsLocationHash(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationHash";
     trace_struct.jsfunc = "location.hash";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -361,7 +362,7 @@ JSValue jsLocationOrigin(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationOrigin";
     trace_struct.jsfunc = "location.origin";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -380,6 +381,7 @@ void JSLocation::put(ExecState* exec, const Identifier& propertyName, JSValue va
 void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -393,6 +395,9 @@ void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -403,7 +408,7 @@ void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationHref";
 	trace_struct.jsfunc = "location.href";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -416,6 +421,7 @@ void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -429,6 +435,9 @@ void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -439,7 +448,7 @@ void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationProtocol";
 	trace_struct.jsfunc = "location.protocol";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -452,6 +461,7 @@ void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -465,6 +475,9 @@ void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -475,7 +488,7 @@ void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationHost";
 	trace_struct.jsfunc = "location.host";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -488,6 +501,7 @@ void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -501,6 +515,9 @@ void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -511,7 +528,7 @@ void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationHostname";
 	trace_struct.jsfunc = "location.hostname";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -524,6 +541,7 @@ void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -537,6 +555,9 @@ void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -547,7 +568,7 @@ void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationPort";
 	trace_struct.jsfunc = "location.port";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -560,6 +581,7 @@ void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -573,6 +595,9 @@ void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -583,7 +608,7 @@ void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationPathname";
 	trace_struct.jsfunc = "location.pathname";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -596,6 +621,7 @@ void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -609,6 +635,9 @@ void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -619,7 +648,7 @@ void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationSearch";
 	trace_struct.jsfunc = "location.search";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -632,6 +661,7 @@ void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHash(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -645,6 +675,9 @@ void setJSLocationHash(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
+
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
 	Location* imp = static_cast<Location*>(castedThis->impl());
@@ -655,7 +688,7 @@ void setJSLocationHash(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSLocationHash";
 	trace_struct.jsfunc = "location.hash";
 	trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);

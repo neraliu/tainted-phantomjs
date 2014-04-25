@@ -25,41 +25,45 @@
  */
 
 #include "config.h"
-#include "TaintedTrace.h"
+#include "TaintedUtils.h"
+
+#include "StringObject.h"
 
 namespace JSC {
 
-TaintedTrace* TaintedTrace::m_taintedtrace = NULL;
-
-TaintedTrace* TaintedTrace::getInstance() 
+string TaintedUtils::UString2string(const UString& u)
 {
-        if (!m_taintedtrace) {
-                m_taintedtrace = new TaintedTrace();
-        }
-        return m_taintedtrace;
+	// we just peek 20 bytes of data.
+        int size = 20;
+        char msg[size];
+        string str;
+        stringstream msgss;
+        snprintf(msg, size, "%s", u.utf8(true).data());
+        msgss << msg;
+        msgss >> str;
+        return str;
 }
 
-vector<TaintedStructure> TaintedTrace::getTrace()
+unsigned int TaintedUtils::isTainted(ExecState* exec, JSValue& thisValue)
 {
-	return m_trace;
-}
-
-void TaintedTrace::addTaintedTrace(TaintedStructure s)
-{
-	m_trace.push_back(s);
-}
-
-void TaintedTrace::clearTrace()
-{
-	m_trace.clear();
-}
-
-TaintedTrace::TaintedTrace()
-{
-}
-
-TaintedTrace::~TaintedTrace()
-{
+	unsigned int tainted = 0;
+	if (thisValue.isString() && thisValue.isTainted()) {
+		tainted = thisValue.isTainted();
+		return tainted;
+	}
+	if (thisValue.inherits(&StringObject::s_info) && asStringObject(thisValue)->isTainted()) {
+		StringObject* sobj = asStringObject(thisValue);
+		tainted = sobj->isTainted();
+		return tainted;
+	}
+	if (thisValue.isObject()) {
+        	UString s = thisValue.toString(exec);
+		if (s.isTainted()) {
+                	tainted = s.isTainted();
+			return tainted;
+		}
+    	}
+	return tainted;
 }
 
 } // namespace JSC

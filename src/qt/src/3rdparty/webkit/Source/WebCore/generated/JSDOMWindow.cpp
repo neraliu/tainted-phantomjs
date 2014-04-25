@@ -407,6 +407,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -1425,7 +1426,7 @@ JSValue jsDOMWindowName(ExecState* exec, JSValue slotBase, const Identifier&)
         trace_struct.internalfunc = "jsDOMWindowName";
         trace_struct.jsfunc = "window.name";
         trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -6044,6 +6045,7 @@ void setJSDOMWindowClientInformation(ExecState* exec, JSObject* thisObject, JSVa
 void setJSDOMWindowLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -6057,7 +6059,9 @@ void setJSDOMWindowLocation(ExecState* exec, JSObject* thisObject, JSValue value
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSDOMWindow* castedThis = static_cast<JSDOMWindow*>(thisObject);
         DOMWindow* imp = static_cast<DOMWindow*>(castedThis->impl());
@@ -6068,7 +6072,7 @@ void setJSDOMWindowLocation(ExecState* exec, JSObject* thisObject, JSValue value
         trace_struct.internalfunc = "setJSDOMWindowLocation";
         trace_struct.jsfunc = "window.location";
         trace_struct.action = "sink";
-        trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
@@ -6202,6 +6206,7 @@ void setJSDOMWindowName(ExecState* exec, JSObject* thisObject, JSValue value)
     JSDOMWindow* castedThis = static_cast<JSDOMWindow*>(thisObject);
     DOMWindow* imp = static_cast<DOMWindow*>(castedThis->impl());
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -6215,7 +6220,9 @@ void setJSDOMWindowName(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
     	Document* d = imp->document();
 	d->setTainted(tainted);
@@ -6225,7 +6232,7 @@ void setJSDOMWindowName(ExecState* exec, JSObject* thisObject, JSValue value)
         trace_struct.internalfunc = "setJSDOMWindowName";
         trace_struct.jsfunc = "window.name";
         trace_struct.action = "sink";
-        trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);

@@ -33,108 +33,138 @@ URL=""
 COOKIE_FILE=""
 TIMEOUT=""
 RENDERING_PATH=""
+FUZZ=""
 SCRIPT=""
 VERBOSE=""
 
 usage() { 
 	echo "-------------------"
-	echo "USAGE: $0"
-	echo "	-l 	the target url to scan"		
+	echo "USAGE: $0 <target url to scan>"
 	echo "	-c 	set the cookie file (in mozilla format)"
-	echo "	-t 	the execution time of the javascript before time out (in msec)"
-	echo "	-p 	the screenshot rendering path"
-	echo "	-s 	the scanning script [domxss.js|domxss-fuzz.js]"
-	echo "	-d 	enable the level of message [default|info|debug]"
+	echo "	-t 	set the execution time of the javascript before time out (in msec)"
+	echo "	-p 	set the screenshot rendering path"
+	echo "	-z 	fuzz the sources (0 for disable or 1 for enable)"
+	echo "	-s 	set the scanning script file"
+	echo "	-d 	enable the level of message [default|info|debug|json]"
 	echo "-------------------"
 	echo ""
 }
 
-while getopts ":l:c:t:p:s:d:" o; do
-    case "${o}" in
-        l)
-            URL=${OPTARG}
-            ;;
-        c)
-            COOKIE_FILE=${OPTARG}
-	    if ! [[ -f $COOKIE_FILE ]] ; then
-		usage
-        	echo "[ERROR] '$COOKIE_FILE' not existed!"
-		echo "-------------------"
-		exit 1;
-	    fi
-            ;;
-        t)
-            TIMEOUT=${OPTARG}
-	    re='^[0-9]+$'
-	    if ! [[ $TIMEOUT =~ $re ]] ; then
-	        usage
-        	echo "[ERROR] '$TIMEOUT' is not a integer!"
-		echo "-------------------"
-		exit 1;
-	    fi
-            ;;
-        p)
-            RENDERING_PATH=${OPTARG}
-	    if ! [[ -d $RENDERING_PATH ]] ; then
-		usage
-        	echo "[ERROR] '$RENDERING_PATH' is not a path!"
-		echo "-------------------"
-		exit 1;
-	    fi
-            ;;
-        s)
-            SCRIPT=${OPTARG}
-	    if ! [[ $SCRIPT == "domxss.js" || $SCRIPT == "domxss-fuzz.js" ]] ; then
-	        usage
-        	echo "[ERROR] SCRIPT can be either domxss.js or domxss-fuzz.js!"
-		echo "-------------------"
-		exit 1;
-	    fi
-            ;;
-        d)
-            VERBOSE=${OPTARG}
-	    if ! [[ $VERBOSE == "default" || $VERBOSE == "info" || $VERBOSE == "debug" || $VERBOSE == "gryffin" ]] ; then
-	        usage
-        	echo "[ERROR] VERBOSE must be default, info or debug"
-		echo "-------------------"
-		exit 1;
-	    fi
-            ;;
-        *)
-            usage
-            ;;
-    esac
+# TPJS_HOME must be set, otherwise use the default location
+if [ -z "${TPJS_HOME}" ]; then
+	TPJS_HOME=/usr/local/
+fi
+re='[\/]$'
+if ! [[ $TPJS_HOME =~ $re ]] ; then
+	TPJS_HOME=${TPJS_HOME}/
+fi
+if [ ! -f "${TPJS_HOME}bin/phantomjs" ]; then
+	usage
+        echo "[ERROR] ${TPJS_HOME}bin/phantomjs not found, please set the environmental variable TPJS_HOME"
+        echo "-------------------"
+	exit 1;
+fi
+
+# URL must be set
+if [ "$#" == "0" ]; then
+	usage
+        echo "[ERROR] target url is required!"
+        echo "-------------------"
+	exit 1;
+else
+	URL=$1
+	shift
+fi
+if [ -z "${URL}" ]; then
+	usage
+	echo "[ERROR] target url is required!"
+	echo "-------------------"
+	exit 1;
+fi
+
+while getopts ":c:t:p:z:s:d:" o; do
+	case "${o}" in
+		c)
+			COOKIE_FILE=${OPTARG}
+			if ! [[ -f $COOKIE_FILE ]] ; then
+				usage
+				echo "[ERROR] '$COOKIE_FILE' not existed!"
+				echo "-------------------"
+				exit 1;
+			fi
+			;;
+		t)
+			TIMEOUT=${OPTARG}
+			re='^[0-9]+$'
+			if ! [[ $TIMEOUT =~ $re ]] ; then
+				usage
+				echo "[ERROR] '$TIMEOUT' is not a integer!"
+				echo "-------------------"
+				exit 1;
+			fi
+			;;
+		p)
+			RENDERING_PATH=${OPTARG}
+			if ! [[ -d $RENDERING_PATH ]] ; then
+				usage
+				echo "[ERROR] '$RENDERING_PATH' is not a path!"
+				echo "-------------------"
+				exit 1;
+			fi
+			;;
+		z)
+			FUZZ=${OPTARG}
+			re='[0-1]'
+			if ! [[ $FUZZ =~ $re ]] ; then
+				usage
+				echo "[ERROR] FUZZ must be 0 or 1"
+				echo "-------------------"
+				exit 1;
+			fi
+			;;
+		s)
+			SCRIPT=${OPTARG}
+			if ! [[ -f $SCRIPT ]] ; then
+				usage
+				echo "[ERROR] '$SCRIPT' not existed!"
+				echo "-------------------"
+				exit 1;
+			fi
+			;;
+		d)
+			VERBOSE=${OPTARG}
+			if ! [[ $VERBOSE == "default" || $VERBOSE == "info" || $VERBOSE == "debug" || $VERBOSE == "json" ]] ; then
+				usage
+				echo "[ERROR] VERBOSE must be default, info, debug or json"
+				echo "-------------------"
+				exit 1;
+			fi
+			;;
+		*)
+			usage
+			exit 1;
+			;;
+	esac
 done
 shift $((OPTIND-1))
 
-# URL must be set
-if [ -z "${URL}" ]; then
-    usage
-    echo "[ERROR] target url is required!"
-    echo "-------------------"
-    exit 1;
-fi
 if [ -z "${COOKIE_FILE}" ]; then
-    COOKIE_FILE="cookie.txt"
+	COOKIE_FILE="cookie.txt"
 fi
 if [ -z "${TIMEOUT}" ]; then
-    TIMEOUT=1000
+	TIMEOUT=1000
 fi
 if [ -z "${RENDERING_PATH}" ]; then
-    RENDERING_PATH="./"
+	RENDERING_PATH="./"
+fi
+if [ -z "${FUZZ}" ]; then
+	FUZZ=0
 fi
 if [ -z "${SCRIPT}" ]; then
-    SCRIPT="domxss.js"
+	SCRIPT="${TPJS_HOME}share/phantomjs/domxss.js"
 fi
 if [ -z "${VERBOSE}" ]; then
-    VERBOSE="default"
-fi
-if [ -z "${TPJS_HOME}" ]; then
-    TPJS_HOME=/usr/local/
+	VERBOSE="default"
 fi
 
-if [ $SCRIPT == "domxss.js" ]; then
-	${TPJS_HOME}bin/phantomjs ${TPJS_HOME}share/phantomjs/domxss.js "${URL}" $COOKIE_FILE $TIMEOUT 0 $RENDERING_PATH $VERBOSE
-elif [ $SCRIPT == "domxss-fuzz.js" ]; then
-	${TPJS_HOME}bin/phantomjs ${TPJS_HOME}share/phantomjs/domxss.js "${URL}" $COOKIE_FILE $TIMEOUT 1 $RENDERING_PATH $VERBOSE
-fi
+${TPJS_HOME}bin/phantomjs $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE

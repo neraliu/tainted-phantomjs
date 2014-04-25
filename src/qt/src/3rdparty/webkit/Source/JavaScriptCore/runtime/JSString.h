@@ -41,6 +41,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include "TaintedHashMap.h"
 #include <string>
 #include <sstream>
@@ -240,7 +241,7 @@ std::cerr << UString::getUStringAddr(value) << ":" << msg << ":" << value.isTain
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(value);
+		trace_struct.value = TaintedUtils::UString2string(value);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -275,7 +276,7 @@ std::cerr << "UString::getUStringAddr(value)" << ":" << msg << ":" << value.isTa
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(value);
+		trace_struct.value = TaintedUtils::UString2string(value);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -347,7 +348,7 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(s2->string());
+		trace_struct.value = TaintedUtils::UString2string(s1->string()) + TaintedUtils::UString2string(s2->string());
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -393,7 +394,7 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(s1->string()) + TaintedTrace::UString2string(u2);
+		trace_struct.value = TaintedUtils::UString2string(s1->string()) + TaintedUtils::UString2string(u2);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -439,7 +440,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(s2->s
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(s2->string());
+		trace_struct.value = TaintedUtils::UString2string(u1) + TaintedUtils::UString2string(s2->string());
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -494,7 +495,7 @@ std::cerr << UString::getUStringAddr(this->string()) << ":JSValue + JSValue + JS
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(v1.toString(exec)) + TaintedTrace::UString2string(v2.toString(exec)) + TaintedTrace::UString2string(v3.toString(exec));
+		trace_struct.value = TaintedUtils::UString2string(v1.toString(exec)) + TaintedUtils::UString2string(v2.toString(exec)) + TaintedUtils::UString2string(v3.toString(exec));
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -539,7 +540,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(u2);
+		trace_struct.value = TaintedUtils::UString2string(u1) + TaintedUtils::UString2string(u2);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -593,7 +594,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 		trace_struct.internalfunc = "JSString";
 		trace_struct.jsfunc = "constructor";
 		trace_struct.action = "propagate";
-		trace_struct.value = TaintedTrace::UString2string(u1) + TaintedTrace::UString2string(u2) + TaintedTrace::UString2string(u3);
+		trace_struct.value = TaintedUtils::UString2string(u1) + TaintedUtils::UString2string(u2) + TaintedUtils::UString2string(u3);
 
 		TaintedTrace* trace = TaintedTrace::getInstance();
 		trace->addTaintedTrace(trace_struct);
@@ -842,7 +843,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 	    trace_struct.internalfunc = "JSString::getIndex";
 	    trace_struct.jsfunc = "String[]";
 	    trace_struct.action = "propagate";
-            trace_struct.value = TaintedTrace::UString2string(s->toString(exec));
+            trace_struct.value = TaintedUtils::UString2string(s->toString(exec));
 
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);

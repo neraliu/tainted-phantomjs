@@ -104,6 +104,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -447,7 +448,7 @@ JSValue jsDocumentDocumentURI(ExecState* exec, JSValue slotBase, const Identifie
     trace_struct.internalfunc = "jsDocumentDocumentURI";
     trace_struct.jsfunc = "document.documentURI";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -502,7 +503,7 @@ JSValue jsDocumentReferrer(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsDocumentReferrer";
     trace_struct.jsfunc = "document.referrer";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -537,7 +538,7 @@ JSValue jsDocumentURL(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsDocumentURL";
     trace_struct.jsfunc = "document.URL";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -563,7 +564,7 @@ JSValue jsDocumentCookie(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsDocumentCookie";
     trace_struct.jsfunc = "document.cookie";
     trace_struct.action = "source";
-    trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -1528,6 +1529,7 @@ void setJSDocumentCookie(ExecState* exec, JSObject* thisObject, JSValue value)
     imp->setCookie(valueToStringWithNullCheck(exec, value), ec);
     setDOMException(exec, ec);
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -1541,7 +1543,9 @@ void setJSDocumentCookie(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
 	imp->setTainted(tainted);
 
@@ -1550,7 +1554,7 @@ void setJSDocumentCookie(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.internalfunc = "setJSDocumentCookie";
 	trace_struct.jsfunc = "document.cookie";
         trace_struct.action = "sink";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -1572,6 +1576,7 @@ void setJSDocumentBody(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSDocumentLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -1585,7 +1590,9 @@ void setJSDocumentLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     JSDocument* castedThis = static_cast<JSDocument*>(thisObject);
     Document* imp = static_cast<Document*>(castedThis->impl());
     if (tainted) {
@@ -1595,7 +1602,7 @@ void setJSDocumentLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 	trace_struct.taintedno = tainted;
 	trace_struct.internalfunc = "setJSDocumentLocation";
 	trace_struct.jsfunc = "document.location";
-    	trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+    	trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
