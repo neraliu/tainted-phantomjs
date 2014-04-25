@@ -54,6 +54,7 @@
 #ifdef JSC_TAINTED 
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -469,7 +470,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEval(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncEval";
 	trace_struct.jsfunc = "eval";
 	trace_struct.action = "sink";
-	trace_struct.value = TaintedTrace::UString2string(x.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(x.toString(exec));
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -479,7 +480,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEval(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncEval";
 	trace_struct.jsfunc = "eval";
 	trace_struct.action = "call";
-	trace_struct.value = TaintedTrace::UString2string(x.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(x.toString(exec));
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -561,7 +562,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncDecodeURI(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncDecodeURI";
 	trace_struct.jsfunc = "decodeURI";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -576,7 +577,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncDecodeURI(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncDecodeURI";
 	trace_struct.jsfunc = "decodeURI";
 	trace_struct.action = "source";
-        trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -610,7 +611,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncDecodeURIComponent(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncDecodeURIComponent";
 	trace_struct.jsfunc = "decodeURIComponent";
 	trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -625,7 +626,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncDecodeURIComponent(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncDecodeURIComponent";
 	trace_struct.jsfunc = "decodeURIComponent";
 	trace_struct.action = "source";
-        trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -664,7 +665,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEncodeURI(ExecState* exec)
     trace_struct.internalfunc = "globalFuncEncodeURI";
     trace_struct.jsfunc = "encodeURI";
     trace_struct.action = "reset";
-    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -701,7 +702,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEncodeURIComponent(ExecState* exec)
     trace_struct.internalfunc = "globalFuncEncodeURIComponent";
     trace_struct.jsfunc = "encodeURIComponent";
     trace_struct.action = "reset";
-    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -755,7 +756,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEscape(ExecState* exec)
     trace_struct.internalfunc = "globalFuncEscape";
     trace_struct.jsfunc = "escape";
     trace_struct.action = "reset";
-    trace_struct.value = TaintedTrace::UString2string(s.toString(exec));
+    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
@@ -808,7 +809,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncUnescape(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncUnescape";
 	trace_struct.jsfunc = "unescape";
 	trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(str);
+        trace_struct.value = TaintedUtils::UString2string(str);
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -823,7 +824,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncUnescape(ExecState* exec)
 	trace_struct.internalfunc = "globalFuncUnescape";
 	trace_struct.jsfunc = "unescape";
 	trace_struct.action = "source";
-        trace_struct.value = TaintedTrace::UString2string(str);
+        trace_struct.value = TaintedUtils::UString2string(str);
 
     	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);

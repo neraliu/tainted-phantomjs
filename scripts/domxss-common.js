@@ -49,7 +49,7 @@ var renderpath = "./";
 var tpjs = new TPJS.TPJSObject();
 
 if (system.args.length < 2) {
-console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookies file in mozilla format] [timeout in msec] [fuzz:1|0] [rendering path] [verbose:default|info|debug|gryffin]");
+console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookies file in mozilla format] [timeout in msec] [fuzz:1|0] [rendering path] [verbose:default|info|debug|json]");
 	phantom.exit(false);
 } else {
 	url = system.args[1];
@@ -78,7 +78,7 @@ console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookie
 if (verbose == "default") { verbose = 0; // TPJS, TRACE, ERROR, WARNING
 } else if (verbose == "info") { verbose = 1; // INFO
 } else if (verbose == "debug") { verbose = 2; // DEBUG
-} else if (verbose == "gryffin") { verbose = -1; } // GRYFFIN
+} else if (verbose == "json") { verbose = -1; } // GRYFFIN
 
 if (verbose >= 0) {
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs....");
@@ -89,16 +89,16 @@ if (verbose >= 0) {
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with fuzz: " + fuzz);
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with rendering Path: " + renderpath);
 } else if (verbose == -1) {
-	var gryffin_result = {}; 
-	gryffin_result['tpjs'] = {};
-	gryffin_result['tpjs']['url'] = url;
-	gryffin_result['tpjs']['cookiesfile'] = cookiesfile;
-	gryffin_result['tpjs']['verbose'] = verbose;
-	gryffin_result['tpjs']['timeout'] = timeout;
-	gryffin_result['tpjs']['fuzz'] = fuzz;
-	gryffin_result['tpjs']['renderpath'] = renderpath;
-	var j = JSON.stringify(gryffin_result);
-	console.log("{"+j.substr(1).substr(0, j.length-2)+",");
+	var json_result = {}; 
+	json_result['tpjs'] = {};
+	json_result['tpjs']['url'] = url;
+	json_result['tpjs']['cookiesfile'] = cookiesfile;
+	json_result['tpjs']['verbose'] = verbose;
+	json_result['tpjs']['timeout'] = timeout;
+	json_result['tpjs']['fuzz'] = fuzz;
+	json_result['tpjs']['renderpath'] = renderpath;
+	var j = JSON.stringify(json_result);
+	fs.write("/dev/stdout", "{"+j.substr(1).substr(0, j.length-2)+",", "w");
 }
 
 /* we can create one instance of page for testing all the patterns */
@@ -122,7 +122,7 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 			console.log("["+t.toUTCString()+"]" + " [INFO] --------------------");
 			console.log("["+t.toUTCString()+"]" + " [INFO] Exiting PhantomsJS...");
 		} else if (verbose == -1) {
-			console.log("}}");
+			fs.write("/dev/stdout", "}}", "w");
 		}
 		phantom.exit(false);
 	} else {
@@ -131,10 +131,10 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 			console.log("["+t.toUTCString()+"]" + " [TPJS] TEST #" + test_cases[tindex] + ": domxss-db.js(" + domxss_patterns[test_cases[tindex]] + ")");
 		} else if (verbose == -1) {
 			if (test_cases[tindex] != DOMXSS_ONLOAD) {
-				console.log("},");
+				fs.write("/dev/stdout", "},", "w");
 			}
-			console.log("\"test"+tindex+"\":{");
-			console.log("\"testid\":"+test_cases[tindex]+",");
+			fs.write("/dev/stdout", "\"test"+tindex+"\":{", "w");
+			fs.write("/dev/stdout", "\"testid\":"+test_cases[tindex]+",", "w");
 		}
 
 		if (test_cases[tindex] == DOMXSS_ONLOAD) {
@@ -151,14 +151,14 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 		if (verbose >= 0) {
                 	console.log("["+t.toUTCString()+"]" + " [TPJS] TEST URL: " + l);
 		} else if (verbose == -1) {
-			console.log("\"url\":\""+l.replace(/'/g, '%27')+"\",");
+			fs.write("/dev/stdout", "\"url\":\""+l.replace(/'/g, '%27')+"\",", "w");
 		}
 
      		if (no_of_query_string_params == -1 || no_of_query_string_params > 0) {
                 	page.open(l, function (status) {
                         	if (status !== 'success') {
 					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
-					else if (verbose == -1) { console.log("\"status\":\"fail\"}}"); }
+					else if (verbose == -1) { fs.write("/dev/stdout", "\"status\":\"fail\"}}", "w"); }
 					phantom.exit(false);
                         	}
 	                });
@@ -178,7 +178,7 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 				console.log("["+t.toUTCString()+"]" + " [TPJS] [CONSOLE] " + msg + " (from line #" + lineNum + " in '" + sourceId + "')");
 			}
 		} else if (verbose == -1 && msg.match(/^\"tpjs-/)) {
-			console.log(msg);
+			fs.write("/dev/stdout", msg, "w");
 		}
 	};
 
@@ -232,15 +232,15 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 					var t = new Date();
 					var tainted = false;
 
-					var gryffin_result = {}; var gindex = 0;
-					gryffin_result['tpjs-trace'] = {};
+					var json_result = {}; var gindex = 0;
+					json_result['tpjs-trace'] = {};
 
 					if (document.tainted) tainted = true;
 					var allobj = $("*");
 					for(var i=0;i<allobj.length;++i) {
 						if (allobj[i].tainted) {
 							if (verbose >= 0) { console.log("[TRACE] " + allobj[i] + " id:" + allobj[i].id + " tainted:" + allobj[i].tainted); }
-							else if (verbose == -1) { gryffin_result['tpjs-trace'][gindex] = allobj[i] + " id:" + allobj[i].id + " tainted:" + allobj[i].tainted; ++gindex; }
+							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = allobj[i] + " id:" + allobj[i].id + " tainted:" + allobj[i].tainted; ++gindex; }
                                                         /*
                                                         for(var j in allobj[i]) {
 								if (verbose >= 0) { console.log("[TRACE] " + j + "," + allobj[i][j]); }
@@ -279,49 +279,49 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 						for (var i=0;i<sources.length;++i) {
 							var s = jsResult.result.trace[sources[i]];
 							if (verbose >= 0) { console.log("[TRACE] "+s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc+","+s.value); }
-							else if (verbose == -1) { gryffin_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
+							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 						if (verbose >= 0) { console.log("[TRACE] ================="); }
 						for (var i=0;i<sinks.length;++i) {
 							var s = jsResult.result.trace[sinks[i]];
 							if (verbose >= 0) { console.log("[TRACE] "+s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc+","+s.value); }
-							else if (verbose == -1) { gryffin_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
+							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 						if (verbose >= 0) { console.log("[TRACE] ================="); }
 						for (var i=0;i<propagates.length;++i) {
 							var s = jsResult.result.trace[propagates[i]];
 							if (verbose >= 0) { console.log("[TRACE] "+s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc+","+s.value); }
-							else if (verbose == -1) { gryffin_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
+							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 						if (verbose >= 0) { console.log("[TRACE] ================="); }
 						for (var i=0;i<clears.length;++i) {
 							var s = jsResult.result.trace[clears[i]];
 							if (verbose >= 0) { console.log("[TRACE] "+s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc+","+s.value); }
-							else if (verbose == -1) { gryffin_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
+							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 						if (verbose >= 0) { console.log("[TRACE] ================="); }
 						for (var i=0;i<resets.length;++i) {
 							var s = jsResult.result.trace[resets[i]];
 							if (verbose >= 0) { console.log("[TRACE] "+s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc+","+s.value); }
-							else if (verbose == -1) { gryffin_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
+							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 						for (var i=0;i<calls.length;++i) {
 							var s = jsResult.result.trace[calls[i]];
 							if (verbose >= 0) { console.log("[TRACE] "+s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc+","+s.value); }
-							else if (verbose == -1) { gryffin_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
+							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 					}
 					if (verbose == -1) { 
-						var j = JSON.stringify(gryffin_result);
-						console.log(j.substr(1).substr(0, j.length-2)+",");
+						var j = JSON.stringify(json_result);
+						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2)+",", "w");
 					}
                                         document.clearTaintedTrace();
 					return tainted;
 				// });
 				}, verbose);
 
-				var gryffin_result = {};
-				gryffin_result['result'] = {};
+				var json_result = {};
+				json_result['result'] = {};
 				if (verbose >= 2) {
 					var body = page.evaluate(function () {
 						return document.body.innerHTML;
@@ -334,31 +334,31 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 					console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.tainted? " + tainted);
 					console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.onAlert? " + onalert);
 				} else if (verbose == -1) {
-					gryffin_result['result']['tainted'] = tainted;
-					gryffin_result['result']['onalert'] = onalert;
+					json_result['result']['tainted'] = tainted;
+					json_result['result']['onalert'] = onalert;
 				}
 				if (onalert && tainted) {
 					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true"); }
 					else if (verbose == -1) { 
-						gryffin_result['result']['domxss.vulnerable'] = true; 
-						var j = JSON.stringify(gryffin_result);
-						console.log(j.substr(1).substr(0, j.length-2));
-						console.log("}");
+						json_result['result']['domxss.vulnerable'] = true; 
+						var j = JSON.stringify(json_result);
+						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
+						fs.write("/dev/stdout", "}", "w");
 					}
 					phantom.exit(true);
 				} else if (!onalert && tainted) {
 					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true|false"); }
 					else if (verbose == -1) { 
-						gryffin_result['result']['domxss.vulnerable'] = false;
-						var j = JSON.stringify(gryffin_result);
-						console.log(j.substr(1).substr(0, j.length-2));
+						json_result['result']['domxss.vulnerable'] = false;
+						var j = JSON.stringify(json_result);
+						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
 				} else {
 					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? false"); }
 					else if (verbose == -1) { 
-						gryffin_result['result']['domxss.vulnerable'] = false; 
-						var j = JSON.stringify(gryffin_result);
-						console.log(j.substr(1).substr(0, j.length-2));
+						json_result['result']['domxss.vulnerable'] = false; 
+						var j = JSON.stringify(json_result);
+						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
 				}
 

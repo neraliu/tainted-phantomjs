@@ -488,6 +488,7 @@ double JSObject::toNumber(ExecState* exec) const
 UString JSObject::toString(ExecState* exec) const
 {
 #ifdef JSC_TAINTED_DEBUG
+std::cerr << "JSObject::toString()" << std::endl;
 #endif
     JSValue primitive = toPrimitive(exec, PreferString);
     if (exec->hadException())

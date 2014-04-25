@@ -90,11 +90,9 @@ extern const double Inf = NaNInf.doubles.Inf_Double;
 const ClassInfo JSCell::s_dummyCellInfo = { "DummyCell", 0, 0, 0 };
 
 #ifdef JSC_TAINTED
+// The JSValue class itself does not have the tainted flag, the tainted flag is located in the UString class wrapped by JSString and StringObject.
 unsigned int JSValue::isTainted() const
 {
-#ifdef JSC_TAINTED_DEBUG
-// The JSValue class itself does not have the tainted flag, the tainted flag is located in the UString class wrapped by JSString and StringObject.
-#endif
     if (isString()) {
         return asString(*this)->isTainted();
     } else if (isObject()) {
@@ -118,7 +116,6 @@ void JSValue::setTainted(unsigned int tainted)
         }
     }
 }
-
 #endif
 
 bool JSCell::getUInt32(uint32_t&) const
@@ -137,6 +134,7 @@ bool JSCell::getString(ExecState* exec, UString&stringValue) const
 UString JSCell::getString(ExecState* exec) const
 {
 #ifdef JSC_TAINTED_DEBUG
+std::cerr << "JSCell::getString()" << std::endl;
 #endif
     return isString() ? static_cast<const JSString*>(this)->value(exec) : UString();
 }

@@ -53,6 +53,7 @@
 #ifdef JSC_TAINTED
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
+#include "TaintedUtils.h"
 #include <sstream>
 #endif
 
@@ -555,7 +556,7 @@ JSValue jsHTMLInputElementValue(ExecState* exec, JSValue slotBase, const Identif
 	trace_struct.internalfunc = "jsHTMLInputElementValue";
 	trace_struct.jsfunc = "input.value";
 	trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(result.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);
@@ -912,6 +913,7 @@ void setJSHTMLInputElementValue(ExecState* exec, JSObject* thisObject, JSValue v
     HTMLInputElement* imp = static_cast<HTMLInputElement*>(castedThis->impl());
     imp->setValue(valueToStringWithNullCheck(exec, value));
 #ifdef JSC_TAINTED
+    /*
     unsigned int tainted = 0;
     if (value.isString() && value.isTainted()) {
 	tainted = value.isTainted();
@@ -925,14 +927,16 @@ void setJSHTMLInputElementValue(ExecState* exec, JSObject* thisObject, JSValue v
 		tainted = s.isTainted();
 	}
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         TaintedStructure trace_struct;
  	trace_struct.taintedno = tainted;
 	trace_struct.internalfunc = "setJSHTMLInputElementValue";
 	trace_struct.jsfunc = "input.value";
 	trace_struct.action = "propagate";
-        trace_struct.value = TaintedTrace::UString2string(value.toString(exec));
+        trace_struct.value = TaintedUtils::UString2string(value.toString(exec));
 
 	TaintedTrace* trace = TaintedTrace::getInstance();
 	trace->addTaintedTrace(trace_struct);

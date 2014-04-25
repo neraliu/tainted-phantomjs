@@ -39,6 +39,10 @@
 #include "UStringConcatenate.h"
 #include <wtf/PassOwnPtr.h>
 
+#ifdef JSC_TAINTED
+#include "TaintedUtils.h"
+#endif
+
 namespace JSC {
 
 static JSValue regExpObjectGlobal(ExecState*, JSValue, const Identifier&);
@@ -140,6 +144,7 @@ JSValue RegExpObject::exec(ExecState* exec)
 {
 #ifdef JSC_TAINTED
     JSValue thisValue = exec->argument(0);
+    /*
     unsigned int tainted = 0;
 
     if (thisValue.isString() && thisValue.isTainted()) tainted = thisValue.isTainted();
@@ -148,14 +153,16 @@ JSValue RegExpObject::exec(ExecState* exec)
         UString s = thisValue.toString(exec);
         if (s.isTainted()) tainted = s.isTainted();
     }
+    */
 
+    unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
         TaintedStructure trace_struct;
         trace_struct.taintedno = tainted;
         trace_struct.internalfunc = "stringProtoFuncReplace::exec";
         trace_struct.jsfunc = "RegExp.exec";
         trace_struct.action = "propagate";
-	trace_struct.value = TaintedTrace::UString2string(thisValue.toString(exec));
+	trace_struct.value = TaintedUtils::UString2string(thisValue.toString(exec));
 
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
