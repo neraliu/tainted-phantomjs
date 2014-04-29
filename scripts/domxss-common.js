@@ -128,7 +128,7 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 	} else {
 		if (verbose >= 0) {
                 	console.log("["+t.toUTCString()+"]" + " [TPJS] --------------------");
-			console.log("["+t.toUTCString()+"]" + " [TPJS] TEST #" + test_cases[tindex] + ": domxss-db.js(" + domxss_patterns[test_cases[tindex]] + ")");
+			console.log("["+t.toUTCString()+"]" + " [TPJS] TEST #" + tindex + ":" + test_cases[tindex] + ": domxss-db.js(" + domxss_patterns[test_cases[tindex]] + ")");
 		} else if (verbose == -1) {
 			if (test_cases[tindex] != DOMXSS_ONLOAD) {
 				fs.write("/dev/stdout", "},", "w");
@@ -137,15 +137,24 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 			fs.write("/dev/stdout", "\"testid\":"+test_cases[tindex]+",", "w");
 		}
 
-		if (test_cases[tindex] == DOMXSS_ONLOAD) {
-		} else if (test_cases[tindex] >= DOMXSS_QS_PATTERN_001 && test_cases[tindex] <= DOMXSS_QS_PATTERN_END) {
-			no_of_query_string_params = 0;
-                	for (k in uri.queryKey) {
-				no_of_query_string_params++;
-                        	l = l + k + "=" + encodeURIComponent(domxss_patterns[test_cases[tindex]]) + "&";
-                	}
-		} else if (test_cases[tindex] >= DOMXSS_HASH_PATTERN_001 && test_cases[tindex] <= DOMXSS_HASH_PATTERN_END) {
-			l = l + "#"+encodeURIComponent(domxss_patterns[test_cases[tindex]]);
+     		while (1) {
+			if (test_cases[tindex] == DOMXSS_ONLOAD) {
+				break;
+			} else if (test_cases[tindex] >= DOMXSS_QS_PATTERN_001 && test_cases[tindex] <= DOMXSS_QS_PATTERN_END) {
+				no_of_query_string_params = 0;
+				for (k in uri.queryKey) {
+					no_of_query_string_params++;
+					l = l + k + "=" + encodeURIComponent(domxss_patterns[test_cases[tindex]]) + "&";
+                		}
+     				if (no_of_query_string_params > 0) {
+					break;
+				} else {
+					tindex++; continue;
+				}
+			} else if (test_cases[tindex] >= DOMXSS_HASH_PATTERN_001 && test_cases[tindex] <= DOMXSS_HASH_PATTERN_END) {
+				l = l + "#"+encodeURIComponent(domxss_patterns[test_cases[tindex]]);
+				break;
+			}
 		}
 
 		if (verbose >= 0) {
@@ -154,17 +163,13 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 			fs.write("/dev/stdout", "\"url\":\""+l.replace(/'/g, '%27')+"\",", "w");
 		}
 
-     		if (no_of_query_string_params == -1 || no_of_query_string_params > 0) {
-                	page.open(l, function (status) {
-                        	if (status !== 'success') {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
-					else if (verbose == -1) { fs.write("/dev/stdout", "\"status\":\"fail\"}}", "w"); }
-					phantom.exit(false);
-                        	}
-	                });
-		} else {
-			callback(uri, timeout, tindex+1, callback, verbose);
-		}
+		page.open(l, function (status) {
+               		if (status !== 'success') {
+				if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
+				else if (verbose == -1) { fs.write("/dev/stdout", "\"status\":\"fail\"}}", "w"); }
+				phantom.exit(false);
+			}
+		});
 	}
 
 	/*
