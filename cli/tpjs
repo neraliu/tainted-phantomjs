@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright (C) 2014 Yahoo! Inc. All Rights Reserved.
 
 # Redistribution and use in source and binary forms, with or without
@@ -26,8 +28,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Author: Nera Liu <neraliu@yahoo-inc.com>
-
-#!/bin/bash
 
 URL=""
 COOKIE_FILE=""
@@ -168,3 +168,5 @@ if [ -z "${VERBOSE}" ]; then
 fi
 
 ${TPJS_HOME}bin/phantomjs $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE
+
+exit
