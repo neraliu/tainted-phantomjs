@@ -78,7 +78,7 @@ console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookie
 if (verbose == "default") { verbose = 0; // TPJS, TRACE, ERROR, WARNING
 } else if (verbose == "info") { verbose = 1; // INFO
 } else if (verbose == "debug") { verbose = 2; // DEBUG
-} else if (verbose == "json") { verbose = -1; } // GRYFFIN
+} else if (verbose == "json") { verbose = -1; } // JSON
 
 if (verbose >= 0) {
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs....");
@@ -201,7 +201,6 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 	};
 
 	page.onInitialized = function() {
-		// page.evaluate(function() {
 		evaluate(page, function(verbose) {
 			document.addEventListener('DOMContentLoaded', function() {
 				// console.log("DOM content has loaded.");
@@ -226,14 +225,9 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 
 			waitFor(function(verbose) {
 				return tpjs.wait(page, verbose);
-				/*
-				return page.evaluate(function() {
-					return false; 
-				});
-				*/
 			}, function(verbose) {
-				// tainted = page.evaluate(function() {
-				tainted = evaluate(page, function(verbose) {
+				var tainted = false;
+				evaluate(page, function(verbose) {
 					var t = new Date();
 					var tainted = false;
 
@@ -316,14 +310,26 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 					}
+
 					if (verbose == -1) { 
+						var fs = require('fs');
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2)+",", "w");
 					}
                                         document.clearTaintedTrace();
-					return tainted;
-				// });
 				}, verbose);
+
+				tainted = page.evaluate(function() {
+					var tainted = false;
+					if (document.tainted) tainted = true;
+					var allobj = $("*");
+					for(var i=0;i<allobj.length;++i) {
+						if (allobj[i].tainted) {
+                                                        tainted = true;
+                                                }
+                                        }
+					return tainted;
+				});
 
 				var json_result = {};
 				json_result['result'] = {};
