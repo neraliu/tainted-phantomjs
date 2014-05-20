@@ -144,16 +144,6 @@ JSValue RegExpObject::exec(ExecState* exec)
 {
 #ifdef JSC_TAINTED
     JSValue thisValue = exec->argument(0);
-    /*
-    unsigned int tainted = 0;
-
-    if (thisValue.isString() && thisValue.isTainted()) tainted = thisValue.isTainted();
-    if (thisValue.inherits(&StringObject::s_info) && asStringObject(thisValue)->isTainted()) tainted = asStringObject(thisValue)->isTainted();
-    if (thisValue.isObject()) {
-        UString s = thisValue.toString(exec);
-        if (s.isTainted()) tainted = s.isTainted();
-    }
-    */
 
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {

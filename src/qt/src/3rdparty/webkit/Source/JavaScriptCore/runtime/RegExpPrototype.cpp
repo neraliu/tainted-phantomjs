@@ -91,23 +91,6 @@ EncodedJSValue JSC_HOST_CALL regExpProtoFuncExec(ExecState* exec)
     JSValue a = asRegExpObject(thisValue)->exec(exec);
     if (a.inherits(&JSArray::s_info)) {
 
-	/*
-	unsigned int tainted = 0;
-	JSValue s = exec->argument(0);
-	if (s.isString() && s.isTainted()) {
-		tainted = s.isTainted();
-	}
-	if (s.inherits(&StringObject::s_info) && asStringObject(s)->isTainted()) {
-		tainted = asStringObject(s)->isTainted();
-	}
-	if (s.isObject()) {
-		UString str = s.toString(exec);
-		if (str.isTainted()) {
-			tainted = s.isTainted();
-		}
-    	}
-	*/
-
 	JSValue s = exec->argument(0);
 	unsigned int tainted = TaintedUtils::isTainted(exec, s);
 

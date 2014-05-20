@@ -36,12 +36,14 @@ it may have potential issue of adding too much test cases
 var test_cases = new Array();
 test_cases.push(DOMXSS_ONLOAD);                 // onload
 if (parseInt(fuzz) === 1) {
-        test_cases.push(DOMXSS_QS_PATTERN_001);         // domxss-db.js
+	test_cases.push(DOMXSS_QS_PATTERN_001);         // domxss-db.js
         test_cases.push(DOMXSS_QS_PATTERN_002);         // domxss-db.js
         test_cases.push(DOMXSS_QS_PATTERN_003);         // domxss-db.js
-        test_cases.push(DOMXSS_HASH_PATTERN_001);       // domxss-db.js
+        test_cases.push(DOMXSS_QS_PATTERN_004);         // domxss-db.js
+	test_cases.push(DOMXSS_HASH_PATTERN_001);       // domxss-db.js
         test_cases.push(DOMXSS_HASH_PATTERN_002);       // domxss-db.js
         test_cases.push(DOMXSS_HASH_PATTERN_003);       // domxss-db.js
+        test_cases.push(DOMXSS_HASH_PATTERN_004);       // domxss-db.js
 }
 test_cases.push(DOMXSS_END);                    // end
-test_domxss(uri, timeout, 0, test_domxss, verbose);
+test_domxss(url, uri, timeout, 0, test_domxss, verbose);

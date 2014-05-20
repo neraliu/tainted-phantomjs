@@ -35,21 +35,25 @@ var DOMXSS_ONLOAD = 1;
 var DOMXSS_QS_PATTERN_001 = 1000; 
 var DOMXSS_QS_PATTERN_002 = 1001; 
 var DOMXSS_QS_PATTERN_003 = 1002; 
+var DOMXSS_QS_PATTERN_004 = 1003; 
 var DOMXSS_QS_PATTERN_END = 1999;
 
-var DOMXSS_HASH_PATTERN_001 = 2000; // 
-var DOMXSS_HASH_PATTERN_002 = 2001; // 
-var DOMXSS_HASH_PATTERN_003 = 2002; // 
+var DOMXSS_HASH_PATTERN_001 = 2000;
+var DOMXSS_HASH_PATTERN_002 = 2001;
+var DOMXSS_HASH_PATTERN_003 = 2002; 
+var DOMXSS_HASH_PATTERN_004 = 2003;
 var DOMXSS_HASH_PATTERN_END = 2999;
 
 var domxss_patterns = {
 	1 : 'window.onload()',
 	// QS patterns
-	1000 : '<img src="" onerror="alert(0)">',
-	1001 : "');alert('0",
-	1002 : '");alert("0',
+	1000 : '<script>alert(0);</script>',
+	1001 : '<img src="" onerror="alert(0)">',
+	1002 : "');alert('0",
+	1003 : '");alert("0',
 	// HASH patterns
-	2000 : '<img src="" onerror="alert(0)">',
-	2001 : '");alert("0',
-	2002 : "');alert('0",
+	2000 : '<script>alert(0);</script>',
+	2001 : '<img src="" onerror="alert(0)">',
+	2002 : '");alert("0',
+	2003 : "');alert('0",
 }

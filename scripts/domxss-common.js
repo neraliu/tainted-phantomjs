@@ -103,7 +103,7 @@ if (verbose >= 0) {
 
 /* we can create one instance of page for testing all the patterns */
 var page = require('webpage').create();
-function test_domxss(uri, timeout, tindex, callback, verbose) {
+function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 
 	var tainted = false;
 	var onalert = false;
@@ -139,6 +139,7 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 
      		while (1) {
 			if (test_cases[tindex] == DOMXSS_ONLOAD) {
+				l = url;
 				break;
 			} else if (test_cases[tindex] >= DOMXSS_QS_PATTERN_001 && test_cases[tindex] <= DOMXSS_QS_PATTERN_END) {
 				no_of_query_string_params = 0;
@@ -373,7 +374,7 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 					}
 				}
 
-				callback(uri, timeout, tindex+1, callback, verbose);
+				callback(url, uri, timeout, tindex+1, callback, verbose);
 			}, timeout, verbose);
 		}
 	};

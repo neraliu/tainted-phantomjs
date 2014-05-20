@@ -516,22 +516,6 @@ this method has the side effect, if the element is untatined, then we need to cl
 void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
@@ -608,22 +592,6 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
 void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
@@ -671,22 +639,6 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
 void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
@@ -734,22 +686,6 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
 void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);

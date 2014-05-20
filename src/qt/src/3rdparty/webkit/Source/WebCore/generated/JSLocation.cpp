@@ -43,12 +43,78 @@
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
+#include "JSStringBuilder.h"
+#include "Lexer.h"
+#include <wtf/unicode/UTF8.h>
 #include <sstream>
 #endif
 
 using namespace JSC;
 
 namespace WebCore {
+
+/* this is copied from the file ../JavaScriptCore/runtime/JSGlobalObjectFunctions.cpp, should consolidate in later */
+static JSValue decode(ExecState *exec, const UString& str, const char* doNotUnescape, bool strict)
+{
+    JSStringBuilder builder;
+    int k = 0;
+    int len = str.length();
+    const UChar* d = str.characters();
+    UChar u = 0;
+    while (k < len) {
+        const UChar* p = d + k;
+        UChar c = *p;
+        if (c == '%') {
+            int charLen = 0;
+            if (k <= len - 3 && isASCIIHexDigit(p[1]) && isASCIIHexDigit(p[2])) {
+                const char b0 = Lexer::convertHex(p[1], p[2]);
+                const int sequenceLen = WTF::Unicode::UTF8SequenceLength(b0);
+                if (sequenceLen != 0 && k <= len - sequenceLen * 3) {
+                    charLen = sequenceLen * 3;
+                    char sequence[5];
+                    sequence[0] = b0;
+                    for (int i = 1; i < sequenceLen; ++i) {
+                        const UChar* q = p + i * 3;
+                        if (q[0] == '%' && isASCIIHexDigit(q[1]) && isASCIIHexDigit(q[2]))
+                            sequence[i] = Lexer::convertHex(q[1], q[2]);
+                        else {
+                            charLen = 0;
+                            break;
+                        }
+                    }
+                    if (charLen != 0) {
+                        sequence[sequenceLen] = 0;
+                        const int character = WTF::Unicode::decodeUTF8Sequence(sequence);
+                        if (character < 0 || character >= 0x110000)
+                            charLen = 0;
+                        else if (character >= 0x10000) {
+			    builder.append(static_cast<UChar>(0xD800 | ((character - 0x10000) >> 10)));
+                            u = static_cast<UChar>(0xDC00 | ((character - 0x10000) & 0x3FF));
+                        } else
+                            u = static_cast<UChar>(character);
+                    }
+                }
+            }
+            if (charLen == 0) {
+                if (strict)
+                    return throwError(exec, createURIError(exec, "URI error"));
+		if (k <= len - 6 && p[1] == 'u'
+                        && isASCIIHexDigit(p[2]) && isASCIIHexDigit(p[3])
+                        && isASCIIHexDigit(p[4]) && isASCIIHexDigit(p[5])) {
+                    charLen = 6;
+                    u = Lexer::convertUnicode(p[2], p[3], p[4], p[5]);
+                }
+            }
+            if (charLen && (u == 0 || u >= 128 || !strchr(doNotUnescape, u))) {
+                c = u;
+                k += charLen - 1;
+            }
+        }
+        k++;
+        builder.append(c);
+    }
+    return builder.build(exec);
+}
 
 ASSERT_CLASS_FITS_IN_CELL(JSLocation);
 
@@ -162,12 +228,20 @@ JSValue jsLocationHref(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationHref";
     trace_struct.jsfunc = "location.href";
     trace_struct.action = "source";
-    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
+    /* as Chrome and FF does not escape the location.hash, 
+       so we decode it once when reading it, such that 
+       we can cover the domxss case for chrome and FF browser */
+    // trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
+    JSValue s = decode(exec, result.toString(exec), "", true);
+    s.setTainted(tainted);
+    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
-#endif
+    return s;
+#else 
     return result;
+#endif
 }
 
 
@@ -337,12 +411,20 @@ JSValue jsLocationHash(ExecState* exec, JSValue slotBase, const Identifier&)
     trace_struct.internalfunc = "jsLocationHash";
     trace_struct.jsfunc = "location.hash";
     trace_struct.action = "source";
-    trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
+    /* as Chrome and FF does not escape the location.hash, 
+       so we decode it once when reading it, such that 
+       we can cover the domxss case for chrome and FF browser */
+    // trace_struct.value = TaintedUtils::UString2string(result.toString(exec));
+    JSValue s = decode(exec, result.toString(exec), "", true);
+    s.setTainted(tainted);
+    trace_struct.value = TaintedUtils::UString2string(s.toString(exec));
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
-#endif
+    return s;
+#else
     return result;
+#endif
 }
 
 
@@ -381,22 +463,6 @@ void JSLocation::put(ExecState* exec, const Identifier& propertyName, JSValue va
 void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -421,22 +487,6 @@ void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -461,22 +511,6 @@ void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -501,22 +535,6 @@ void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -541,22 +559,6 @@ void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -581,22 +583,6 @@ void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -621,22 +607,6 @@ void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -661,22 +631,6 @@ void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 void setJSLocationHash(ExecState* exec, JSObject* thisObject, JSValue value)
 {
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);

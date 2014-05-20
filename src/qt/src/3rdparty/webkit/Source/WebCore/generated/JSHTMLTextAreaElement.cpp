@@ -533,22 +533,6 @@ void setJSHTMLTextAreaElementValue(ExecState* exec, JSObject* thisObject, JSValu
     HTMLTextAreaElement* imp = static_cast<HTMLTextAreaElement*>(castedThis->impl());
     imp->setValue(valueToStringWithNullCheck(exec, value));
 #ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         TaintedStructure trace_struct;
