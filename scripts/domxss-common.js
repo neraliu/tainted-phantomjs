@@ -98,7 +98,9 @@ if (verbose >= 0) {
 	json_result['tpjs']['fuzz'] = fuzz;
 	json_result['tpjs']['renderpath'] = renderpath;
 	var j = JSON.stringify(json_result);
-	fs.write("/dev/stdout", "{"+j.substr(1).substr(0, j.length-2)+",", "w");
+	fs.write("/dev/stdout", "{", "w"); // open global json {
+	fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
+	fs.write("/dev/stdout", ",", "w");
 }
 
 /* we can create one instance of page for testing all the patterns */
@@ -122,7 +124,8 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 			console.log("["+t.toUTCString()+"]" + " [INFO] --------------------");
 			console.log("["+t.toUTCString()+"]" + " [INFO] Exiting PhantomsJS...");
 		} else if (verbose == -1) {
-			fs.write("/dev/stdout", "}}", "w");
+			fs.write("/dev/stdout", "}", "w"); // close test's json {
+			fs.write("/dev/stdout", "}", "w"); // close global json {
 		}
 		phantom.exit(false);
 	} else {
@@ -131,9 +134,9 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 			console.log("["+t.toUTCString()+"]" + " [TPJS] TEST #" + tindex + ":" + test_cases[tindex] + ": domxss-db.js(" + domxss_patterns[test_cases[tindex]] + ")");
 		} else if (verbose == -1) {
 			if (test_cases[tindex] != DOMXSS_ONLOAD) {
-				fs.write("/dev/stdout", "},", "w");
+				fs.write("/dev/stdout", "},", "w"); // close test's json {
 			}
-			fs.write("/dev/stdout", "\"test"+tindex+"\":{", "w");
+			fs.write("/dev/stdout", "\"test"+tindex+"\":{", "w"); // open test's json {
 			fs.write("/dev/stdout", "\"testid\":"+test_cases[tindex]+",", "w");
 		}
 
@@ -167,7 +170,10 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 		page.open(l, function (status) {
                		if (status !== 'success') {
 				if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
-				else if (verbose == -1) { fs.write("/dev/stdout", "\"status\":\"fail\"}}", "w"); }
+				else if (verbose == -1) { 
+					fs.write("/dev/stdout", "\"status\":\"fail\"}", "w");  // close test's json {
+					fs.write("/dev/stdout", "}", "w"); // close global's json {
+				}
 				phantom.exit(false);
 			}
 		});
@@ -355,9 +361,10 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 						json_result['result']['domxss.vulnerable'] = true; 
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
-						fs.write("/dev/stdout", "}", "w");
+						fs.write("/dev/stdout", "}", "w"); // close test's json {
+						fs.write("/dev/stdout", "}", "w"); // close global json {
 					}
-					phantom.exit(true);
+					phantom.exit(false);
 				} else if (!onalert && tainted) {
 					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true|false"); }
 					else if (verbose == -1) { 
@@ -365,6 +372,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
+					callback(url, uri, timeout, tindex+1, callback, verbose);
 				} else {
 					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? false"); }
 					else if (verbose == -1) { 
@@ -372,9 +380,9 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
+					callback(url, uri, timeout, tindex+1, callback, verbose);
 				}
 
-				callback(url, uri, timeout, tindex+1, callback, verbose);
 			}, timeout, verbose);
 		}
 	};
