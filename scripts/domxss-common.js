@@ -356,12 +356,13 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 					json_result['result']['onalert'] = onalert;
 				}
 				if (onalert && tainted) {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true"); }
-					else if (verbose == -1) { 
+					var explain = l + " is vulnerable to DOMXSS (some broswers may not work, for example chrome has its own XSS filter, FF has autoescape on location.href, please try all supported grade A browsers Chrome/FF/IE/Safari).";
+					if (verbose >= 0) { 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true");
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
+					} else if (verbose == -1) { 
 						json_result['result']['domxss.vulnerable'] = true; 
-						json_result['result']['domxss.msg'] = l;
-			 			json_result['result']['domxss.msg'] += " is vulnerable to DOMXSS ";
-						json_result['result']['domxss.msg'] += "(some broswers may not work, for example chrome has its own XSS filter, FF has autoescape on location.href, please try all supported grade A browsers Chrome/FF/IE/Safari)";
+						json_result['result']['domxss.msg'] = explain;
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-1), "w");
 						fs.write("/dev/stdout", "}", "w"); // close test's json {
@@ -369,17 +370,25 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 					}
 					phantom.exit(false);
 				} else if (!onalert && tainted) {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true|false"); }
-					else if (verbose == -1) { 
+					var explain = l + " is tainted, it means that unstrusted input can progagate from the source to sink, however known attack vector cannot triggered javascript execution, we cannot confirm whether it is DOMXSS vulnerable or not.";
+					if (verbose >= 0) { 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true|false");
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
+					} else if (verbose == -1) { 
 						json_result['result']['domxss.vulnerable'] = false;
+						json_result['result']['domxss.msg'] = explain;
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
 					callback(url, uri, timeout, tindex+1, callback, verbose);
 				} else {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? false"); }
-					else if (verbose == -1) { 
+					var explain = l + " is not DOMXSS vulnerable.";
+					if (verbose >= 0) { 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? false"); 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
+					} else if (verbose == -1) { 
 						json_result['result']['domxss.vulnerable'] = false; 
+						json_result['result']['domxss.msg'] = explain;
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
