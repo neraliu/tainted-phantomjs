@@ -49,7 +49,7 @@ public:
 #ifdef JSC_TAINTED
 
 #ifdef JSC_TAINTED_HASHMAP
-    UString() { 
+    UString() {
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
@@ -87,15 +87,15 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 #ifdef JSC_TAINTED
 
 #ifdef JSC_TAINTED_HASHMAP
-    UString(StringImpl* impl) : m_impl(impl) { 
+    UString(StringImpl* impl) : m_impl(impl) {
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
-    UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { 
+    UString(PassRefPtr<StringImpl> impl) : m_impl(impl) {
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
-    UString(RefPtr<StringImpl> impl) : m_impl(impl) { 
+    UString(RefPtr<StringImpl> impl) : m_impl(impl) {
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }

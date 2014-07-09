@@ -218,6 +218,9 @@ std::cerr << "RopeBuilder::append(JSString* jsString):" << jsString->isTainted()
             , m_length(value.length())
             , m_value(value)
             , m_fiberCount(0)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             ASSERT(!m_value.isNull());
             Heap::heap(this)->reportExtraMemoryCost(value.impl()->cost());
@@ -239,7 +242,7 @@ std::cerr << UString::getUStringAddr(value) << ":" << msg << ":" << value.isTain
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = value.isTainted();
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.1";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(value);
 
@@ -255,6 +258,9 @@ std::cerr << UString::getUStringAddr(value) << ":" << msg << ":" << value.isTain
             , m_length(value.length())
             , m_value(value)
             , m_fiberCount(0)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             ASSERT(!m_value.isNull());
 #ifdef JSC_TAINTED
@@ -274,7 +280,7 @@ std::cerr << "UString::getUStringAddr(value)" << ":" << msg << ":" << value.isTa
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = value.isTainted();
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.2";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(value);
 
@@ -288,6 +294,9 @@ std::cerr << "UString::getUStringAddr(value)" << ":" << msg << ":" << value.isTa
             , m_length(value->length())
             , m_value(value)
             , m_fiberCount(0)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
@@ -301,6 +310,9 @@ std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<StringImpl>
             : JSCell(*globalData, globalData->stringStructure.get())
             , m_length(rope->length())
             , m_fiberCount(1)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
 #ifdef JSC_TAINTED
 #ifdef JSC_TAINTED_DEBUG
@@ -316,6 +328,9 @@ std::cerr << this << ":JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> r
             : JSCell(*globalData, globalData->stringStructure.get())
             , m_length(s1->length() + s2->length())
             , m_fiberCount(fiberCount)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             ASSERT(fiberCount <= s_maxInternalRopeLength);
             unsigned index = 0;
@@ -346,7 +361,7 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
 			trace_struct.taintedno = s2->isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.3";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(s1->string()) + TaintedUtils::UString2string(s2->string());
 
@@ -362,6 +377,9 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
             : JSCell(*globalData, globalData->stringStructure.get())
             , m_length(s1->length() + u2.length())
             , m_fiberCount(fiberCount)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             ASSERT(fiberCount <= s_maxInternalRopeLength);
             unsigned index = 0;
@@ -392,7 +410,7 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
 			trace_struct.taintedno = u2.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.4";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(s1->string()) + TaintedUtils::UString2string(u2);
 
@@ -408,6 +426,9 @@ std::cerr << UString::getUStringAddr(s1->string()) << ":" << UString::getUString
             : JSCell(*globalData, globalData->stringStructure.get())
             , m_length(u1.length() + s2->length())
             , m_fiberCount(fiberCount)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             ASSERT(fiberCount <= s_maxInternalRopeLength);
             unsigned index = 0;
@@ -438,7 +459,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(s2->s
 			trace_struct.taintedno = s2->isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.5";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(u1) + TaintedUtils::UString2string(s2->string());
 
@@ -456,6 +477,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(s2->s
             : JSCell(exec->globalData(), exec->globalData().stringStructure.get())
             , m_length(0)
             , m_fiberCount(s_maxInternalRopeLength)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             unsigned index = 0;
             appendValueInConstructAndIncrementLength(exec, index, v1);
@@ -493,7 +517,7 @@ std::cerr << UString::getUStringAddr(this->string()) << ":JSValue + JSValue + JS
 			trace_struct.taintedno = v3.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.6";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(v1.toString(exec)) + TaintedUtils::UString2string(v2.toString(exec)) + TaintedUtils::UString2string(v3.toString(exec));
 
@@ -509,6 +533,9 @@ std::cerr << UString::getUStringAddr(this->string()) << ":JSValue + JSValue + JS
             : JSCell(*globalData, globalData->stringStructure.get())
             , m_length(u1.length() + u2.length())
             , m_fiberCount(2)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             unsigned index = 0;
             appendStringInConstruct(index, u1);
@@ -538,7 +565,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 			trace_struct.taintedno = u2.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.7";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(u1) + TaintedUtils::UString2string(u2);
 
@@ -554,6 +581,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
             : JSCell(*globalData, globalData->stringStructure.get())
             , m_length(u1.length() + u2.length() + u3.length())
             , m_fiberCount(s_maxInternalRopeLength)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
             unsigned index = 0;
             appendStringInConstruct(index, u1);
@@ -592,7 +622,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 			trace_struct.taintedno = u3.isTainted();
 		}
 		trace_struct.internalfunc = "JSString";
-		trace_struct.jsfunc = "constructor";
+		trace_struct.jsfunc = "constructor.8";
 		trace_struct.action = "propagate";
 		trace_struct.value = TaintedUtils::UString2string(u1) + TaintedUtils::UString2string(u2) + TaintedUtils::UString2string(u3);
 
@@ -685,6 +715,9 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
         JSString(VPtrStealingHackType) 
             : JSCell(VPtrStealingHack)
             , m_fiberCount(0)
+#ifdef JSC_TAINTED
+	    , m_tainted(0)
+#endif
         {
 #ifdef JSC_TAINTED_DEBUG
 // std::cerr << "JSString(VPtrStealingHackType)" << std::endl;
@@ -841,7 +874,7 @@ std::cerr << UString::getUStringAddr(u1) << ":" << UString::getUStringAddr(u2) <
 	    TaintedStructure trace_struct;
 	    trace_struct.taintedno = isTainted();
 	    trace_struct.internalfunc = "JSString::getIndex";
-	    trace_struct.jsfunc = "String[]";
+	    trace_struct.jsfunc = "String[].1";
 	    trace_struct.action = "propagate";
             trace_struct.value = TaintedUtils::UString2string(s->toString(exec));
 

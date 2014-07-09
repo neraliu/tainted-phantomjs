@@ -85,10 +85,18 @@ std::cerr << s1->length() << ":" << s2->length() << std::endl;
 // JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
 #endif
 	unsigned int tainted = 0;
-	if (s1->isTainted()) {
+	// the JSString constructor has set the default value of m_tainted=0, 
+	// however, some strings are constructed by Rope which does not have the members variable m_tainted.
+	// so isTainted() returns non-zero number does not mean tainted.
+	//
+	// the below idea is hacky to filter out non-positive number and we only allow JSC_MAX_TAINTED to trace in TPJS
+	//
+	// if (s1->isTainted()) {
+	if (s1->isTainted() && s1->isTainted() > 0 && s1->isTainted() <= JSC_MAX_TAINTED) {
 		tainted = s1->isTainted();
 	}
-	if (s2->isTainted()) {
+	// if (s2->isTainted()) {
+	if (s2->isTainted() && s2->isTainted() > 0 && s2->isTainted() <= JSC_MAX_TAINTED) {
 		tainted = s2->isTainted();
 	}
 	JSString* s = new (globalData) JSString(globalData, ropeBuilder.release());
@@ -102,7 +110,7 @@ std::cerr << s1->length() << ":" << s2->length() << std::endl;
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String.operations";
+		trace_struct.jsfunc = "String.operations.1";
 		trace_struct.action = "propagate";
                 trace_struct.value = TaintedUtils::UString2string(s1->string()) + TaintedUtils::UString2string(s2->string());
 
@@ -153,10 +161,12 @@ std::cerr << u1.length() << ":" << s2->length() << std::endl;
 // JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
 #endif
 	unsigned int tainted = 0;
-	if (u1.isTainted()) {
+	// if (u1.isTainted()) {
+	if (u1.isTainted() && u1.isTainted() > 0 && u1.isTainted() <= JSC_MAX_TAINTED) {
 		tainted = u1.isTainted();
 	}
-	if (s2->isTainted()) {
+	// if (s2->isTainted()) {
+	if (s2->isTainted() && s2->isTainted() > 0 && s2->isTainted() <= JSC_MAX_TAINTED) {
 		tainted = s2->isTainted();
 	}
 	JSString* s = new (globalData) JSString(globalData, ropeBuilder.release());
@@ -170,7 +180,7 @@ std::cerr << u1.length() << ":" << s2->length() << std::endl;
         	TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String.operations";
+		trace_struct.jsfunc = "String.operations.2";
 		trace_struct.action = "propagate";
                 trace_struct.value = TaintedUtils::UString2string(u1) + TaintedUtils::UString2string(s2->string());
 
@@ -221,10 +231,12 @@ std::cerr << s1->length() << ":" << u2.length() << std::endl;
 // JSString(JSGlobalData* globalData, PassRefPtr<RopeImpl> rope)
 #endif
 	unsigned int tainted = 0;
-	if (s1->isTainted()) {
+	// if (s1->isTainted()) {
+	if (s1->isTainted() && s1->isTainted() > 0 && s1->isTainted() <= JSC_MAX_TAINTED) {
 		tainted = s1->isTainted();
 	}
-	if (u2.isTainted()) {
+	// if (u2.isTainted()) {
+	if (u2.isTainted() && u2.isTainted() > 0 && u2.isTainted() <= JSC_MAX_TAINTED) {
 		tainted = u2.isTainted();
 	}
 	JSString* s = new (globalData) JSString(globalData, ropeBuilder.release());
@@ -238,7 +250,7 @@ std::cerr << s1->length() << ":" << u2.length() << std::endl;
         	TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String.operations";
+		trace_struct.jsfunc = "String.operations.3";
 		trace_struct.action = "propagate";
                 trace_struct.value = TaintedUtils::UString2string(s1->string()) + TaintedUtils::UString2string(u2);
 
@@ -387,7 +399,7 @@ std::cerr << u1.length() << ":" << u2.length() << ":" << u3.length() << std::end
 	    TaintedStructure trace_struct;
 	    trace_struct.taintedno = tainted;
 	    trace_struct.internalfunc = "jsString";
-	    trace_struct.jsfunc = "String.operations";
+	    trace_struct.jsfunc = "String.operations.4";
 	    trace_struct.action = "propagate";
 	    trace_struct.value = TaintedUtils::UString2string(s->string());
 
@@ -482,7 +494,7 @@ std::cerr << "jsString(ExecState* exec, JSValue thisValue)" << std::endl;
 		TaintedStructure trace_struct;
 		trace_struct.taintedno = tainted;
 		trace_struct.internalfunc = "jsString";
-		trace_struct.jsfunc = "String.operations";
+		trace_struct.jsfunc = "String.operations.5";
 		trace_struct.action = "propagate";
 	        trace_struct.value = TaintedUtils::UString2string(s->string());
 

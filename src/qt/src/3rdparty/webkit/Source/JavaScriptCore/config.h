@@ -134,6 +134,7 @@
 
 #if !defined(JSC_TAINTED)
 #define JSC_TAINTED             	1
+#define JSC_MAX_TAINTED             	1000
 
 #if _WIN32 || _WIN64
 #if _WIN64

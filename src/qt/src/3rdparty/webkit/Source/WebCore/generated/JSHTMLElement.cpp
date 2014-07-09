@@ -574,7 +574,8 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
 // cerr
 
 	TaintedStructure trace_struct;
-	trace_struct.taintedno = imp_tainted;
+	trace_struct.taintedno = 0;
+	// trace_struct.taintedno = imp_tainted;
 	trace_struct.internalfunc = "setJSHTMLElementInnerHTML";
 	trace_struct.jsfunc = "HTMLElement.innerHTML";
 	trace_struct.action = "reset";
@@ -621,7 +622,8 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
 	&& !tainted) {
 
 	TaintedStructure trace_struct;
-	trace_struct.taintedno = imp_tainted;
+	trace_struct.taintedno = 0;
+	// trace_struct.taintedno = imp_tainted;
 	trace_struct.internalfunc = "setJSHTMLElementInnerText";
 	trace_struct.jsfunc = "HTMLElement.innerText";
 	trace_struct.action = "reset";
@@ -668,7 +670,8 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
 	&& !tainted) {
 
 	TaintedStructure trace_struct;
-	trace_struct.taintedno = imp_tainted;
+	trace_struct.taintedno = 0;
+	// trace_struct.taintedno = imp_tainted;
 	trace_struct.internalfunc = "setJSHTMLElementOuterHTML";
 	trace_struct.jsfunc = "HTMLElement.outerHTML";
 	trace_struct.action = "reset";
@@ -715,7 +718,8 @@ void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue va
 	&& !tainted) {
 
 	TaintedStructure trace_struct;
-	trace_struct.taintedno = tainted;
+	trace_struct.taintedno = 0;
+	// trace_struct.taintedno = tainted;
 	trace_struct.internalfunc = "setJSHTMLElementOuterText";
 	trace_struct.jsfunc = "HTMLElement.outerText";
 	trace_struct.action = "reset";

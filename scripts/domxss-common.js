@@ -356,7 +356,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 					json_result['result']['onalert'] = onalert;
 				}
 				if (onalert && tainted) {
-					var explain = l + " is vulnerable to DOMXSS (some broswers may not work, for example chrome has its own XSS filter, FF has autoescape on location.href, please try all supported grade A browsers Chrome/FF/IE/Safari).";
+					var explain = "This page " + l + " is vulnerable to DOMXSS. The untrusted input can be injected into the DOM of the page and trigger javascript execution. (Please note that some broswers may not be vulnerable as it has builtin XSS defense, for example Chrome has its own XSS filter and FF has autoescape on location.href. Please try all supported grade A browsers Chrome/FF/IE/Safari).";
 					if (verbose >= 0) { 
 						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true");
 						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
@@ -370,7 +370,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 					}
 					phantom.exit(false);
 				} else if (!onalert && tainted) {
-					var explain = l + " is tainted, it means that unstrusted input can progagate from the source to sink, however known attack vector cannot triggered javascript execution, we cannot confirm whether it is DOMXSS vulnerable or not.";
+					var explain = "This page " + l + " is reported as 'tainted'. It means that untrusted input can progagate from the source to sink of the DOM, however the current known attack vector in our database cannot trigger javascript execution, we cannot confirm whether it is DOMXSS vulnerable or not of your page";
 					if (verbose >= 0) { 
 						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true|false");
 						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
