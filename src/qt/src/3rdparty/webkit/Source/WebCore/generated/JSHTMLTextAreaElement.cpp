@@ -45,7 +45,7 @@
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -346,7 +346,7 @@ JSValue jsHTMLTextAreaElementValue(ExecState* exec, JSValue slotBase, const Iden
     UNUSED_PARAM(exec);
     HTMLTextAreaElement* imp = static_cast<HTMLTextAreaElement*>(castedThis->impl());
     JSValue result = jsString(exec, imp->value());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (imp->tainted()) {
         unsigned int tainted = imp->tainted();
         result.setTainted(imp->tainted());
@@ -532,7 +532,7 @@ void setJSHTMLTextAreaElementValue(ExecState* exec, JSObject* thisObject, JSValu
     JSHTMLTextAreaElement* castedThis = static_cast<JSHTMLTextAreaElement*>(thisObject);
     HTMLTextAreaElement* imp = static_cast<HTMLTextAreaElement*>(castedThis->impl());
     imp->setValue(valueToStringWithNullCheck(exec, value));
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         TaintedStructure trace_struct;

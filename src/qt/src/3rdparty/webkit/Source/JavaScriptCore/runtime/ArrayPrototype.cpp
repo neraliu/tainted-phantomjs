@@ -44,7 +44,7 @@
 #include <wtf/Assertions.h>
 #include <wtf/HashSet.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -180,7 +180,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncToString(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
 #endif
 
@@ -216,7 +216,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncToString(ExecState* exec)
         if (element.isUndefinedOrNull())
             continue;
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 	if (!tainted && element.isString() && element.isTainted()) {
 	     	tainted = element.isTainted();
 	}
@@ -253,8 +253,8 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncToString(ExecState* exec)
             buffer.append(rep->characters(), rep->length());
     }
     ASSERT(buffer.size() == totalSize);
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED)
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "ArrayProtocol::arrayProtoFuncToString:" << tainted << std::endl;
 #endif
     JSValue v = jsString(exec, UString::adopt(buffer));
@@ -328,12 +328,12 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
     if (EncodedJSValue earlyReturnValue = checker.earlyReturnValue())
         return earlyReturnValue;
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
 #endif
     JSStringBuilder strBuffer;
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     UString separator;
     if (!exec->argument(0).isUndefined()) {
         separator = exec->argument(0).toString(exec);
@@ -355,7 +355,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
             if (!array->canGetIndex(k)) 
                 goto skipFirstLoop;
             JSValue element = array->getIndex(k);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
             if (!element.isUndefinedOrNull()) {
                 if (element.isTainted()) {
 			tainted = element.isTainted();
@@ -375,7 +375,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
                     break;
                 strBuffer.append(',');
                 JSValue element = array->getIndex(k);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
                 if (!element.isUndefinedOrNull()) {
                     if (element.isTainted()) {
 			tainted = element.isTainted();
@@ -393,7 +393,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
                     break;
                 strBuffer.append(separator);
                 JSValue element = array->getIndex(k);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
                 if (!element.isUndefinedOrNull()) {
                     if (element.isTainted()) {
 			tainted = element.isTainted();
@@ -417,7 +417,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
         }
 
         JSValue element = thisObj->get(exec, k);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         if (!element.isUndefinedOrNull()) {
 	    if (element.isTainted()) {
 		tainted = element.isTainted();
@@ -430,7 +430,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
 #endif
     }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSValue v = strBuffer.build(exec);
     if (tainted) {
 	v.setTainted(tainted); 
@@ -450,7 +450,7 @@ EncodedJSValue JSC_HOST_CALL arrayProtoFuncJoin(ExecState* exec)
         trace->addTaintedTrace(trace_struct);
     }
 
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "arrayProtoFuncJoin:" << tainted << std::endl;
 #endif
 

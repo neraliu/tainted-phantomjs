@@ -47,7 +47,7 @@
 #include <wtf/MathExtras.h>
 #include <wtf/unicode/Collator.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -92,7 +92,7 @@ static EncodedJSValue JSC_HOST_CALL stringProtoFuncLink(ExecState*);
 static EncodedJSValue JSC_HOST_CALL stringProtoFuncTrim(ExecState*);
 static EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimLeft(ExecState*);
 static EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimRight(ExecState*);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 static EncodedJSValue JSC_HOST_CALL stringProtoFuncTainted(ExecState*);
 static EncodedJSValue JSC_HOST_CALL stringProtoFuncIsTainted(ExecState*);
 #endif
@@ -321,7 +321,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
     JSValue pattern = exec->argument(0);
     JSValue replacement = exec->argument(1);
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -465,7 +465,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
             } while (global);
         }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         if (!lastIndex && replacements.isEmpty()) {
             if (tainted) {
 		sourceVal->setTainted(tainted); 
@@ -482,7 +482,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
         if (static_cast<unsigned>(lastIndex) < sourceLen)
             sourceRanges.append(StringRange(lastIndex, sourceLen - lastIndex));
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         JSValue v1 = jsSpliceSubstringsWithSeparators(exec, sourceVal, source, sourceRanges.data(), sourceRanges.size(), replacements.data(), replacements.size());
 	if (tainted) {
 		v1.setTainted(tainted); 
@@ -499,7 +499,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
 
     UString patternString = pattern.toString(exec);
     // Special case for single character patterns without back reference replacement
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (patternString.length() == 1 && callType == CallTypeNone && replacementString.find('$', 0) == notFound) {
         JSValue v2 = sourceVal->replaceCharacter(exec, patternString[0], replacementString);
 	if (tainted) {
@@ -517,7 +517,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
     const UString& source = sourceVal->value(exec);
     size_t matchPos = source.find(patternString);
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (matchPos == notFound) {
 	if (tainted) {
 		sourceVal->setTainted(tainted); 
@@ -543,7 +543,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
     
     size_t matchEnd = matchPos + matchLen;
     int ovector[2] = { matchPos, matchEnd };
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSValue v3 = jsString(exec, source.substringSharingImpl(0, matchPos), substituteBackreferences(replacementString, source, ovector, 0), source.substringSharingImpl(matchEnd));
     if (tainted) {
 	v3.setTainted(tainted); 
@@ -558,16 +558,16 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncReplace(ExecState* exec)
 
 EncodedJSValue JSC_HOST_CALL stringProtoFuncToString(ExecState* exec)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // no need to propagage, as it passes back the JSValue pointer directly
 std::cerr << "StringObejct::stringProtoFuncToString:" << std::endl;
 #endif
     JSValue thisValue = exec->hostThisValue();
     // Also used for valueOf.
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #endif
 
-#ifdef JSC_TAINTED 
+#if defined(JSC_TAINTED) 
     if (thisValue.isString())
         return JSValue::encode(thisValue);
 
@@ -589,7 +589,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncCharAt(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 /*
     unsigned int tainted = 0;
     if (thisValue.isString() && thisValue.isTainted()) {
@@ -624,7 +624,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncCharAt(ExecState* exec)
     JSValue a0 = exec->argument(0);
     if (a0.isUInt32()) {
         uint32_t i = a0.asUInt32();
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         if (i < len) {
             JSString* s1 = jsSingleCharacterSubstring(exec, s, i);
             if (tainted) {
@@ -641,7 +641,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncCharAt(ExecState* exec)
         return JSValue::encode(jsEmptyString(exec));
     }
     double dpos = a0.toInteger(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (dpos >= 0 && dpos < len) {
         JSString* s2 = jsSingleCharacterSubstring(exec, s, static_cast<unsigned>(dpos));
         if (tainted) {
@@ -682,7 +682,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncConcat(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (exec->argumentCount() == 1) {
         JSValue v = exec->argument(0);
@@ -715,7 +715,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncConcat(ExecState* exec)
 
     if (thisValue.isString() && (exec->argumentCount() == 1)) {
         JSValue v = exec->argument(0);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         JSValue v1 = v.isString() ? jsString(exec, asString(thisValue), asString(v)) : jsString(exec, asString(thisValue), v.toString(exec));
         if (tainted) {
 		v1.setTainted(tainted); 
@@ -731,7 +731,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncConcat(ExecState* exec)
     }
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSValue v2 = jsString(exec, thisValue);
     if (tainted) {
 	v2.setTainted(tainted); 
@@ -809,7 +809,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncMatch(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -852,7 +852,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncMatch(ExecState* exec)
     // return array of matches
     MarkedArgumentBuffer list;
     while (pos >= 0) {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 	JSString* s1 = jsSubstring(exec, s, pos, matchLength);
 	if (tainted) {
 		s1->setTainted(tainted); 
@@ -908,7 +908,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSlice(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -938,7 +938,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSlice(ExecState* exec)
             from = 0;
         if (to > len)
             to = len;
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         JSString* s1 = jsSubstring(exec, s, static_cast<unsigned>(from), static_cast<unsigned>(to) - static_cast<unsigned>(from));
 	if (tainted) {
 		s1->setTainted(tainted); 
@@ -959,7 +959,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -997,7 +997,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
             int mlen = ovector[1] - ovector[0];
             pos = mpos + (mlen == 0 ? 1 : mlen);
             if (static_cast<unsigned>(mpos) != p0 || mlen) {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 		JSString* s1 = jsSubstring(exec, s, p0, mpos - p0);
 		if (tainted) {
 			s1->setTainted(tainted); 
@@ -1014,7 +1014,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
                 int spos = ovector[si * 2];
                 if (spos < 0)
                     result->put(exec, i++, jsUndefined());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
                 else {
                     JSString* s2 = jsSubstring(exec, s, spos, ovector[si * 2 + 1] - spos);
 		    if (tainted) {
@@ -1037,7 +1037,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
                 // empty separator matches empty string -> empty array
                 return JSValue::encode(result);
             }
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
             while (i != limit && p0 < s.length() - 1) {
                 JSString* s3 = jsSingleCharacterSubstring(exec, s, p0++);
 		if (tainted) {
@@ -1054,7 +1054,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
         } else {
             size_t pos;
             while (i != limit && (pos = s.find(u2, p0)) != notFound) {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
                 JSString* s4 = jsSubstring(exec, s, p0, pos - p0);
 		if (tainted) {
 			s4->setTainted(tainted); 
@@ -1071,7 +1071,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSplit(ExecState* exec)
     }
 
     // add remaining string
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (i != limit) {
         JSString* s5 = jsSubstring(exec, s, p0, s.length() - p0);
 	if (tainted) {
@@ -1094,7 +1094,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstr(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -1135,7 +1135,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstr(ExecState* exec)
         length = len - start;
     unsigned substringStart = static_cast<unsigned>(start);
     unsigned substringLength = static_cast<unsigned>(length);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (jsString) {
         JSString* result_str = jsSubstring(exec, jsString, substringStart, substringLength);
 	if (tainted) {
@@ -1164,7 +1164,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstring(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -1214,7 +1214,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncSubstring(ExecState* exec)
     }
     unsigned substringStart = static_cast<unsigned>(start);
     unsigned substringLength = static_cast<unsigned>(end) - substringStart;
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (jsString) {
         JSString* result_str = jsSubstring(exec, jsString, substringStart, substringLength);
 	if (tainted) {
@@ -1243,7 +1243,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -1261,7 +1261,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
     const UString& s = sVal->value(exec);
 
     int sSize = s.length();
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (!sSize) {
         if (tainted) {
 		sVal->setTainted(tainted); 
@@ -1284,7 +1284,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
         ored |= c;
         buffer[i] = toASCIILower(c);
     }
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (!(ored & ~0x7f)) {
         JSString* s1 = jsString(exec, UString::adopt(buffer));
         if (tainted) {
@@ -1304,7 +1304,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
     if (error) {
         buffer.resize(length);
         length = Unicode::toLower(buffer.data(), length, sData, sSize, &error);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         if (error) {
             if (tainted) {
 		sVal->setTainted(tainted); 
@@ -1319,7 +1319,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
 #endif
     }
     if (length == sSize) {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         if (memcmp(buffer.data(), sData, length * sizeof(UChar)) == 0) {
             if (tainted) {
 		sVal->setTainted(tainted); 
@@ -1334,7 +1334,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToLowerCase(ExecState* exec)
 #endif
     } else
         buffer.resize(length);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSString* return_str = jsString(exec, UString::adopt(buffer));
     if (tainted) {
 	return_str->setTainted(tainted); 
@@ -1352,7 +1352,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (thisValue.isUndefinedOrNull()) // CheckObjectCoercible
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     if (tainted) {
 	TaintedStructure trace_struct;
@@ -1370,7 +1370,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
     const UString& s = sVal->value(exec);
 
     int sSize = s.length();
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (!sSize) {
         if (tainted) {
 		sVal->setTainted(tainted); 
@@ -1393,7 +1393,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
         ored |= c;
         buffer[i] = toASCIIUpper(c);
     }
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (!(ored & ~0x7f)) {
         JSString* s1 = jsString(exec, UString::adopt(buffer));
         if (tainted) {
@@ -1413,7 +1413,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
     if (error) {
         buffer.resize(length);
         length = Unicode::toUpper(buffer.data(), length, sData, sSize, &error);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         if (error) {
             if (tainted) {
 		sVal->setTainted(tainted); 
@@ -1428,7 +1428,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
 #endif
     }
     if (length == sSize) {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         if (memcmp(buffer.data(), sData, length * sizeof(UChar)) == 0) {
             if (tainted) {
 		sVal->setTainted(tainted); 
@@ -1443,7 +1443,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncToUpperCase(ExecState* exec)
 #endif
     } else
         buffer.resize(length);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSString* s2 = jsString(exec, UString::adopt(buffer));
     if (tainted) {
 	s2->setTainted(tainted); 
@@ -1662,7 +1662,7 @@ static inline JSValue trimString(ExecState* exec, JSValue thisValue, int trimKin
 EncodedJSValue JSC_HOST_CALL stringProtoFuncTrim(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     JSValue s = trimString(exec, thisValue, TrimLeft | TrimRight);
     if (tainted) {
@@ -1692,7 +1692,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrim(ExecState* exec)
 EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimLeft(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     JSValue s = trimString(exec, thisValue, TrimLeft);
     if (tainted) {
@@ -1722,7 +1722,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimLeft(ExecState* exec)
 EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimRight(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
     JSValue s = trimString(exec, thisValue, TrimRight);
     if (tainted) {
@@ -1749,7 +1749,7 @@ EncodedJSValue JSC_HOST_CALL stringProtoFuncTrimRight(ExecState* exec)
 #endif
 }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 EncodedJSValue JSC_HOST_CALL stringProtoFuncIsTainted(ExecState* exec)
 {
     JSValue thisValue = exec->hostThisValue();

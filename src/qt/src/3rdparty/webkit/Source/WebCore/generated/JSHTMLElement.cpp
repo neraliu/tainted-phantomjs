@@ -43,7 +43,7 @@
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -289,7 +289,7 @@ JSValue jsHTMLElementInnerHTML(ExecState* exec, JSValue slotBase, const Identifi
     UNUSED_PARAM(exec);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());
     JSValue result = jsString(exec, imp->innerHTML());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (imp->tainted()) {
         unsigned int tainted = imp->tainted();
         result.setTainted(imp->tainted());
@@ -315,7 +315,7 @@ JSValue jsHTMLElementInnerText(ExecState* exec, JSValue slotBase, const Identifi
     UNUSED_PARAM(exec);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());
     JSValue result = jsString(exec, imp->innerText());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (imp->tainted()) {
         unsigned int tainted = imp->tainted();
         result.setTainted(imp->tainted());
@@ -341,7 +341,7 @@ JSValue jsHTMLElementOuterHTML(ExecState* exec, JSValue slotBase, const Identifi
     UNUSED_PARAM(exec);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());
     JSValue result = jsString(exec, imp->outerHTML());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (imp->tainted()) {
         unsigned int tainted = imp->tainted();
         result.setTainted(imp->tainted());
@@ -367,7 +367,7 @@ JSValue jsHTMLElementOuterText(ExecState* exec, JSValue slotBase, const Identifi
     UNUSED_PARAM(exec);
     HTMLElement* imp = static_cast<HTMLElement*>(castedThis->impl());
     JSValue result = jsString(exec, imp->outerText());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (imp->tainted()) {
         unsigned int tainted = imp->tainted();
         result.setTainted(imp->tainted());
@@ -515,7 +515,7 @@ this method has the side effect, if the element is untatined, then we need to cl
 */
 void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
@@ -523,7 +523,7 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
     ExceptionCode ec = 0;
     imp->setInnerHTML(valueToStringWithNullCheck(exec, value), ec);
     setDOMException(exec, ec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int imp_tainted = imp->tainted();
 
     if (tainted) {
@@ -592,7 +592,7 @@ void setJSHTMLElementInnerHTML(ExecState* exec, JSObject* thisObject, JSValue va
 
 void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
@@ -600,7 +600,7 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
     ExceptionCode ec = 0;
     imp->setInnerText(valueToStringWithNullCheck(exec, value), ec);
     setDOMException(exec, ec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int imp_tainted = imp->tainted();
 
     if (tainted) {
@@ -640,7 +640,7 @@ void setJSHTMLElementInnerText(ExecState* exec, JSObject* thisObject, JSValue va
 
 void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
@@ -648,7 +648,7 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
     ExceptionCode ec = 0;
     imp->setOuterHTML(valueToStringWithNullCheck(exec, value), ec);
     setDOMException(exec, ec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int imp_tainted = imp->tainted();
 
     if (tainted) {
@@ -688,7 +688,7 @@ void setJSHTMLElementOuterHTML(ExecState* exec, JSObject* thisObject, JSValue va
 
 void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
 #endif
     JSHTMLElement* castedThis = static_cast<JSHTMLElement*>(thisObject);
@@ -696,7 +696,7 @@ void setJSHTMLElementOuterText(ExecState* exec, JSObject* thisObject, JSValue va
     ExceptionCode ec = 0;
     imp->setOuterText(valueToStringWithNullCheck(exec, value), ec);
     setDOMException(exec, ec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int imp_tainted = imp->tainted();
 
     if (tainted) {

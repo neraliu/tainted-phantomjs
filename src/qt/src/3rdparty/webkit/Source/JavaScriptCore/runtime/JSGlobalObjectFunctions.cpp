@@ -51,7 +51,7 @@
 #include <wtf/StringExtras.h>
 #include <wtf/unicode/UTF8.h>
 
-#ifdef JSC_TAINTED 
+#if defined(JSC_TAINTED) 
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -457,7 +457,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEval(ExecState* exec)
     if (!x.isString())
         return JSValue::encode(x);
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     if (x.isString() && x.isTainted()) {
 	tainted = x.isTainted(); 
@@ -545,7 +545,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncDecodeURI(ExecState* exec)
     static const char do_not_unescape_when_decoding_URI[] =
         "#$&+,/:;=?@";
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     UString str = exec->argument(0).toString(exec);
     if (str.isTainted()) {
@@ -583,7 +583,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncDecodeURI(ExecState* exec)
 	trace->addTaintedTrace(trace_struct);
 */
     }
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "globalFuncDecodeURI:" << tainted << std::endl;
 #endif
     return JSValue::encode(s);
@@ -594,7 +594,7 @@ std::cerr << "globalFuncDecodeURI:" << tainted << std::endl;
 
 EncodedJSValue JSC_HOST_CALL globalFuncDecodeURIComponent(ExecState* exec)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     UString str = exec->argument(0).toString(exec);
     if (str.isTainted()) {
@@ -632,7 +632,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncDecodeURIComponent(ExecState* exec)
 	trace->addTaintedTrace(trace_struct);
 */
     }
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "globalFuncDecodeURIComponent:" << tainted << std::endl;
 #endif
     return JSValue::encode(s);
@@ -649,7 +649,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEncodeURI(ExecState* exec)
         "0123456789"
         "!#$&'()*+,-./:;=?@_~";
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     UString str = exec->argument(0).toString(exec);
     if (str.isTainted()) {
@@ -669,7 +669,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEncodeURI(ExecState* exec)
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "globalFuncEncodeURI:" << tainted << std::endl;
 #endif
     return JSValue::encode(s);
@@ -686,7 +686,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEncodeURIComponent(ExecState* exec)
         "0123456789"
         "!'()*-._~";
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     UString str = exec->argument(0).toString(exec);
     if (str.isTainted()) {
@@ -706,7 +706,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEncodeURIComponent(ExecState* exec)
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "globalFuncEncodeURIComponent:" << tainted << std::endl;
 #endif
     return JSValue::encode(s);
@@ -741,7 +741,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEscape(ExecState* exec)
         }
     }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     if (str.isTainted()) {
 	tainted = str.isTainted(); 
@@ -760,7 +760,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncEscape(ExecState* exec)
 
     TaintedTrace* trace = TaintedTrace::getInstance();
     trace->addTaintedTrace(trace_struct);
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "globalFuncEscape:" << tainted << std::endl;
 #endif
     return JSValue::encode(s);
@@ -793,7 +793,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncUnescape(ExecState* exec)
         builder.append(*c);
     }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     if (str.isTainted()) {
 	tainted = str.isTainted(); 
@@ -830,7 +830,7 @@ EncodedJSValue JSC_HOST_CALL globalFuncUnescape(ExecState* exec)
 	trace->addTaintedTrace(trace_struct);
 */
     }
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "globalFuncUnescape:" << tainted << std::endl;
 #endif
     return JSValue::encode(s);

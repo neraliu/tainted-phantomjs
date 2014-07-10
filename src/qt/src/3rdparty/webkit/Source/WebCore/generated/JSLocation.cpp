@@ -37,7 +37,7 @@
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "Frame.h"
 #include "Document.h"
 #include "TaintedCounter.h"
@@ -218,7 +218,7 @@ JSValue jsLocationHref(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->href());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -251,7 +251,7 @@ JSValue jsLocationProtocol(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->protocol());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -276,7 +276,7 @@ JSValue jsLocationHost(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->host());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -301,7 +301,7 @@ JSValue jsLocationHostname(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->hostname());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -326,7 +326,7 @@ JSValue jsLocationPort(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->port());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -351,7 +351,7 @@ JSValue jsLocationPathname(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->pathname());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -376,7 +376,7 @@ JSValue jsLocationSearch(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->search());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -401,7 +401,7 @@ JSValue jsLocationHash(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->hash());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -434,7 +434,7 @@ JSValue jsLocationOrigin(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Location* imp = static_cast<Location*>(castedThis->impl());
     JSValue result = jsString(exec, imp->origin());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -462,7 +462,7 @@ void JSLocation::put(ExecState* exec, const Identifier& propertyName, JSValue va
 
 void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -486,7 +486,7 @@ void setJSLocationHref(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -510,7 +510,7 @@ void setJSLocationProtocol(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -534,7 +534,7 @@ void setJSLocationHost(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -558,7 +558,7 @@ void setJSLocationHostname(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -582,7 +582,7 @@ void setJSLocationPort(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -606,7 +606,7 @@ void setJSLocationPathname(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -630,7 +630,7 @@ void setJSLocationSearch(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSLocationHash(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSLocation* castedThis = static_cast<JSLocation*>(thisObject);
@@ -697,7 +697,7 @@ EncodedJSValue JSC_HOST_CALL jsLocationPrototypeFunctionGetParameter(ExecState* 
 
 EncodedJSValue JSC_HOST_CALL jsLocationPrototypeFunctionToString(ExecState* exec)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 // implement @ bindings/js/JSLocationCustom.cpp toStringFunction()
 #endif
     JSValue thisValue = exec->hostThisValue();

@@ -58,7 +58,7 @@ namespace JSC {
         {
             return Structure::create(globalData, prototype, TypeInfo(ObjectType, StructureFlags), AnonymousSlotCount, &s_info);
         }
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         unsigned int isTainted() const
         {
 	    return internalValue()->isTainted();

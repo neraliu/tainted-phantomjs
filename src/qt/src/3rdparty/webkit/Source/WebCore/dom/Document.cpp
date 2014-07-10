@@ -500,7 +500,7 @@ Document::Document(Frame* frame, const KURL& url, bool isXHTML, bool isHTML)
     m_shouldProcessNoScriptElement = !(m_frame && m_frame->script()->canExecuteScripts(NotAboutToExecuteScript));
 #endif
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     m_tainted = 0;
 #endif
 }

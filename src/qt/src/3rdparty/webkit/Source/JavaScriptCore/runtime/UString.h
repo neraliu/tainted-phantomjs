@@ -33,7 +33,7 @@
 #include "config.h"
 #include <wtf/text/StringImpl.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedHashMap.h"
 #include <string>
 #include <sstream>
@@ -46,9 +46,9 @@ namespace JSC {
 class UString {
 public:
     // Construct a null string, distinguishable from an empty string.
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 
-#ifdef JSC_TAINTED_HASHMAP
+#if defined(JSC_TAINTED_HASHMAP)
     UString() {
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
@@ -56,14 +56,14 @@ public:
 
     // copy constructor
     UString(const UString& u) {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAddr(u) << std::endl;
 #endif
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), map->get(UString::getUStringAddr(u)));
 	m_impl = u.m_impl;
     }
-#elif JSC_TAINTED_EXTENDED
+#elif defined(JSC_TAINTED_EXTENDED)
     UString() { m_tainted = 0; } 
 #endif
 
@@ -84,9 +84,9 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
     UString(const char* characters);
 
     // Construct a string referencing an existing StringImpl.
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 
-#ifdef JSC_TAINTED_HASHMAP
+#if defined(JSC_TAINTED_HASHMAP)
     UString(StringImpl* impl) : m_impl(impl) {
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
@@ -99,7 +99,7 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->add(getUStringAddr(), 0);
     }
-#elif JSC_TAINTED_EXTENDED
+#elif defined(JSC_TAINTED_EXTENDED)
     UString(StringImpl* impl) : m_impl(impl) { m_tainted = 0; } 
     UString(PassRefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } 
     UString(RefPtr<StringImpl> impl) : m_impl(impl) { m_tainted = 0; } 
@@ -174,23 +174,23 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 
     UString substringSharingImpl(unsigned pos, unsigned len = UINT_MAX) const;
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int isTainted() const
     {
-#ifdef JSC_TAINTED_HASHMAP
+#if defined(JSC_TAINTED_HASHMAP)
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	return map->get(getUStringAddr());
-#elif JSC_TAINTED_EXTENDED
+#elif defined(JSC_TAINTED_EXTENDED)
 	return this->m_tainted;
 #endif
     }
 
     void setTainted(unsigned int tainted)
     {
-#ifdef JSC_TAINTED_HASHMAP
+#if defined(JSC_TAINTED_HASHMAP)
 	TaintedHashMap* map = TaintedHashMap::getInstance();
 	map->update(getUStringAddr(), tainted);
-#elif JSC_TAINTED_EXTENDED
+#elif defined(JSC_TAINTED_EXTENDED)
     	this->m_tainted = tainted;
 #endif
     }
@@ -220,10 +220,10 @@ std::cerr << getUStringAddr() << ":UString::UString():" << UString::getUStringAd
 
 private:
     RefPtr<StringImpl> m_impl;
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 
-#ifdef JSC_TAINTED_HASHMAP
-#elif JSC_TAINTED_EXTENDED
+#if defined(JSC_TAINTED_HASHMAP)
+#elif defined(JSC_TAINTED_EXTENDED)
     unsigned int m_tainted;
 #endif
 

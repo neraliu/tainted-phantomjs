@@ -35,7 +35,7 @@
 #include "JSObject.h"
 #include <wtf/MathExtras.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "StringObject.h"
 #endif
 
@@ -89,7 +89,7 @@ extern const double Inf = NaNInf.doubles.Inf_Double;
 
 const ClassInfo JSCell::s_dummyCellInfo = { "DummyCell", 0, 0, 0 };
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 // The JSValue class itself does not have the tainted flag, the tainted flag is located in the UString class wrapped by JSString and StringObject.
 unsigned int JSValue::isTainted() const
 {
@@ -133,7 +133,7 @@ bool JSCell::getString(ExecState* exec, UString&stringValue) const
 
 UString JSCell::getString(ExecState* exec) const
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "JSCell::getString()" << std::endl;
 #endif
     return isString() ? static_cast<const JSString*>(this)->value(exec) : UString();

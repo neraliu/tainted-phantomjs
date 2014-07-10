@@ -36,7 +36,7 @@
 #include "config.h"
 #include "Interpreter.h"
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 #include <iostream>
 #endif
 
@@ -738,7 +738,7 @@ static inline JSObject* checkedReturn(JSObject* returnValue)
 JSValue Interpreter::execute(ProgramExecutable* program, CallFrame* callFrame, ScopeChainNode* scopeChain, JSObject* thisObj)
 {
     ASSERT(!scopeChain->globalData->exception);
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "Interpreter::execute" << std::endl;
 #endif
 
@@ -799,7 +799,7 @@ std::cerr << "Interpreter::execute" << std::endl;
 JSValue Interpreter::executeCall(CallFrame* callFrame, JSObject* function, CallType callType, const CallData& callData, JSValue thisValue, const ArgList& args)
 {
     ASSERT(!callFrame->hadException());
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "Interpreter::executeCall" << std::endl;
 #endif
 
@@ -892,7 +892,7 @@ std::cerr << "Interpreter::executeCall" << std::endl;
 JSObject* Interpreter::executeConstruct(CallFrame* callFrame, JSObject* constructor, ConstructType constructType, const ConstructData& constructData, const ArgList& args)
 {
     ASSERT(!callFrame->hadException());
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "Interpreter::executeConstruct" << std::endl;
 #endif
 
@@ -1033,7 +1033,7 @@ CallFrameClosure Interpreter::prepareForRepeatCall(FunctionExecutable* FunctionE
 
 JSValue Interpreter::execute(CallFrameClosure& closure) 
 {
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "Interpreter::execute(CallFrameClosure& closure)" << std::endl;
 #endif
     closure.resetCallFrame();
@@ -1073,7 +1073,7 @@ void Interpreter::endRepeatCall(CallFrameClosure& closure)
 
 JSValue Interpreter::execute(EvalExecutable* eval, CallFrame* callFrame, JSObject* thisObj, ScopeChainNode* scopeChain)
 {
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "Interpreter::execute(EvalExecutable* eval, CallFrame* callFrame, JSObject* thisObj, ScopeChainNode* scopeChain)" << std::endl;
 #endif
     JSObject* compileError = eval->compile(callFrame, scopeChain);
@@ -1085,7 +1085,7 @@ std::cerr << "Interpreter::execute(EvalExecutable* eval, CallFrame* callFrame, J
 JSValue Interpreter::execute(EvalExecutable* eval, CallFrame* callFrame, JSObject* thisObj, int globalRegisterOffset, ScopeChainNode* scopeChain)
 {
     ASSERT(!scopeChain->globalData->exception);
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "Interpreter::execute(EvalExecutable* eval, CallFrame* callFrame, JSObject* thisObj, int globalRegisterOffset, ScopeChainNode* scopeChain)" << std::endl;
 #endif
 
@@ -1444,7 +1444,7 @@ NEVER_INLINE void Interpreter::uncacheGetByID(CodeBlock*, Instruction* vPC)
 
 JSValue Interpreter::privateExecute(ExecutionFlag flag, RegisterFile* registerFile, CallFrame* callFrame)
 {
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "Interpreter::privateExecute" << std::endl;
 #endif
 
@@ -1538,7 +1538,7 @@ std::cerr << "Interpreter::privateExecute" << std::endl;
            Constructs a new empty Object instance using the original
            constructor, and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_new_object)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1555,7 +1555,7 @@ std::cerr << "DEFINE_OPCODE(op_new_object)" << std::endl;
            The array will contain argCount elements with values
            taken from registers starting at register firstArg.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_new_array)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1574,7 +1574,7 @@ std::cerr << "DEFINE_OPCODE(op_new_array)" << std::endl;
            constructor from regexp regExp, and puts the result in
            register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_new_regexp)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1593,7 +1593,7 @@ std::cerr << "DEFINE_OPCODE(op_new_regexp)" << std::endl;
 
            Copies register src to register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_mov)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1611,7 +1611,7 @@ std::cerr << "DEFINE_OPCODE(op_mov)" << std::endl;
            as with the ECMAScript '==' operator, and puts the result
            as a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_eq)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1634,7 +1634,7 @@ std::cerr << "DEFINE_OPCODE(op_eq)" << std::endl;
            Checks whether register src is null, as with the ECMAScript '!='
            operator, and puts the result as a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_eq_null)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1657,7 +1657,7 @@ std::cerr << "DEFINE_OPCODE(op_eq_null)" << std::endl;
            equal, as with the ECMAScript '!=' operator, and puts the
            result as a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_neq)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1680,7 +1680,7 @@ std::cerr << "DEFINE_OPCODE(op_neq)" << std::endl;
            Checks whether register src is not null, as with the ECMAScript '!='
            operator, and puts the result as a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_neq_null)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1703,7 +1703,7 @@ std::cerr << "DEFINE_OPCODE(op_neq_null)" << std::endl;
            equal, as with the ECMAScript '===' operator, and puts the
            result as a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_stricteq)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1723,7 +1723,7 @@ std::cerr << "DEFINE_OPCODE(op_stricteq)" << std::endl;
            strictly equal, as with the ECMAScript '!==' operator, and
            puts the result as a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_nstricteq)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1743,7 +1743,7 @@ std::cerr << "DEFINE_OPCODE(op_nstricteq)" << std::endl;
            with the ECMAScript '<' operator, and puts the result as
            a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_less)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1763,7 +1763,7 @@ std::cerr << "DEFINE_OPCODE(op_less)" << std::endl;
            register src2, as with the ECMAScript '<=' operator, and
            puts the result as a boolean in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_lesseq)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1782,7 +1782,7 @@ std::cerr << "DEFINE_OPCODE(op_lesseq)" << std::endl;
            Converts register srcDst to number, adds one, and puts the result
            back in register srcDst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_pre_inc)" << std::endl;
 #endif
         int srcDst = vPC[1].u.operand;
@@ -1804,7 +1804,7 @@ std::cerr << "DEFINE_OPCODE(op_pre_inc)" << std::endl;
            Converts register srcDst to number, subtracts one, and puts the result
            back in register srcDst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_pre_dec)" << std::endl;
 #endif
         int srcDst = vPC[1].u.operand;
@@ -1827,7 +1827,7 @@ std::cerr << "DEFINE_OPCODE(op_pre_dec)" << std::endl;
            written to register dst, and the number plus one is written
            back to register srcDst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_post_inc)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1853,7 +1853,7 @@ std::cerr << "DEFINE_OPCODE(op_post_inc)" << std::endl;
            written to register dst, and the number minus one is written
            back to register srcDst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_post_dec)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1878,7 +1878,7 @@ std::cerr << "DEFINE_OPCODE(op_post_dec)" << std::endl;
            Converts register src to number, and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_to_jsnumber)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1903,7 +1903,7 @@ std::cerr << "DEFINE_OPCODE(op_to_jsnumber)" << std::endl;
            Converts register src to number, negates it, and puts the
            result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_negate)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1926,7 +1926,7 @@ std::cerr << "DEFINE_OPCODE(op_negate)" << std::endl;
            in register dst. (JS add may be string concatenation or
            numeric add, depending on the types of the operands.)
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_add)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1948,7 +1948,7 @@ std::cerr << "DEFINE_OPCODE(op_add)" << std::endl;
            Multiplies register src1 and register src2 (converted to
            numbers), and puts the product in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_mul)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1972,7 +1972,7 @@ std::cerr << "DEFINE_OPCODE(op_mul)" << std::endl;
            register divisor (converted to number), and puts the
            quotient in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_div)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -1993,7 +1993,7 @@ std::cerr << "DEFINE_OPCODE(op_div)" << std::endl;
            register divisor (converted to number), and puts the
            remainder in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_mod)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2025,7 +2025,7 @@ std::cerr << "DEFINE_OPCODE(op_mod)" << std::endl;
            src1 (converted to number), and puts the difference in
            register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_sub)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2048,7 +2048,7 @@ std::cerr << "DEFINE_OPCODE(op_sub)" << std::endl;
            register shift (converted to uint32), and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_lshift)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2073,7 +2073,7 @@ std::cerr << "DEFINE_OPCODE(op_lshift)" << std::endl;
            to int32) by register shift (converted to
            uint32), and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_rshift)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2098,7 +2098,7 @@ std::cerr << "DEFINE_OPCODE(op_rshift)" << std::endl;
            to uint32) by register shift (converted to
            uint32), and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_urshift)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2122,7 +2122,7 @@ std::cerr << "DEFINE_OPCODE(op_urshift)" << std::endl;
            and register src2 (converted to int32), and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_bitand)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2146,7 +2146,7 @@ std::cerr << "DEFINE_OPCODE(op_bitand)" << std::endl;
            and register src2 (converted to int32), and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_bitxor)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2170,7 +2170,7 @@ std::cerr << "DEFINE_OPCODE(op_bitxor)" << std::endl;
            and register src2 (converted to int32), and puts the
            result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_bitor)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2193,7 +2193,7 @@ std::cerr << "DEFINE_OPCODE(op_bitor)" << std::endl;
            Computes bitwise NOT of register src1 (converted to int32),
            and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_bitnot)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2214,7 +2214,7 @@ std::cerr << "DEFINE_OPCODE(op_bitnot)" << std::endl;
            Computes logical NOT of register src (converted to
            boolean), and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_not)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2234,7 +2234,7 @@ std::cerr << "DEFINE_OPCODE(op_not)" << std::endl;
            JSC API*). Raises an exception if register constructor is not
            an valid parameter for instanceof.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_check_has_instance)" << std::endl;
 #endif
         int base = vPC[1].u.operand;
@@ -2259,7 +2259,7 @@ std::cerr << "DEFINE_OPCODE(op_check_has_instance)" << std::endl;
            Raises an exception if register constructor is not an
            object.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_instanceof)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2284,7 +2284,7 @@ std::cerr << "DEFINE_OPCODE(op_instanceof)" << std::endl;
            Determines the type string for src according to ECMAScript
            rules, and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_typeof)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2301,7 +2301,7 @@ std::cerr << "DEFINE_OPCODE(op_typeof)" << std::endl;
            the ECMAScript rules is "undefined", and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_is_undefined)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2319,7 +2319,7 @@ std::cerr << "DEFINE_OPCODE(op_is_undefined)" << std::endl;
            the ECMAScript rules is "boolean", and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_is_boolean)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2336,7 +2336,7 @@ std::cerr << "DEFINE_OPCODE(op_is_boolean)" << std::endl;
            the ECMAScript rules is "number", and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_is_number)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2353,7 +2353,7 @@ std::cerr << "DEFINE_OPCODE(op_is_number)" << std::endl;
            the ECMAScript rules is "string", and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_is_string)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2370,7 +2370,7 @@ std::cerr << "DEFINE_OPCODE(op_is_string)" << std::endl;
            the ECMAScript rules is "object", and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_is_object)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2387,7 +2387,7 @@ std::cerr << "DEFINE_OPCODE(op_is_object)" << std::endl;
            the ECMAScript rules is "function", and puts the result
            in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_is_function)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2406,7 +2406,7 @@ std::cerr << "DEFINE_OPCODE(op_is_function)" << std::endl;
            Raises an exception if register constructor is not an
            object.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_in)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2440,7 +2440,7 @@ std::cerr << "DEFINE_OPCODE(op_in)" << std::endl;
            scope chain, and writes the resulting value to register
            dst. If the property is not found, raises an exception.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_resolve)" << std::endl;
 #endif
         if (UNLIKELY(!resolve(callFrame, vPC, exceptionValue)))
@@ -2456,7 +2456,7 @@ std::cerr << "DEFINE_OPCODE(op_resolve)" << std::endl;
          scope chain skipping the top 'skip' levels, and writes the resulting
          value to register dst. If the property is not found, raises an exception.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_resolve_skip)" << std::endl;
 #endif
         if (UNLIKELY(!resolveSkip(callFrame, vPC, exceptionValue)))
@@ -2474,7 +2474,7 @@ std::cerr << "DEFINE_OPCODE(op_resolve_skip)" << std::endl;
            a fast lookup using the case offset, otherwise fall back to a full resolve and
            cache the new structure and offset
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_resolve_global)" << std::endl;
 #endif
         if (UNLIKELY(!resolveGlobal(callFrame, vPC, exceptionValue)))
@@ -2495,7 +2495,7 @@ std::cerr << "DEFINE_OPCODE(op_resolve_global)" << std::endl;
          This walks through n levels of the scope chain to verify that none of those levels
          in the scope chain include dynamically added properties.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_resolve_global_dynamic)" << std::endl;
 #endif
         if (UNLIKELY(!resolveGlobalDynamic(callFrame, vPC, exceptionValue)))
@@ -2510,7 +2510,7 @@ std::cerr << "DEFINE_OPCODE(op_resolve_global_dynamic)" << std::endl;
 
            Gets the global var at global slot index and places it in register dst.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_global_var)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2527,7 +2527,7 @@ std::cerr << "DEFINE_OPCODE(op_get_global_var)" << std::endl;
          
            Puts value into global slot index.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_global_var)" << std::endl;
 #endif
         JSGlobalObject* scope = codeBlock->globalObject();
@@ -2545,7 +2545,7 @@ std::cerr << "DEFINE_OPCODE(op_put_global_var)" << std::endl;
          Loads the contents of the index-th local from the scope skip nodes from
          the top of the scope chain, and places it in register dst.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_scoped_var)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2578,7 +2578,7 @@ std::cerr << "DEFINE_OPCODE(op_get_scoped_var)" << std::endl;
         /* put_scoped_var index(n) skip(n) value(r)
 
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_scoped_var)" << std::endl;
 #endif
         int index = vPC[1].u.operand;
@@ -2617,7 +2617,7 @@ std::cerr << "DEFINE_OPCODE(op_put_scoped_var)" << std::endl;
            outermost scope (which will be the global object) is
            stored in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_resolve_base)" << std::endl;
 #endif
         resolveBase(callFrame, vPC);
@@ -2631,7 +2631,7 @@ std::cerr << "DEFINE_OPCODE(op_resolve_base)" << std::endl;
 
            Throws an exception if property does not exist on base
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_ensure_property_exists)" << std::endl;
 #endif
         int base = vPC[1].u.operand;
@@ -2661,7 +2661,7 @@ std::cerr << "DEFINE_OPCODE(op_ensure_property_exists)" << std::endl;
            resolve, or resolve_base followed by get_by_id, as it
            avoids duplicate hash lookups.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_resolve_with_base)" << std::endl;
 #endif
         if (UNLIKELY(!resolveBaseAndProperty(callFrame, vPC, exceptionValue)))
@@ -2676,7 +2676,7 @@ std::cerr << "DEFINE_OPCODE(op_resolve_with_base)" << std::endl;
            Generic property access: Gets the property named by identifier
            property from the value base, and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -2702,7 +2702,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id)" << std::endl;
            value base. If the cache misses, op_get_by_id_self reverts to
            op_get_by_id.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_self)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -2736,7 +2736,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_self)" << std::endl;
            value base's prototype. If the cache misses, op_get_by_id_proto
            reverts to op_get_by_id.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_proto)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -2778,7 +2778,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_proto)" << std::endl;
          value base's prototype. If the cache misses, op_get_by_id_getter_proto
          reverts to op_get_by_id.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_getter_proto)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -2826,7 +2826,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_getter_proto)" << std::endl;
          from the value base's prototype. If the cache misses, op_get_by_id_custom_proto
          reverts to op_get_by_id.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_custom_proto)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -2913,7 +2913,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_custom_proto)" << std::endl;
            value base's prototype chain. If the cache misses, op_get_by_id_chain
            reverts to op_get_by_id.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_chain)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -2966,7 +2966,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_chain)" << std::endl;
          value base. If the cache misses, op_get_by_id_getter_self reverts to
          op_get_by_id.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_getter_self)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -3012,7 +3012,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_getter_self)" << std::endl;
          from the value base. If the cache misses, op_get_by_id_custom_self reverts to
          op_get_by_id.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_custom_self)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -3048,7 +3048,7 @@ skip_id_custom_self:
            Generic property access: Gets the property named by identifier
            property from the value base, and puts the result in register dst.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_generic)" << std::endl;
 #endif
         int dst = vPC[1].u.operand;
@@ -3075,7 +3075,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_generic)" << std::endl;
          value base's prototype chain. If the cache misses, op_get_by_id_getter_chain
          reverts to op_get_by_id.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_getter_chain)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -3133,7 +3133,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_getter_chain)" << std::endl;
          value base's prototype chain. If the cache misses, op_get_by_id_custom_chain
          reverts to op_get_by_id.
          */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_id_custom_chain)" << std::endl;
 #endif
         int base = vPC[2].u.operand;
@@ -3186,7 +3186,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_id_custom_chain)" << std::endl;
            and puts the result in register dst. If register base does not hold
            an array, op_get_array_length reverts to op_get_by_id.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_array_length)" << std::endl;
 #endif
 
@@ -3213,7 +3213,7 @@ std::cerr << "DEFINE_OPCODE(op_get_array_length)" << std::endl;
            and puts the result in register dst. If register base does not hold
            a string, op_get_string_length reverts to op_get_by_id.
         */
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_string_length)" << std::endl;
 #endif
 
@@ -3246,7 +3246,7 @@ std::cerr << "DEFINE_OPCODE(op_get_string_length)" << std::endl;
            an object literal.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_by_id)" << std::endl;
 #endif
 
@@ -3287,7 +3287,7 @@ std::cerr << "DEFINE_OPCODE(op_put_by_id)" << std::endl;
            the register file.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_by_id_transition)" << std::endl;
 #endif
 
@@ -3345,7 +3345,7 @@ std::cerr << "DEFINE_OPCODE(op_put_by_id_transition)" << std::endl;
            the register file.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_by_id_replace)" << std::endl;
 #endif
 
@@ -3384,7 +3384,7 @@ std::cerr << "DEFINE_OPCODE(op_put_by_id_replace)" << std::endl;
            the register file.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_by_id_generic)" << std::endl;
 #endif
 
@@ -3416,7 +3416,7 @@ std::cerr << "DEFINE_OPCODE(op_put_by_id_generic)" << std::endl;
            to register dst.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_del_by_id)" << std::endl;
 #endif
 
@@ -3439,7 +3439,7 @@ std::cerr << "DEFINE_OPCODE(op_del_by_id)" << std::endl;
     }
     DEFINE_OPCODE(op_get_by_pname) {
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_pname)" << std::endl;
 #endif
 
@@ -3474,7 +3474,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_pname)" << std::endl;
     }
     DEFINE_OPCODE(op_get_arguments_length) {
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_arguments_length)" << std::endl;
 #endif
 
@@ -3497,7 +3497,7 @@ std::cerr << "DEFINE_OPCODE(op_get_arguments_length)" << std::endl;
     }
     DEFINE_OPCODE(op_get_argument_by_val) {
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_argument_by_val)" << std::endl;
 #endif
 
@@ -3533,7 +3533,7 @@ std::cerr << "DEFINE_OPCODE(op_get_argument_by_val)" << std::endl;
            but numbers are treated more efficiently.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_by_val)" << std::endl;
 #endif
 
@@ -3583,7 +3583,7 @@ std::cerr << "DEFINE_OPCODE(op_get_by_val)" << std::endl;
            the register file.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_by_val)" << std::endl;
 #endif
 
@@ -3636,7 +3636,7 @@ std::cerr << "DEFINE_OPCODE(op_put_by_val)" << std::endl;
            to register dst.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_del_by_val)" << std::endl;
 #endif
 
@@ -3680,7 +3680,7 @@ std::cerr << "DEFINE_OPCODE(op_del_by_val)" << std::endl;
            This opcode is mainly used to initialize array literals.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_by_index)" << std::endl;
 #endif
 
@@ -3704,7 +3704,7 @@ std::cerr << "DEFINE_OPCODE(op_put_by_index)" << std::endl;
            the JS timeout is reached.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_loop)" << std::endl;
 #endif
 
@@ -3724,7 +3724,7 @@ std::cerr << "DEFINE_OPCODE(op_loop)" << std::endl;
            instruction.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jmp)" << std::endl;
 #endif
 
@@ -3747,7 +3747,7 @@ std::cerr << "DEFINE_OPCODE(op_jmp)" << std::endl;
            the JS timeout is reached.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_loop_if_true)" << std::endl;
 #endif
 
@@ -3773,7 +3773,7 @@ std::cerr << "DEFINE_OPCODE(op_loop_if_true)" << std::endl;
            the JS timeout is reached.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_loop_if_false)" << std::endl;
 #endif
 
@@ -3796,7 +3796,7 @@ std::cerr << "DEFINE_OPCODE(op_loop_if_false)" << std::endl;
            only if register cond converts to boolean as true.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jtrue)" << std::endl;
 #endif
 
@@ -3818,7 +3818,7 @@ std::cerr << "DEFINE_OPCODE(op_jtrue)" << std::endl;
            only if register cond converts to boolean as false.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jfalse)" << std::endl;
 #endif
 
@@ -3840,7 +3840,7 @@ std::cerr << "DEFINE_OPCODE(op_jfalse)" << std::endl;
            only if register src is null.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jeq_null)" << std::endl;
 #endif
 
@@ -3864,7 +3864,7 @@ std::cerr << "DEFINE_OPCODE(op_jeq_null)" << std::endl;
            only if register src is not null.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jneq_null)" << std::endl;
 #endif
 
@@ -3888,7 +3888,7 @@ std::cerr << "DEFINE_OPCODE(op_jneq_null)" << std::endl;
            to ptr, using pointer equality.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jneq_ptr)" << std::endl;
 #endif
 
@@ -3916,7 +3916,7 @@ std::cerr << "DEFINE_OPCODE(op_jneq_ptr)" << std::endl;
            the JS timeout is reached.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_loop_if_less)" << std::endl;
 #endif
 
@@ -3949,7 +3949,7 @@ std::cerr << "DEFINE_OPCODE(op_loop_if_less)" << std::endl;
            the JS timeout is reached.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_loop_if_lesseq)" << std::endl;
 #endif
 
@@ -3979,7 +3979,7 @@ std::cerr << "DEFINE_OPCODE(op_loop_if_lesseq)" << std::endl;
            result of the comparison is false.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jnless)" << std::endl;
 #endif
 
@@ -4008,7 +4008,7 @@ std::cerr << "DEFINE_OPCODE(op_jnless)" << std::endl;
            result of the comparison is true.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jless)" << std::endl;
 #endif
 
@@ -4037,7 +4037,7 @@ std::cerr << "DEFINE_OPCODE(op_jless)" << std::endl;
            if and only if theresult of the comparison is false.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jnlesseq)" << std::endl;
 #endif
 
@@ -4066,7 +4066,7 @@ std::cerr << "DEFINE_OPCODE(op_jnlesseq)" << std::endl;
          if and only if the result of the comparison is true.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jlesseq)" << std::endl;
 #endif
 
@@ -4096,7 +4096,7 @@ std::cerr << "DEFINE_OPCODE(op_jlesseq)" << std::endl;
            that value is used as the jump offset, otherwise defaultOffset is used.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_switch_imm)" << std::endl;
 #endif
 
@@ -4126,7 +4126,7 @@ std::cerr << "DEFINE_OPCODE(op_switch_imm)" << std::endl;
            that value is used as the jump offset, otherwise defaultOffset is used.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_switch_char)" << std::endl;
 #endif
 
@@ -4155,7 +4155,7 @@ std::cerr << "DEFINE_OPCODE(op_switch_char)" << std::endl;
            jump offset, otherwise defaultOffset is used.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_switch_string)" << std::endl;
 #endif
 
@@ -4178,7 +4178,7 @@ std::cerr << "DEFINE_OPCODE(op_switch_string)" << std::endl;
            puts the result in register dst.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_new_func)" << std::endl;
 #endif
 
@@ -4202,7 +4202,7 @@ std::cerr << "DEFINE_OPCODE(op_new_func)" << std::endl;
            puts the result in register dst.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_new_func_exp)" << std::endl;
 #endif
 
@@ -4243,7 +4243,7 @@ std::cerr << "DEFINE_OPCODE(op_new_func_exp)" << std::endl;
            opcode). Otherwise, act exactly as the "call" opcode would.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_call_eval)" << std::endl;
 #endif
 
@@ -4286,7 +4286,7 @@ std::cerr << "DEFINE_OPCODE(op_call_eval)" << std::endl;
            dst is where op_ret should store its result.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_call)" << std::endl;
 #endif
 
@@ -4361,7 +4361,7 @@ std::cerr << "DEFINE_OPCODE(op_call)" << std::endl;
     }
     DEFINE_OPCODE(op_load_varargs) {
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_load_varargs)" << std::endl;
 #endif
 
@@ -4456,7 +4456,7 @@ std::cerr << "DEFINE_OPCODE(op_load_varargs)" << std::endl;
          dst is where op_ret should store its result.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_call_varargs)" << std::endl;
 #endif
 
@@ -4540,7 +4540,7 @@ std::cerr << "DEFINE_OPCODE(op_call_varargs)" << std::endl;
            This opcode appears before op_ret in functions that require full scope chains.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_tear_off_activation)" << std::endl;
 #endif
 
@@ -4577,7 +4577,7 @@ std::cerr << "DEFINE_OPCODE(op_tear_off_activation)" << std::endl;
            scope chains, but do use 'arguments'.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_tear_off_arguments)" << std::endl;
 #endif
 
@@ -4602,7 +4602,7 @@ std::cerr << "DEFINE_OPCODE(op_tear_off_arguments)" << std::endl;
            to those of the calling function.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_ret)" << std::endl;
 #endif
 
@@ -4631,7 +4631,7 @@ std::cerr << "DEFINE_OPCODE(op_ret)" << std::endl;
            expected return value register.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_call_put_result)" << std::endl;
 #endif
 
@@ -4652,7 +4652,7 @@ std::cerr << "DEFINE_OPCODE(op_call_put_result)" << std::endl;
            register base to those of the calling function.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_ret_object_or_this)" << std::endl;
 #endif
 
@@ -4686,7 +4686,7 @@ std::cerr << "DEFINE_OPCODE(op_ret_object_or_this)" << std::endl;
            This opcode appears only at the beginning of a code block.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_enter)" << std::endl;
 #endif
 
@@ -4706,7 +4706,7 @@ std::cerr << "DEFINE_OPCODE(op_enter)" << std::endl;
            this creates it and writes it back to dst.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_create_activation)" << std::endl;
 #endif
 
@@ -4727,7 +4727,7 @@ std::cerr << "DEFINE_OPCODE(op_create_activation)" << std::endl;
            Move callee into a register.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_callee)" << std::endl;
 #endif
 
@@ -4747,7 +4747,7 @@ std::cerr << "DEFINE_OPCODE(op_get_callee)" << std::endl;
            block.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_create_this)" << std::endl;
 #endif
 
@@ -4785,7 +4785,7 @@ std::cerr << "DEFINE_OPCODE(op_create_this)" << std::endl;
            block.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_convert_this)" << std::endl;
 #endif
 
@@ -4810,7 +4810,7 @@ std::cerr << "DEFINE_OPCODE(op_convert_this)" << std::endl;
          block.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_convert_this_strict)" << std::endl;
 #endif
 
@@ -4832,7 +4832,7 @@ std::cerr << "DEFINE_OPCODE(op_convert_this_strict)" << std::endl;
            This opcode appears only at the beginning of a code block.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_init_lazy_reg)" << std::endl;
 #endif
 
@@ -4851,7 +4851,7 @@ std::cerr << "DEFINE_OPCODE(op_init_lazy_reg)" << std::endl;
            register, if it has not already been initialised.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_create_arguments)" << std::endl;
 #endif
 
@@ -4882,7 +4882,7 @@ std::cerr << "DEFINE_OPCODE(op_create_arguments)" << std::endl;
            caching of this lookup.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_construct)" << std::endl;
 #endif
 
@@ -4961,7 +4961,7 @@ std::cerr << "DEFINE_OPCODE(op_construct)" << std::endl;
            register src.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_strcat)" << std::endl;
 #endif
 
@@ -4978,7 +4978,7 @@ std::cerr << "DEFINE_OPCODE(op_strcat)" << std::endl;
     }
     DEFINE_OPCODE(op_to_primitive) {
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_to_primitive)" << std::endl;
 #endif
 
@@ -4999,7 +4999,7 @@ std::cerr << "DEFINE_OPCODE(op_to_primitive)" << std::endl;
            are replaced by the result of toObject conversion of the scope.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_push_scope)" << std::endl;
 #endif
 
@@ -5021,7 +5021,7 @@ std::cerr << "DEFINE_OPCODE(op_push_scope)" << std::endl;
            Removes the top item from the current scope chain.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_pop_scope)" << std::endl;
 #endif
 
@@ -5039,7 +5039,7 @@ std::cerr << "DEFINE_OPCODE(op_pop_scope)" << std::endl;
            base is undefined or null, jumps to breakTarget.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_get_pnames)" << std::endl;
 #endif
 
@@ -5078,7 +5078,7 @@ std::cerr << "DEFINE_OPCODE(op_get_pnames)" << std::endl;
            instruction.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_next_pname)" << std::endl;
 #endif
 
@@ -5114,7 +5114,7 @@ std::cerr << "DEFINE_OPCODE(op_next_pname)" << std::endl;
            target.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jmp_scopes)" << std::endl;
 #endif
 
@@ -5142,7 +5142,7 @@ std::cerr << "DEFINE_OPCODE(op_jmp_scopes)" << std::endl;
            in dst for GC.
          */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_push_new_scope)" << std::endl;
 #endif
 
@@ -5163,7 +5163,7 @@ std::cerr << "DEFINE_OPCODE(op_push_new_scope)" << std::endl;
            and usually forms the beginning of an exception handler.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_catch)" << std::endl;
 #endif
 
@@ -5188,7 +5188,7 @@ std::cerr << "DEFINE_OPCODE(op_catch)" << std::endl;
            else the script returns control to the nearest native caller.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_throw)" << std::endl;
 #endif
 
@@ -5213,7 +5213,7 @@ std::cerr << "DEFINE_OPCODE(op_throw)" << std::endl;
            message string. The result is thrown.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_throw_reference_error)" << std::endl;
 #endif
 
@@ -5229,7 +5229,7 @@ std::cerr << "DEFINE_OPCODE(op_throw_reference_error)" << std::endl;
            program. Return control to the calling native code.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_end)" << std::endl;
 #endif
 
@@ -5250,7 +5250,7 @@ std::cerr << "DEFINE_OPCODE(op_end)" << std::endl;
            the register file.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_getter)" << std::endl;
 #endif
 
@@ -5280,7 +5280,7 @@ std::cerr << "DEFINE_OPCODE(op_put_getter)" << std::endl;
            the register file.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_put_setter)" << std::endl;
 #endif
 
@@ -5300,7 +5300,7 @@ std::cerr << "DEFINE_OPCODE(op_put_setter)" << std::endl;
     }
     DEFINE_OPCODE(op_method_check) {
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_method_check)" << std::endl;
 #endif
 
@@ -5315,7 +5315,7 @@ std::cerr << "DEFINE_OPCODE(op_method_check)" << std::endl;
            register and jumps to offset target from the current instruction.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_jsr)" << std::endl;
 #endif
 
@@ -5335,7 +5335,7 @@ std::cerr << "DEFINE_OPCODE(op_jsr)" << std::endl;
          register, not as an immediate.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_sret)" << std::endl;
 #endif
 
@@ -5351,7 +5351,7 @@ std::cerr << "DEFINE_OPCODE(op_sret)" << std::endl;
          is only generated while the debugger is attached.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_debug)" << std::endl;
 #endif
 
@@ -5372,7 +5372,7 @@ std::cerr << "DEFINE_OPCODE(op_debug)" << std::endl;
          is only generated if developer tools are enabled.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_profile_will_call)" << std::endl;
 #endif
 
@@ -5392,7 +5392,7 @@ std::cerr << "DEFINE_OPCODE(op_profile_will_call)" << std::endl;
          is only generated if developer tools are enabled.
         */
 
-#ifdef JSC_TAINTED_I_DEBUG
+#if defined(JSC_TAINTED_I_DEBUG)
 std::cerr << "DEFINE_OPCODE(op_profile_did_call)" << std::endl;
 #endif
 

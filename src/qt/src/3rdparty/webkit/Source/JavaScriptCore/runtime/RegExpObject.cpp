@@ -39,7 +39,7 @@
 #include "UStringConcatenate.h"
 #include <wtf/PassOwnPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedUtils.h"
 #endif
 
@@ -142,7 +142,7 @@ JSValue RegExpObject::test(ExecState* exec)
 
 JSValue RegExpObject::exec(ExecState* exec)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSValue thisValue = exec->argument(0);
 
     unsigned int tainted = TaintedUtils::isTainted(exec, thisValue);
@@ -157,7 +157,7 @@ JSValue RegExpObject::exec(ExecState* exec)
         TaintedTrace* trace = TaintedTrace::getInstance();
         trace->addTaintedTrace(trace_struct);
     }
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "RegExpObject::exec:" << tainted << std::endl;
 #endif
 #endif

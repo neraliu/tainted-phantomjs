@@ -101,7 +101,7 @@
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -121,7 +121,7 @@ ASSERT_CLASS_FITS_IN_CELL(JSDocument);
 #define THUNK_GENERATOR(generator)
 #endif
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 static const HashTableValue JSDocumentTableValues[80] =
 #else
 static const HashTableValue JSDocumentTableValues[78] =
@@ -214,7 +214,7 @@ static const HashTableValue JSDocumentTableValues[78] =
 #if ENABLE(FULLSCREEN_API)
     { "onwebkitfullscreenchange", DontDelete | DontEnum, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentOnwebkitfullscreenchange), (intptr_t)setJSDocumentOnwebkitfullscreenchange THUNK_GENERATOR(0) },
 #endif
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     { "tainted", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentTainted), (intptr_t)0 THUNK_GENERATOR(0) },
     { "taintedTrace", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsDocumentTaintedTrace), (intptr_t)0 THUNK_GENERATOR(0) },
 #endif
@@ -279,7 +279,7 @@ bool JSDocumentConstructor::getOwnPropertyDescriptor(ExecState* exec, const Iden
 #define THUNK_GENERATOR(generator)
 #endif
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 static const HashTableValue JSDocumentPrototypeTableValues[41] =
 #else
 static const HashTableValue JSDocumentPrototypeTableValues[40] =
@@ -324,7 +324,7 @@ static const HashTableValue JSDocumentPrototypeTableValues[40] =
     { "querySelectorAll", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionQuerySelectorAll), (intptr_t)1 THUNK_GENERATOR(0) },
     { "createTouch", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionCreateTouch), (intptr_t)7 THUNK_GENERATOR(0) },
     { "createTouchList", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentPrototypeFunctionCreateTouchList), (intptr_t)0 THUNK_GENERATOR(0) },
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     { "clearTaintedTrace", DontDelete | Function, (intptr_t)static_cast<NativeFunction>(jsDocumentClearTaintedTrace), (intptr_t)0 THUNK_GENERATOR(0) },
 #endif
     { 0, 0, 0, 0 THUNK_GENERATOR(0) }
@@ -438,7 +438,7 @@ JSValue jsDocumentDocumentURI(ExecState* exec, JSValue slotBase, const Identifie
     UNUSED_PARAM(exec);
     Document* imp = static_cast<Document*>(castedThis->impl());
     JSValue result = jsStringOrNull(exec, imp->documentURI());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -493,7 +493,7 @@ JSValue jsDocumentReferrer(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Document* imp = static_cast<Document*>(castedThis->impl());
     JSValue result = jsString(exec, imp->referrer());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -528,7 +528,7 @@ JSValue jsDocumentURL(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     Document* imp = static_cast<Document*>(castedThis->impl());
     JSValue result = jsString(exec, imp->url());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -554,7 +554,7 @@ JSValue jsDocumentCookie(ExecState* exec, JSValue slotBase, const Identifier&)
     Document* imp = static_cast<Document*>(castedThis->impl());
     JSC::JSValue result = jsString(exec, imp->cookie(ec));
     setDOMException(exec, ec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();
     result.setTainted(tainted);
@@ -655,7 +655,7 @@ JSValue jsDocumentLastModified(ExecState* exec, JSValue slotBase, const Identifi
 
 JSValue jsDocumentLocation(ExecState* exec, JSValue slotBase, const Identifier&)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 // implement @ bindings/js/JSLocationCustom.cpp toStringFunction()
 #endif
     JSDocument* castedThis = static_cast<JSDocument*>(asObject(slotBase));
@@ -1433,7 +1433,7 @@ JSValue jsDocumentOnwebkitfullscreenchange(ExecState* exec, JSValue slotBase, co
 
 #endif
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 JSValue jsDocumentTainted(ExecState* exec, JSValue slotBase, const Identifier&)
 {
     JSDocument* castedThis = static_cast<JSDocument*>(asObject(slotBase));
@@ -1528,7 +1528,7 @@ void setJSDocumentCookie(ExecState* exec, JSObject* thisObject, JSValue value)
     ExceptionCode ec = 0;
     imp->setCookie(valueToStringWithNullCheck(exec, value), ec);
     setDOMException(exec, ec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
 	imp->setTainted(tainted);
@@ -1559,7 +1559,7 @@ void setJSDocumentBody(ExecState* exec, JSObject* thisObject, JSValue value)
 
 void setJSDocumentLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     JSDocument* castedThis = static_cast<JSDocument*>(thisObject);
     Document* imp = static_cast<Document*>(castedThis->impl());

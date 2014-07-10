@@ -53,7 +53,7 @@
 #include <wtf/PassOwnPtr.h>
 #include <wtf/PassRefPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include <sstream>
@@ -1107,7 +1107,7 @@ public:
 
     ContentSecurityPolicy* contentSecurityPolicy() { return m_contentSecurityPolicy.get(); }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted() const { return m_tainted; }
     void setTainted(unsigned int tainted) { m_tainted = tainted; }
     const String taintedTrace();
@@ -1414,7 +1414,7 @@ private:
 
     RefPtr<ContentSecurityPolicy> m_contentSecurityPolicy;
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int m_tainted;
 #endif
 };

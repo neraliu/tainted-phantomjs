@@ -66,7 +66,7 @@ ASSERT_CLASS_FITS_IN_CELL(JSElement);
 #define THUNK_GENERATOR(generator)
 #endif
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 static const HashTableValue JSElementTableValues[67] =
 #else
 static const HashTableValue JSElementTableValues[66] =
@@ -147,7 +147,7 @@ static const HashTableValue JSElementTableValues[66] =
 #if ENABLE(FULLSCREEN_API)
     { "onwebkitfullscreenchange", DontDelete | DontEnum, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementOnwebkitfullscreenchange), (intptr_t)setJSElementOnwebkitfullscreenchange THUNK_GENERATOR(0) },
 #endif
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     { "tainted", DontDelete | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementTainted), (intptr_t)0 THUNK_GENERATOR(0) },
 #endif
     { "constructor", DontEnum | ReadOnly, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsElementConstructor), (intptr_t)0 THUNK_GENERATOR(0) },
@@ -1156,7 +1156,7 @@ JSValue jsElementOnwebkitfullscreenchange(ExecState* exec, JSValue slotBase, con
 
 #endif
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 JSValue jsElementTainted(ExecState* exec, JSValue slotBase, const Identifier&)
 {
     JSElement* castedThis = static_cast<JSElement*>(asObject(slotBase));

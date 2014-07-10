@@ -154,7 +154,7 @@ namespace JSC {
             return OBJECT_OFFSETOF(JSCell, m_structure);
         }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
         virtual void setTainted(unsigned int tainted) {} 
         virtual unsigned int isTainted() const { return 0; }
 #endif

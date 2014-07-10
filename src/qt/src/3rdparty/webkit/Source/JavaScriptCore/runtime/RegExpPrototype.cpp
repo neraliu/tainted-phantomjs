@@ -43,7 +43,7 @@
 #include "StringRecursionChecker.h"
 #include "UStringConcatenate.h"
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "JSArray.h"
 #include "ArrayConstructor.h"
 #include "TaintedCounter.h"
@@ -87,7 +87,7 @@ EncodedJSValue JSC_HOST_CALL regExpProtoFuncExec(ExecState* exec)
     JSValue thisValue = exec->hostThisValue();
     if (!thisValue.inherits(&RegExpObject::s_info))
         return throwVMTypeError(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSValue a = asRegExpObject(thisValue)->exec(exec);
     if (a.inherits(&JSArray::s_info)) {
 
@@ -105,7 +105,7 @@ EncodedJSValue JSC_HOST_CALL regExpProtoFuncExec(ExecState* exec)
 	    TaintedTrace* trace = TaintedTrace::getInstance();
 	    trace->addTaintedTrace(trace_struct);
 	}
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "regExpProtoFuncExec:" << tainted << std::endl;
 #endif
 
