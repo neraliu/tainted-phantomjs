@@ -48,7 +48,7 @@ public:
 
     void append(const UChar u)
     {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "JSStringBuilder:append::UChar" << std::endl;
 #endif
         m_okay &= buffer.tryAppend(&u, 1);
@@ -56,7 +56,7 @@ public:
 
     void append(const char* str)
     {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "JSStringBuilder:append::const char*" << std::endl;
 #endif
         append(str, strlen(str));
@@ -64,7 +64,7 @@ public:
 
     void append(const char* str, size_t len)
     {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "JSStringBuilder:append::const char*, size_t" << std::endl;
 #endif
         m_okay &= buffer.tryReserveCapacity(buffer.size() + len);
@@ -76,7 +76,7 @@ public:
 
     void append(const UChar* str, size_t len)
     {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "JSStringBuilder:append::UChar" << std::endl;
 #endif
         m_okay &= buffer.tryAppend(str, len);
@@ -84,7 +84,7 @@ public:
 
     void append(const UString& str)
     {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "JSStringBuilder:append::UString" << std::endl;
 #endif
         m_okay &= buffer.tryAppend(str.characters(), str.length());
@@ -92,7 +92,7 @@ public:
 
     JSValue build(ExecState* exec)
     {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "JSStringBuilder:build" << std::endl;
 #endif
         if (!m_okay)
@@ -111,7 +111,7 @@ protected:
 template<typename StringType1, typename StringType2>
 inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, StringType2 string2)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "jsMakeNontrivialString:2" << std::endl;
 #endif
     PassRefPtr<StringImpl> result = WTF::tryMakeString(string1, string2);
@@ -123,7 +123,7 @@ inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, Stri
 template<typename StringType1, typename StringType2, typename StringType3>
 inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, StringType2 string2, StringType3 string3)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "jsMakeNontrivialString:3" << std::endl;
 #endif
     PassRefPtr<StringImpl> result = WTF::tryMakeString(string1, string2, string3);
@@ -135,7 +135,7 @@ inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, Stri
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4>
 inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "jsMakeNontrivialString:4" << std::endl;
 #endif
     PassRefPtr<StringImpl> result = WTF::tryMakeString(string1, string2, string3, string4);
@@ -147,7 +147,7 @@ inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, Stri
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4, typename StringType5>
 inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4, StringType5 string5)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "jsMakeNontrivialString:5" << std::endl;
 #endif
     PassRefPtr<StringImpl> result = WTF::tryMakeString(string1, string2, string3, string4, string5);
@@ -159,7 +159,7 @@ inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, Stri
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4, typename StringType5, typename StringType6>
 inline JSValue jsMakeNontrivialString(ExecState* exec, StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4, StringType5 string5, StringType6 string6)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "jsMakeNontrivialString:6" << std::endl;
 #endif
     PassRefPtr<StringImpl> result = WTF::tryMakeString(string1, string2, string3, string4, string5, string6);

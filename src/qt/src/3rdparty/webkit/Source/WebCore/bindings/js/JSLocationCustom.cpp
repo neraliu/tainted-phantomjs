@@ -33,7 +33,7 @@
 #include "Location.h"
 #include <runtime/JSFunction.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -285,7 +285,7 @@ JSValue JSLocation::toStringFunction(ExecState* exec)
     if (!frame || !allowsAccessFromFrame(exec, frame))
         return jsUndefined();
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSValue s = jsString(exec, impl()->toString());
     TaintedCounter* counter = TaintedCounter::getInstance();
     unsigned int tainted = counter->getCount();

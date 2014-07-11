@@ -9,7 +9,7 @@ namespace JSC {
 #define THUNK_GENERATOR(generator)
 #endif
 
-// #ifdef JSC_TAINTED
+// #if defined(JSC_TAINTED)
 static const struct HashTableValue stringTableValues[38] = {
 // #else
 // static const struct HashTableValue stringTableValues[36] = {
@@ -49,7 +49,7 @@ static const struct HashTableValue stringTableValues[38] = {
    { "trim", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTrim), (intptr_t)0 THUNK_GENERATOR(0) },
    { "trimLeft", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTrimLeft), (intptr_t)0 THUNK_GENERATOR(0) },
    { "trimRight", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTrimRight), (intptr_t)0 THUNK_GENERATOR(0) },
-// #ifdef JSC_TAINTED
+// #if defined(JSC_TAINTED)
    { "tainted", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncTainted), (intptr_t)1 THUNK_GENERATOR(0) },
    { "isTainted", DontEnum|Function, (intptr_t)static_cast<NativeFunction>(stringProtoFuncIsTainted), (intptr_t)0 THUNK_GENERATOR(0) },
 // #endif

@@ -66,7 +66,7 @@ namespace JSC {
 template<typename StringType1, typename StringType2>
 UString makeUString(StringType1 string1, StringType2 string2)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "UStringConcatenate:makeUString:2" << std::endl;
 #endif
     PassRefPtr<StringImpl> resultImpl = WTF::tryMakeString(string1, string2);
@@ -78,7 +78,7 @@ UString makeUString(StringType1 string1, StringType2 string2)
 template<typename StringType1, typename StringType2, typename StringType3>
 UString makeUString(StringType1 string1, StringType2 string2, StringType3 string3)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "UStringConcatenate:makeUString:3" << std::endl;
 #endif
     PassRefPtr<StringImpl> resultImpl = WTF::tryMakeString(string1, string2, string3);
@@ -90,7 +90,7 @@ UString makeUString(StringType1 string1, StringType2 string2, StringType3 string
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4>
 UString makeUString(StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "UStringConcatenate:makeUString:4" << std::endl;
 #endif
     PassRefPtr<StringImpl> resultImpl = WTF::tryMakeString(string1, string2, string3, string4);
@@ -102,7 +102,7 @@ UString makeUString(StringType1 string1, StringType2 string2, StringType3 string
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4, typename StringType5>
 UString makeUString(StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4, StringType5 string5)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "UStringConcatenate:makeUString:5" << std::endl;
 #endif
     PassRefPtr<StringImpl> resultImpl = WTF::tryMakeString(string1, string2, string3, string4, string5);
@@ -114,7 +114,7 @@ UString makeUString(StringType1 string1, StringType2 string2, StringType3 string
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4, typename StringType5, typename StringType6>
 UString makeUString(StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4, StringType5 string5, StringType6 string6)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "UStringConcatenate:makeUString:6" << std::endl;
 #endif
     PassRefPtr<StringImpl> resultImpl = WTF::tryMakeString(string1, string2, string3, string4, string5, string6);
@@ -126,7 +126,7 @@ UString makeUString(StringType1 string1, StringType2 string2, StringType3 string
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4, typename StringType5, typename StringType6, typename StringType7>
 UString makeUString(StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4, StringType5 string5, StringType6 string6, StringType7 string7)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "UStringConcatenate:makeUString:7" << std::endl;
 #endif
     PassRefPtr<StringImpl> resultImpl = WTF::tryMakeString(string1, string2, string3, string4, string5, string6, string7);
@@ -138,7 +138,7 @@ UString makeUString(StringType1 string1, StringType2 string2, StringType3 string
 template<typename StringType1, typename StringType2, typename StringType3, typename StringType4, typename StringType5, typename StringType6, typename StringType7, typename StringType8>
 UString makeUString(StringType1 string1, StringType2 string2, StringType3 string3, StringType4 string4, StringType5 string5, StringType6 string6, StringType7 string7, StringType8 string8)
 {
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED_DEBUG)
 // std::cerr << "UStringConcatenate:makeUString:8" << std::endl;
 #endif
     PassRefPtr<StringImpl> resultImpl = WTF::tryMakeString(string1, string2, string3, string4, string5, string6, string7, string8);

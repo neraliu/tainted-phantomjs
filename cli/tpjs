@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright (C) 2014 Yahoo! Inc. All Rights Reserved.
 
 # Redistribution and use in source and binary forms, with or without
@@ -26,8 +28,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Author: Nera Liu <neraliu@yahoo-inc.com>
-
-#!/bin/bash
 
 URL=""
 COOKIE_FILE=""
@@ -58,9 +58,9 @@ re='[\/]$'
 if ! [[ $TPJS_HOME =~ $re ]] ; then
 	TPJS_HOME=${TPJS_HOME}/
 fi
-if [ ! -f "${TPJS_HOME}bin/phantomjs" ]; then
+if [ ! -f "${TPJS_HOME}bin/tphantomjs" ]; then
 	usage
-        echo "[ERROR] ${TPJS_HOME}bin/phantomjs not found, please set the environmental variable TPJS_HOME"
+        echo "[ERROR] ${TPJS_HOME}bin/tphantomjs not found, please set the environmental variable TPJS_HOME"
         echo "-------------------"
 	exit 1;
 fi
@@ -161,10 +161,12 @@ if [ -z "${FUZZ}" ]; then
 	FUZZ=0
 fi
 if [ -z "${SCRIPT}" ]; then
-	SCRIPT="${TPJS_HOME}share/phantomjs/domxss.js"
+	SCRIPT="${TPJS_HOME}share/tpjs/domxss.js"
 fi
 if [ -z "${VERBOSE}" ]; then
 	VERBOSE="default"
 fi
 
-${TPJS_HOME}bin/phantomjs $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE
+${TPJS_HOME}bin/tphantomjs $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE
+
+exit

@@ -351,7 +351,7 @@ public:
     virtual bool childShouldCreateRenderer(Node*) const; 
 #endif
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted() const { return m_tainted; }
     void setTainted(unsigned int tainted) { m_tainted = tainted; }
 #endif
@@ -370,7 +370,7 @@ public:
 
 protected:
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int m_tainted;
 #endif
 
@@ -378,7 +378,7 @@ protected:
         : ContainerNode(document, type)
         , m_tagName(tagName)
     {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     m_tainted = 0;
 #endif
     }

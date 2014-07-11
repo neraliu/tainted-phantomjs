@@ -237,7 +237,7 @@ namespace JSC {
         JSCell* asCell() const;
         bool isValidCallee();
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 	void setTainted(unsigned int tainted);
         unsigned int isTainted() const;
 #endif

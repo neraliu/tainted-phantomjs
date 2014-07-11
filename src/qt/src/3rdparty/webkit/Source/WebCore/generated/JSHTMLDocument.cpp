@@ -41,7 +41,7 @@
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -456,7 +456,7 @@ EncodedJSValue JSC_HOST_CALL jsHTMLDocumentPrototypeFunctionWrite(ExecState* exe
     if (!thisValue.inherits(&JSHTMLDocument::s_info))
         return throwVMTypeError(exec);
     JSHTMLDocument* castedThis = static_cast<JSHTMLDocument*>(asObject(thisValue));
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 /*
 if we comment out the following code segement and move the detection to bindings/js/JSHTMLDocumentCustom.cpp
 one of the test case like below cannot be detected anymore. need to investigate the reason behind.
@@ -506,7 +506,7 @@ EncodedJSValue JSC_HOST_CALL jsHTMLDocumentPrototypeFunctionWriteln(ExecState* e
     if (!thisValue.inherits(&JSHTMLDocument::s_info))
         return throwVMTypeError(exec);
     JSHTMLDocument* castedThis = static_cast<JSHTMLDocument*>(asObject(thisValue));
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     JSValue s = exec->argument(0);
     if (s.isString() && s.isTainted() > 0) {
         HTMLDocument* d1 = static_cast<HTMLDocument*>(castedThis->impl());

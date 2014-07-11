@@ -50,7 +50,7 @@
 #include <runtime/JSCell.h>
 #include <wtf/unicode/CharacterNames.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -151,7 +151,7 @@ static inline void documentWrite(ExecState* exec, HTMLDocument* document, Newlin
     size_t size = exec->argumentCount();
 
     UString firstString = exec->argument(0).toString(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     unsigned int tainted = 0;
     if (firstString.isTainted()) {
 	TaintedStructure trace_struct;
@@ -173,7 +173,7 @@ static inline void documentWrite(ExecState* exec, HTMLDocument* document, Newlin
         else {
             for (size_t i = 1; i < size; ++i) {
                 UString subsequentString = exec->argument(i).toString(exec);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 	        unsigned int c_tainted = 0;
     		if (subsequentString.isTainted()) {
 		    c_tainted = subsequentString.isTainted();
@@ -201,7 +201,7 @@ static inline void documentWrite(ExecState* exec, HTMLDocument* document, Newlin
 
     Document* activeDocument = asJSDOMWindow(exec->lexicalGlobalObject())->impl()->document();
     document->write(segmentedString, activeDocument);
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     if (tainted) {
 	activeDocument->setTainted(tainted);
     }

@@ -118,8 +118,8 @@ RegExpConstructor::RegExpConstructor(ExecState* exec, JSGlobalObject* globalObje
 RegExpMatchesArray::RegExpMatchesArray(ExecState* exec, RegExpConstructorPrivate* data)
     : JSArray(exec->globalData(), exec->lexicalGlobalObject()->regExpMatchesArrayStructure(), data->lastNumSubPatterns + 1, CreateInitialized)
 {
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED)
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "RegExpMatchesArray::RegExpMatchesArray" << std::endl;
 #endif
 #endif
@@ -165,8 +165,8 @@ void RegExpMatchesArray::fillArrayInstance(ExecState* exec)
 
 JSObject* RegExpConstructor::arrayOfMatches(ExecState* exec) const
 {
-#ifdef JSC_TAINTED
-#ifdef JSC_TAINTED_DEBUG
+#if defined(JSC_TAINTED)
+#if defined(JSC_TAINTED_DEBUG)
 std::cerr << "RegExpConstructor::arrayOfMatches" << std::endl;
 #endif
 #endif

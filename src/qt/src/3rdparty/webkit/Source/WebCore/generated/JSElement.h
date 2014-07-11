@@ -234,7 +234,7 @@ JSC::JSValue jsElementOntouchcancel(JSC::ExecState*, JSC::JSValue, const JSC::Id
 void setJSElementOntouchcancel(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
 JSC::JSValue jsElementOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 void setJSElementOnwebkitfullscreenchange(JSC::ExecState*, JSC::JSObject*, JSC::JSValue);
-// #ifdef JSC_TAINTED
+// #if defined(JSC_TAINTED)
 JSC::JSValue jsElementTainted(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);
 // #endif
 JSC::JSValue jsElementConstructor(JSC::ExecState*, JSC::JSValue, const JSC::Identifier&);

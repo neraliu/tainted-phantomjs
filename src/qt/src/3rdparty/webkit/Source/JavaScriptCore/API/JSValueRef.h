@@ -300,7 +300,7 @@ JS_EXPORT void JSValueProtect(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT void JSValueUnprotect(JSContextRef ctx, JSValueRef value);
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 /*!
 @function
 @abstract       Tests whether a JavaScript value's type is tainted?

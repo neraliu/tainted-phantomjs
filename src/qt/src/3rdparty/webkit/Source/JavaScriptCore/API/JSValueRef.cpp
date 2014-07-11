@@ -339,7 +339,7 @@ void JSValueUnprotect(JSContextRef ctx, JSValueRef value)
     gcUnprotect(jsValue);
 }
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 int JSValueIsTainted(JSContextRef ctx, JSValueRef value) 
 {
     ExecState* exec = toJS(ctx);

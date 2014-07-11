@@ -404,7 +404,7 @@
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
 
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 #include "TaintedCounter.h"
 #include "TaintedTrace.h"
 #include "TaintedUtils.h"
@@ -1203,7 +1203,7 @@ JSValue jsDOMWindowCrypto(ExecState* exec, JSValue slotBase, const Identifier&)
 
 JSValue jsDOMWindowLocation(ExecState* exec, JSValue slotBase, const Identifier&)
 {
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
 // when the JSLocation is converting toString, it will taint the string.
 #endif
     JSDOMWindow* castedThis = static_cast<JSDOMWindow*>(asObject(slotBase));
@@ -1414,7 +1414,7 @@ JSValue jsDOMWindowName(ExecState* exec, JSValue slotBase, const Identifier&)
     UNUSED_PARAM(exec);
     DOMWindow* imp = static_cast<DOMWindow*>(castedThis->impl());
     JSValue result = jsString(exec, imp->name());
-#ifdef JSC_TAINTED
+#if defined(JSC_TAINTED)
     /* this implemenation has some problems, we should use the window object not document */
     Document* d = imp->document();
     if (d->tainted()) {
@@ -6044,23 +6044,7 @@ void setJSDOMWindowClientInformation(ExecState* exec, JSObject* thisObject, JSVa
 
 void setJSDOMWindowLocation(ExecState* exec, JSObject* thisObject, JSValue value)
 {
-#ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
         JSDOMWindow* castedThis = static_cast<JSDOMWindow*>(thisObject);
@@ -6205,23 +6189,7 @@ void setJSDOMWindowName(ExecState* exec, JSObject* thisObject, JSValue value)
         return;
     JSDOMWindow* castedThis = static_cast<JSDOMWindow*>(thisObject);
     DOMWindow* imp = static_cast<DOMWindow*>(castedThis->impl());
-#ifdef JSC_TAINTED
-    /*
-    unsigned int tainted = 0;
-    if (value.isString() && value.isTainted()) {
-	tainted = value.isTainted();
-    }
-    if (value.inherits(&StringObject::s_info) && asStringObject(value)->isTainted()) {
-	tainted = asStringObject(value)->isTainted();
-    }
-    if (value.isObject()) {
-        UString s = value.toString(exec);
-        if (s.isTainted()) {
-		tainted = s.isTainted();
-	}
-    }
-    */
-
+#if defined(JSC_TAINTED)
     unsigned int tainted = TaintedUtils::isTainted(exec, value);
     if (tainted) {
     	Document* d = imp->document();

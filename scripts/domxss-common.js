@@ -78,7 +78,7 @@ console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookie
 if (verbose == "default") { verbose = 0; // TPJS, TRACE, ERROR, WARNING
 } else if (verbose == "info") { verbose = 1; // INFO
 } else if (verbose == "debug") { verbose = 2; // DEBUG
-} else if (verbose == "json") { verbose = -1; } // GRYFFIN
+} else if (verbose == "json") { verbose = -1; } // JSON
 
 if (verbose >= 0) {
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs....");
@@ -98,12 +98,14 @@ if (verbose >= 0) {
 	json_result['tpjs']['fuzz'] = fuzz;
 	json_result['tpjs']['renderpath'] = renderpath;
 	var j = JSON.stringify(json_result);
-	fs.write("/dev/stdout", "{"+j.substr(1).substr(0, j.length-2)+",", "w");
+	fs.write("/dev/stdout", "{", "w"); // open global json {
+	fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
+	fs.write("/dev/stdout", ",", "w");
 }
 
 /* we can create one instance of page for testing all the patterns */
 var page = require('webpage').create();
-function test_domxss(uri, timeout, tindex, callback, verbose) {
+function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 
 	var tainted = false;
 	var onalert = false;
@@ -122,30 +124,41 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 			console.log("["+t.toUTCString()+"]" + " [INFO] --------------------");
 			console.log("["+t.toUTCString()+"]" + " [INFO] Exiting PhantomsJS...");
 		} else if (verbose == -1) {
-			fs.write("/dev/stdout", "}}", "w");
+			fs.write("/dev/stdout", "}", "w"); // close test's json {
+			fs.write("/dev/stdout", "}", "w"); // close global json {
 		}
 		phantom.exit(false);
 	} else {
 		if (verbose >= 0) {
                 	console.log("["+t.toUTCString()+"]" + " [TPJS] --------------------");
-			console.log("["+t.toUTCString()+"]" + " [TPJS] TEST #" + test_cases[tindex] + ": domxss-db.js(" + domxss_patterns[test_cases[tindex]] + ")");
+			console.log("["+t.toUTCString()+"]" + " [TPJS] TEST #" + tindex + ":" + test_cases[tindex] + ": domxss-db.js(" + domxss_patterns[test_cases[tindex]] + ")");
 		} else if (verbose == -1) {
 			if (test_cases[tindex] != DOMXSS_ONLOAD) {
-				fs.write("/dev/stdout", "},", "w");
+				fs.write("/dev/stdout", "},", "w"); // close test's json {
 			}
-			fs.write("/dev/stdout", "\"test"+tindex+"\":{", "w");
+			fs.write("/dev/stdout", "\"test"+tindex+"\":{", "w"); // open test's json {
 			fs.write("/dev/stdout", "\"testid\":"+test_cases[tindex]+",", "w");
 		}
 
-		if (test_cases[tindex] == DOMXSS_ONLOAD) {
-		} else if (test_cases[tindex] >= DOMXSS_QS_PATTERN_001 && test_cases[tindex] <= DOMXSS_QS_PATTERN_END) {
-			no_of_query_string_params = 0;
-                	for (k in uri.queryKey) {
-				no_of_query_string_params++;
-                        	l = l + k + "=" + encodeURIComponent(domxss_patterns[test_cases[tindex]]) + "&";
-                	}
-		} else if (test_cases[tindex] >= DOMXSS_HASH_PATTERN_001 && test_cases[tindex] <= DOMXSS_HASH_PATTERN_END) {
-			l = l + "#"+encodeURIComponent(domxss_patterns[test_cases[tindex]]);
+     		while (1) {
+			if (test_cases[tindex] == DOMXSS_ONLOAD) {
+				l = url;
+				break;
+			} else if (test_cases[tindex] >= DOMXSS_QS_PATTERN_001 && test_cases[tindex] <= DOMXSS_QS_PATTERN_END) {
+				no_of_query_string_params = 0;
+				for (k in uri.queryKey) {
+					no_of_query_string_params++;
+					l = l + k + "=" + encodeURIComponent(domxss_patterns[test_cases[tindex]]) + "&";
+                		}
+     				if (no_of_query_string_params > 0) {
+					break;
+				} else {
+					tindex++; continue;
+				}
+			} else if (test_cases[tindex] >= DOMXSS_HASH_PATTERN_001 && test_cases[tindex] <= DOMXSS_HASH_PATTERN_END) {
+				l = l + "#"+encodeURIComponent(domxss_patterns[test_cases[tindex]]);
+				break;
+			}
 		}
 
 		if (verbose >= 0) {
@@ -154,17 +167,16 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 			fs.write("/dev/stdout", "\"url\":\""+l.replace(/'/g, '%27')+"\",", "w");
 		}
 
-     		if (no_of_query_string_params == -1 || no_of_query_string_params > 0) {
-                	page.open(l, function (status) {
-                        	if (status !== 'success') {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
-					else if (verbose == -1) { fs.write("/dev/stdout", "\"status\":\"fail\"}}", "w"); }
-					phantom.exit(false);
-                        	}
-	                });
-		} else {
-			callback(uri, timeout, tindex+1, callback, verbose);
-		}
+		page.open(l, function (status) {
+               		if (status !== 'success') {
+				if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
+				else if (verbose == -1) { 
+					fs.write("/dev/stdout", "\"status\":\"fail\"}", "w");  // close test's json {
+					fs.write("/dev/stdout", "}", "w"); // close global's json {
+				}
+				phantom.exit(false);
+			}
+		});
 	}
 
 	/*
@@ -196,7 +208,6 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 	};
 
 	page.onInitialized = function() {
-		// page.evaluate(function() {
 		evaluate(page, function(verbose) {
 			document.addEventListener('DOMContentLoaded', function() {
 				// console.log("DOM content has loaded.");
@@ -221,14 +232,9 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 
 			waitFor(function(verbose) {
 				return tpjs.wait(page, verbose);
-				/*
-				return page.evaluate(function() {
-					return false; 
-				});
-				*/
 			}, function(verbose) {
-				// tainted = page.evaluate(function() {
-				tainted = evaluate(page, function(verbose) {
+				var tainted = false;
+				evaluate(page, function(verbose) {
 					var t = new Date();
 					var tainted = false;
 
@@ -311,14 +317,26 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 							else if (verbose == -1) { json_result['tpjs-trace'][gindex] = s.action+","+s.taintedno+","+s.internalfunc+","+s.jsfunc; ++gindex;}
 						}
 					}
+
 					if (verbose == -1) { 
+						var fs = require('fs');
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2)+",", "w");
 					}
                                         document.clearTaintedTrace();
-					return tainted;
-				// });
 				}, verbose);
+
+				tainted = page.evaluate(function() {
+					var tainted = false;
+					if (document.tainted) tainted = true;
+					var allobj = $("*");
+					for(var i=0;i<allobj.length;++i) {
+						if (allobj[i].tainted) {
+                                                        tainted = true;
+                                                }
+                                        }
+					return tainted;
+				});
 
 				var json_result = {};
 				json_result['result'] = {};
@@ -338,31 +356,45 @@ function test_domxss(uri, timeout, tindex, callback, verbose) {
 					json_result['result']['onalert'] = onalert;
 				}
 				if (onalert && tainted) {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true"); }
-					else if (verbose == -1) { 
+					var explain = "This page " + l + " is vulnerable to DOMXSS. The untrusted input can be injected into the DOM of the page and trigger javascript execution. (Please note that some broswers may not be vulnerable as it has builtin XSS defense, for example Chrome has its own XSS filter and FF has autoescape on location.href. Please try all supported grade A browsers Chrome/FF/IE/Safari).";
+					if (verbose >= 0) { 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true");
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
+					} else if (verbose == -1) { 
 						json_result['result']['domxss.vulnerable'] = true; 
+						json_result['result']['domxss.msg'] = explain;
 						var j = JSON.stringify(json_result);
-						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
-						fs.write("/dev/stdout", "}", "w");
+						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-1), "w");
+						fs.write("/dev/stdout", "}", "w"); // close test's json {
+						fs.write("/dev/stdout", "}", "w"); // close global json {
 					}
-					phantom.exit(true);
+					phantom.exit(false);
 				} else if (!onalert && tainted) {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true|false"); }
-					else if (verbose == -1) { 
+					var explain = "This page " + l + " is reported as 'tainted'. It means that untrusted input can progagate from the source to sink of the DOM, however the current known attack vector in our database cannot trigger javascript execution, we cannot confirm whether it is DOMXSS vulnerable or not of your page";
+					if (verbose >= 0) { 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? true|false");
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
+					} else if (verbose == -1) { 
 						json_result['result']['domxss.vulnerable'] = false;
+						json_result['result']['domxss.msg'] = explain;
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
+					callback(url, uri, timeout, tindex+1, callback, verbose);
 				} else {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? false"); }
-					else if (verbose == -1) { 
+					var explain = l + " is not DOMXSS vulnerable.";
+					if (verbose >= 0) { 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.domxss.vulnerable? false"); 
+						console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] " + explain);
+					} else if (verbose == -1) { 
 						json_result['result']['domxss.vulnerable'] = false; 
+						json_result['result']['domxss.msg'] = explain;
 						var j = JSON.stringify(json_result);
 						fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
 					}
+					callback(url, uri, timeout, tindex+1, callback, verbose);
 				}
 
-				callback(uri, timeout, tindex+1, callback, verbose);
 			}, timeout, verbose);
 		}
 	};
