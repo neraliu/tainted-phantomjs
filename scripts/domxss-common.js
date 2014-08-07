@@ -45,12 +45,16 @@ var timeout = 1000;
 var fuzz = 0;
 var url = "";
 var renderpath = "./";
+var headers = ""
+var method = "GET"
+var postdata = ""
 
 var tpjs = new TPJS.TPJSObject();
 
+/* WISH LIST: Need to refactor this part later */
 if (system.args.length < 2) {
-console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookies file in mozilla format] [timeout in msec] [fuzz:1|0] [rendering path] [verbose:default|info|debug|json]");
-	phantom.exit(false);
+console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookies file in mozilla format] [timeout in msec] [fuzz:1|0] [rendering path] [verbose:default|info|debug|json] [headers] [method] [postdata]");
+	phantom.exit(1);
 } else {
 	url = system.args[1];
 	if (system.args.length == 3) {
@@ -73,6 +77,30 @@ console.log("["+t.toUTCString()+"]" + " [WARNING] Usage: domxss.js [url] [cookie
 		fuzz = system.args[4];
 		renderpath = system.args[5];
 		verbose = system.args[6];
+	} else if (system.args.length == 8) {
+		cookiesfile = system.args[2];
+		timeout = system.args[3];
+		fuzz = system.args[4];
+		renderpath = system.args[5];
+		verbose = system.args[6];
+		headers = system.args[7];
+	} else if (system.args.length == 9) {
+		cookiesfile = system.args[2];
+		timeout = system.args[3];
+		fuzz = system.args[4];
+		renderpath = system.args[5];
+		verbose = system.args[6];
+		headers = system.args[7];
+		method = system.args[8];
+	} else if (system.args.length == 10) {
+		cookiesfile = system.args[2];
+		timeout = system.args[3];
+		fuzz = system.args[4];
+		renderpath = system.args[5];
+		verbose = system.args[6];
+		headers = system.args[7];
+		method = system.args[8];
+		postdata = system.args[9];
 	}
 }
 if (verbose == "default") { verbose = 0; // TPJS, TRACE, ERROR, WARNING
@@ -88,6 +116,9 @@ if (verbose >= 0) {
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with timeout: " + timeout);
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with fuzz: " + fuzz);
 	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with rendering Path: " + renderpath);
+	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with headers: " + headers);
+	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with method: " + method);
+	console.log("["+t.toUTCString()+"]" + " [TPJS] Running Tainted Phantomjs with postdata: " + postdata);
 } else if (verbose == -1) {
 	var json_result = {}; 
 	json_result['tpjs'] = {};
@@ -97,6 +128,9 @@ if (verbose >= 0) {
 	json_result['tpjs']['timeout'] = timeout;
 	json_result['tpjs']['fuzz'] = fuzz;
 	json_result['tpjs']['renderpath'] = renderpath;
+	json_result['tpjs']['headers'] = headers;
+	json_result['tpjs']['method'] = method;
+	json_result['tpjs']['postdata'] = postdata;
 	var j = JSON.stringify(json_result);
 	fs.write("/dev/stdout", "{", "w"); // open global json {
 	fs.write("/dev/stdout", j.substr(1).substr(0, j.length-2), "w");
@@ -105,6 +139,7 @@ if (verbose >= 0) {
 
 /* we can create one instance of page for testing all the patterns */
 var page = require('webpage').create();
+page.settings.loadImages = false;
 function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 
 	var tainted = false;
@@ -119,6 +154,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 	} else {
 		l = uri.protocol+"://"+uri.host+uri.path+"?"+ts+"&";
 	}
+
 	if (test_cases[tindex] == DOMXSS_END) {
 		if (verbose >= 1) {
 			console.log("["+t.toUTCString()+"]" + " [INFO] --------------------");
@@ -127,7 +163,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 			fs.write("/dev/stdout", "}", "w"); // close test's json {
 			fs.write("/dev/stdout", "}", "w"); // close global json {
 		}
-		phantom.exit(false);
+		phantom.exit(0);
 	} else {
 		if (verbose >= 0) {
                 	console.log("["+t.toUTCString()+"]" + " [TPJS] --------------------");
@@ -167,16 +203,46 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 			fs.write("/dev/stdout", "\"url\":\""+l.replace(/'/g, '%27')+"\",", "w");
 		}
 
-		page.open(l, function (status) {
-               		if (status !== 'success') {
-				if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
-				else if (verbose == -1) { 
-					fs.write("/dev/stdout", "\"status\":\"fail\"}", "w");  // close test's json {
-					fs.write("/dev/stdout", "}", "w"); // close global's json {
+		var hobj = {};
+		var h = headers.split('\n');
+		for (i=0;i<h.length;i++) { 
+			var kv = h[i].split(':');
+			hobj[kv[0]] = kv[1];
+			// if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [HEADERS] " + kv[0] + ":" + kv[1]) }
+		}
+		page.customHeaders = hobj;
+
+		var retry = 1;
+		if (method == 'GET') {
+			page.open(l, function (status) {
+       	        		if (status !== 'success') {
+					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
+					else if (verbose == -1) { 
+						fs.write("/dev/stdout", "\"status\":\"fail\"}", "w");  // close test's json {
+						fs.write("/dev/stdout", "}", "w"); // close global's json {
+					}
+					phantom.exit(2);
 				}
-				phantom.exit(false);
+			});
+		} else if (method == 'POST') {
+			var postbody = {};
+			var p = postdata.split('&');
+			for (i=0;i<p.length;i++) { 
+				var kv = p[i].split('=');
+				postbody[kv[0]] = kv[1];
+				// if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [TPJS] [POSTDATA] " + kv[0] + ":" + kv[1]) }
 			}
-		});
+			page.open(l, 'POST', postbody, function (status) {
+       	        		if (status !== 'success') {
+					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
+					else if (verbose == -1) { 
+						fs.write("/dev/stdout", "\"status\":\"fail\"}", "w");  // close test's json {
+						fs.write("/dev/stdout", "}", "w"); // close global's json {
+					}
+					phantom.exit(2);
+				}
+			});
+		}
 	}
 
 	/*
@@ -346,7 +412,8 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 					});
 					console.log("["+t.toUTCString()+"]" + " [DEBUG] " + body);
 				}
-				page.render(renderpath + 'screenshot.png');
+				// 
+				// page.render(renderpath + 'screenshot.png');
 
 				if (verbose >= 0) {
 					console.log("["+t.toUTCString()+"]" + " [TPJS] [RESULT] document.tainted? " + tainted);
@@ -368,7 +435,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 						fs.write("/dev/stdout", "}", "w"); // close test's json {
 						fs.write("/dev/stdout", "}", "w"); // close global json {
 					}
-					phantom.exit(false);
+					phantom.exit(0);
 				} else if (!onalert && tainted) {
 					var explain = "This page " + l + " is reported as 'tainted'. It means that untrusted input can progagate from the source to sink of the DOM, however the current known attack vector in our database cannot trigger javascript execution, we cannot confirm whether it is DOMXSS vulnerable or not of your page";
 					if (verbose >= 0) { 
@@ -413,7 +480,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 		++no_of_navigation;
 		if (no_of_navigation >= 10) {
 			if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] navigate too much"); }
-			phantom.exit();
+			phantom.exit(3);
 		}
 		if (verbose >= 1) {
 			console.log("["+t.toUTCString()+"]" + " [INFO] Trying to navigate to: " + url);

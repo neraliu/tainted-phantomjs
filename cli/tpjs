@@ -36,6 +36,11 @@ RENDERING_PATH=""
 FUZZ=""
 SCRIPT=""
 VERBOSE=""
+HEADER=""
+HEADERS=()
+hcount=1
+METHOD=""
+DATA=""
 
 usage() { 
 	echo "-------------------"
@@ -46,6 +51,9 @@ usage() {
 	echo "	-z 	fuzz the sources (0 for disable or 1 for enable)"
 	echo "	-s 	set the scanning script file"
 	echo "	-d 	enable the level of message [default|info|debug|json]"
+	echo "	-H 	<line> custom header to pass to server"
+	echo "	-X 	HTTP methods [GET|POST]"
+	echo "	-D 	HTTP POST data (in param1=value1&param2=value2 format)"
 	echo "-------------------"
 	echo ""
 }
@@ -82,7 +90,7 @@ if [ -z "${URL}" ]; then
 	exit 1;
 fi
 
-while getopts ":c:t:p:z:s:d:" o; do
+while getopts ":c:t:p:z:s:d:H:X:D:" o; do
 	case "${o}" in
 		c)
 			COOKIE_FILE=${OPTARG}
@@ -140,6 +148,16 @@ while getopts ":c:t:p:z:s:d:" o; do
 				exit 1;
 			fi
 			;;
+		H)
+			HEADERS[hcount]=${OPTARG}
+			let hcount=$hcount+1
+			;;
+		X)
+			METHOD=${OPTARG}
+			;;
+		D)
+			DATA=${OPTARG}
+			;;
 		*)
 			usage
 			exit 1;
@@ -166,7 +184,22 @@ fi
 if [ -z "${VERBOSE}" ]; then
 	VERBOSE="default"
 fi
+if [ -z "${METHOD}" ]; then
+	METHOD="GET"
+fi
+for i in "${HEADERS[@]}"
+do
+	if [ -z "${HEADER}" ]; then
+		HEADER=${i}
+	else
+		HEADER=${HEADER}$'\n'${i}
+	fi
+done
 
-${TPJS_HOME}bin/tphantomjs $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE
+${TPJS_HOME}bin/tphantomjs --disk-cache=false $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE "${HEADER}" ${METHOD} "${DATA}"
+rc=$?
+if [[ $rc != 0 ]] ; then
+	exit $rc
+fi
 
-exit
+exit 0

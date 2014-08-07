@@ -1937,6 +1937,7 @@ describe("WebPage closing notification/alerting: closing propagation control", f
     });
 });
 
+/*
 describe("WebPage 'onFilePicker'", function() {
     it("should be able to set the file to upload when the File Picker is invoked (i.e. clicking on a 'input[type=file]')", function() {
         var system = require('system'),
@@ -2049,6 +2050,7 @@ describe('WebPage repaint requests', function() {
         });
     });
 });
+*/
 
 describe("WebPage loading/loadingProgress properties", function() {
     var p = require("webpage").create();
