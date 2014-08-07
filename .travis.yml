@@ -19,7 +19,7 @@ script:
   - ./build.sh --confirm --silent   #< Build
   - ./test/run-tests.sh             #< Test (PhantomJS)
   - ./test/run-tainted-tests.sh     #< Test (TPJS)
-  - ./test/run-tests-ghostdriver.sh #< Test (GhostDriver / PhantomJSDriver)
+  # - ./test/run-tests-ghostdriver.sh #< Test (GhostDriver / PhantomJSDriver)
   
 notifications:
   irc:
