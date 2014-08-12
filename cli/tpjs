@@ -196,7 +196,7 @@ do
 	fi
 done
 
-${TPJS_HOME}bin/tphantomjs --disk-cache=false $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE "${HEADER}" ${METHOD} "${DATA}"
+${TPJS_HOME}bin/tphantomjs --disk-cache=true $SCRIPT "${URL}" $COOKIE_FILE $TIMEOUT $FUZZ $RENDERING_PATH $VERBOSE "${HEADER}" ${METHOD} "${DATA}"
 rc=$?
 if [[ $rc != 0 ]] ; then
 	exit $rc

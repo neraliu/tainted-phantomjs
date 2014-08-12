@@ -122,6 +122,7 @@ if (verbose >= 0) {
 } else if (verbose == -1) {
 	var json_result = {}; 
 	json_result['tpjs'] = {};
+	json_result['tpjs']['version'] = "version 2014-08-12";
 	json_result['tpjs']['url'] = url;
 	json_result['tpjs']['cookiesfile'] = cookiesfile;
 	json_result['tpjs']['verbose'] = verbose;
@@ -216,7 +217,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 		if (method == 'GET') {
 			page.open(l, function (status) {
        	        		if (status !== 'success') {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
+					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Fail to load the page"); }
 					else if (verbose == -1) { 
 						fs.write("/dev/stdout", "\"status\":\"2\"}", "w");  // close test's json {
 						fs.write("/dev/stdout", "}", "w"); // close global's json {
@@ -234,12 +235,12 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 			}
 			page.open(l, 'POST', postbody, function (status) {
        	        		if (status !== 'success') {
-					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
+					if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Fail to load the page"); }
 					else if (verbose == -1) { 
-						fs.write("/dev/stdout", "\"status\":\"2\"}", "w");  // close test's json {
+						fs.write("/dev/stdout", "\"status\":\"3\"}", "w");  // close test's json {
 						fs.write("/dev/stdout", "}", "w"); // close global's json {
 					}
-					phantom.exit(2);
+					phantom.exit(3);
 				}
 			});
 		}
@@ -261,15 +262,17 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 	};
 
 	page.onError = function(msg, trace) {
-		if (verbose >= 2) {
-			var msgStack = ['ERROR: ' + msg];
-			if (trace) {
-				msgStack.push('TRACE:');
-				trace.forEach(function(t) {
-					msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function + '")' : ''));
-				});
-			}
+		var msgStack = ['ERROR: ' + msg];
+		if (trace) {
+			msgStack.push('TRACE:');
+			trace.forEach(function(t) {
+				msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function + '")' : ''));
+			});
+		}
+		if (verbose >= 0) {
 			console.error(msgStack.join('\n'));
+		} else if (verbose == -1) {
+			fs.write("/dev/stdout", "\"onerror\":\""+msgStack.join(':')+"\",", "w");
 		}
 	};
 
@@ -283,12 +286,12 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 
 	page.onLoadFinished = function(status) {
 		if (status !== 'success') {
-			if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to access network"); }
+			if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] Fail to load the page"); }
 			else if (verbose == -1) { 
-				fs.write("/dev/stdout", "\"status\":\"2\"}", "w");  // close test's json {
+				fs.write("/dev/stdout", "\"status\":\"4\"}", "w");  // close test's json {
 				fs.write("/dev/stdout", "}", "w"); // close global's json {
 			}
-			phantom.exit(2);
+			phantom.exit(4);
 		} else {
 			page.injectJs('jquery-1.9.1.min.js');
 			page.injectJs('x2js-v1.0.11/xml2json.js');
@@ -411,7 +414,7 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 
 				var json_result = {};
 				json_result['result'] = {};
-				if (verbose >= 2) {
+				if (verbose >= 0) {
 					var body = page.evaluate(function () {
 						return document.body.innerHTML;
 					});
@@ -485,10 +488,10 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 		if (no_of_navigation >= 10) {
 			if (verbose >= 0) { console.log("["+t.toUTCString()+"]" + " [ERROR] navigate too much"); }
 			else if (verbose == -1) { 
-				fs.write("/dev/stdout", "\"status\":\"3\"}", "w"); // close test's json {
+				fs.write("/dev/stdout", "\"status\":\"5\"}", "w"); // close test's json {
 				fs.write("/dev/stdout", "}", "w"); // close global's json {
 			}
-			phantom.exit(3);
+			phantom.exit(5);
 		}
 		if (verbose >= 1) {
 			console.log("["+t.toUTCString()+"]" + " [INFO] Trying to navigate to: " + url);
@@ -532,9 +535,11 @@ function test_domxss(url, uri, timeout, tindex, callback, verbose) {
 	};
 
 	page.onResourceError = function(resourceError) {
-		if (verbose >= 2) {
-			console.log("["+t.toUTCString()+"]" + " [DEBUG] Unable to load resource (#" + resourceError.id + "URL:" + resourceError.url + ")");
-			console.log("["+t.toUTCString()+"]" + " [DEBUG] Error code: " + resourceError.errorCode + ". Description: " + resourceError.errorString);
+		if (verbose >= 0) {
+			console.log("["+t.toUTCString()+"]" + " [ERROR] Unable to load resource (#" + resourceError.id + "URL:" + resourceError.url + ")");
+			console.log("["+t.toUTCString()+"]" + " [ERROR] Error code: " + resourceError.errorCode + ". Description: " + resourceError.errorString);
+		} else if (verbose == -1) { 
+			fs.write("/dev/stdout", "\"onresourcerror\":\""+resourceError.id+":"+resourceError.url+":"+resourceError.errorCode+":"+resourceError.errorString+"\",", "w"); 
 		}
 	};
 
