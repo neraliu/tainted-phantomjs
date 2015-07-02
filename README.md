@@ -5,5 +5,5 @@ Tainted Phantomjs (TPJS) is the scriptable tool for DOM-based XSS detection. It 
 
 | Branch   | Build Status    |
 |:--------:|:---------------:|
-| `master` | [![Build Status](https://travis-ci.org/neraliu/tpjs.svg?branch=master)](https://travis-ci.org/neraliu/tpjs) |
-| `devel`  | [![Build Status](https://travis-ci.org/neraliu/tpjs.svg?branch=devel)](https://travis-ci.org/neraliu/tpjs) |
+| `master` | [![Build Status](https://travis-ci.org/neraliu/tainted-phantomjs.svg?branch=master)](https://travis-ci.org/neraliu/tainted-phantomjs) |
+| `devel`  | [![Build Status](https://travis-ci.org/neraliu/tainted-phantomjs.svg?branch=devel)](https://travis-ci.org/neraliu/tainted-phantomjs) |
